@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/MainStyleSheet.uss?fileID=7433441132597879392&amp;guid=adbc92717d61611429515c2b18641fe0&amp;type=3#MainStyleSheet" />
-    <ui:VisualElement name="root" style="flex-grow: 1; position: relative; left: 0; top: 0; right: 0; bottom: 0;">
-        <ui:Button text="Vald" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ValidButton" style="position: absolute; left: 1910px; top: 1083px; right: 449px; bottom: 4px;" />
-        <ui:Button text="Undo" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UndoButton" style="position: absolute; left: 339px; top: 1083px; right: 2020px; bottom: 4px;" />
-        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LettersLabel" style="position: absolute; left: 25%; top: 85%; right: 25%; bottom: 0; -unity-text-align: middle-left; font-size: 122px;" />
-        <ui:ListView name="WordsList" header-title="Found Words" style="position: absolute; left: 83%; top: 2%; right: 1%; bottom: 15px; font-size: 60px; -unity-text-align: middle-left;" />
+    <ui:VisualElement name="root" style="flex-grow: 1; position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+        <ui:Button text="Vald" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ValidButton" style="position: absolute; left: 75%; top: 90%; right: 15%; bottom: 0;" />
+        <ui:Button text="Undo" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UndoButton" style="position: absolute; left: 15%; top: 90%; right: 75%; bottom: 0;" />
+        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LettersLabel" style="position: absolute; left: 25%; top: 90%; right: 25%; bottom: 0; -unity-text-align: middle-left; font-size: 122px;" />
+        <ui:ListView name="WordsList" header-title="Found Words" style="position: absolute; left: 85%; top: 2%; right: 0; bottom: 0; font-size: 60%; -unity-text-align: middle-left;" />
     </ui:VisualElement>
 </ui:UXML>

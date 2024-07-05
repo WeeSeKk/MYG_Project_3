@@ -82,8 +82,11 @@ public class BoxPrefabController : MonoBehaviour
 
     void OnMouseDown()
     {
-        wordsManager.AddLetter(letter);
-        gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
+        if (!gridManager.selectedBoxs.Contains(this.gameObject))
+        {
+            wordsManager.AddLetter(letter);
+            gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
+        }
     }
 
     public void FindCell()//find in witch cell is this gameobject
