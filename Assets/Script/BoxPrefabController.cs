@@ -53,7 +53,7 @@ public class BoxPrefabController : MonoBehaviour
             string chars = "etaoinshr"; 
 
             System.Random random = new System.Random();
-            int i = rand.Next(0, chars.Length);
+            int i = random.Next(0, chars.Length);
             letter = chars[i];
 
             text.SetText(letter.ToString());
@@ -63,7 +63,7 @@ public class BoxPrefabController : MonoBehaviour
             string chars = "dlcumwfgy"; 
 
             System.Random random = new System.Random();
-            int i = rand.Next(0, chars.Length);
+            int i = random.Next(0, chars.Length);
             letter = chars[i];
 
             text.SetText(letter.ToString());
@@ -73,7 +73,7 @@ public class BoxPrefabController : MonoBehaviour
             string chars = "pbvkjxqz"; 
 
             System.Random random = new System.Random();
-            int i = rand.Next(0, chars.Length);
+            int i = random.Next(0, chars.Length);
             letter = chars[i];
 
             text.SetText(letter.ToString());

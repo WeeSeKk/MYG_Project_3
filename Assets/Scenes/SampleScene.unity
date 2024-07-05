@@ -152,7 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   words: []
-  isValid: 0
 --- !u!4 &7249774
 Transform:
   m_ObjectHideFlags: 0

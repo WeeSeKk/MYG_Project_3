@@ -1,43 +1,44 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-
-
 public class APIManager : MonoBehaviour
 {
     public Word[] words;
-    public bool isValid;
+    public delegate void Callback(bool isValid);
 
-    void Start()
-    {
-        //System.Action<bool> callback = null
-    }
-
-    public IEnumerator SendRequest(string url)
+    public IEnumerator SendRequest(string url, Callback isValidCallback)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
             yield return webRequest.SendWebRequest();
 
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError) 
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError) //word found
             {
-                Debug.Log("Error: " + webRequest.error);//can be words not found too
-                isValid = false;
+                Debug.Log("Error: " + webRequest.error);
+
+                if (isValidCallback != null)
+                {
+                    isValidCallback(false);
+                }
             }
-            else
+            else//word not found
             {
                 Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
                 words = JsonConvert.DeserializeObject<Word[]>(webRequest.downloadHandler.text);
-                isValid = true;
+
+                if (isValidCallback != null)
+                {
+                    isValidCallback(true);
+                }
             }
         }
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class Word
 {
     public string definitions;

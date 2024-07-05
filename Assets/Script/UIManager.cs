@@ -28,13 +28,7 @@ public class UIManager : MonoBehaviour
         
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void UpdateLabel(string word)
     {
         lettersLabel.text = word;
