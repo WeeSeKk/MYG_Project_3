@@ -4,5 +4,6 @@
         <ui:Button text="Vald" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ValidButton" style="position: absolute; left: 1910px; top: 1083px; right: 449px; bottom: 4px;" />
         <ui:Button text="Undo" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UndoButton" style="position: absolute; left: 339px; top: 1083px; right: 2020px; bottom: 4px;" />
         <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LettersLabel" style="position: absolute; left: 25%; top: 85%; right: 25%; bottom: 0; -unity-text-align: middle-left; font-size: 122px;" />
+        <ui:ListView name="WordsList" header-title="Found Words" style="position: absolute; left: 83%; top: 2%; right: 1%; bottom: 15px; font-size: 60px; -unity-text-align: middle-left;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -9,7 +9,7 @@ public class BoxPrefabController : MonoBehaviour
 {
     GridManager gridManager;
     WordsManager wordsManager;
-    public GameObject child;
+    [SerializeField] GameObject child;
     TMP_Text text;
     char letter;
     int posX;
@@ -45,26 +45,49 @@ public class BoxPrefabController : MonoBehaviour
 
     void ChooseLetter()
     {
-        //choose a random letter to assign to this box
-        string chars = "abcdefghijklmnopqrstuvwxyz"; 
-
         System.Random rand = new System.Random();
-        int num = rand.Next(0, chars.Length);
-        letter = chars[num];
+        int num = rand.Next(0, 100);
 
-        text.SetText(letter.ToString());
+        if (num < 50)
+        {
+            string chars = "etaoinshr"; 
+
+            System.Random random = new System.Random();
+            int i = rand.Next(0, chars.Length);
+            letter = chars[i];
+
+            text.SetText(letter.ToString());
+        }
+        else if (num >= 50 && num < 85)
+        {
+            string chars = "dlcumwfgy"; 
+
+            System.Random random = new System.Random();
+            int i = rand.Next(0, chars.Length);
+            letter = chars[i];
+
+            text.SetText(letter.ToString());
+        }
+        else if (num >= 85)
+        {
+            string chars = "pbvkjxqz"; 
+
+            System.Random random = new System.Random();
+            int i = rand.Next(0, chars.Length);
+            letter = chars[i];
+
+            text.SetText(letter.ToString());
+        }
     }
 
     void OnMouseDown()
     {
         wordsManager.AddLetter(letter);
-        gridManager.boxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
-        Debug.Log(posY);
+        gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
     }
 
-    public void FindCell()
+    public void FindCell()//find in witch cell is this gameobject
     {
-        //if a cell have a empty cell under it then go down by one cell and continue until there is a cell or a max vector
         for (int x = 0; x < gridManager.gridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
@@ -72,6 +95,7 @@ public class BoxPrefabController : MonoBehaviour
                 if (gridManager.gridArray[x, y] == this.gameObject)
                 {
                     posY = y;
+                    posX = x;
                     StartCoroutine(MoveCell(x, y));
                     break;
                 }
@@ -79,16 +103,15 @@ public class BoxPrefabController : MonoBehaviour
         }
     }
 
-    IEnumerator MoveCell(int x, int y)
+    IEnumerator MoveCell(int x, int y)//if a cell have a empty cell under it then go down by one cell and continue until there is a cell or a max vector
     {
         while (y > 0 && gridManager.gridArray[x, y - 1] == null)
         {
             yield return new WaitForSeconds(1f);
-            gridManager.UpdateArray(this.gameObject, x, y);
-            Vector3 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, y - 1, 0));
+            Vector3 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, y - 1));
             this.gameObject.transform.position = newWorldPosition;
+            gridManager.UpdateArray(this.gameObject, x, y);
             y -= 1;
-            posX = x;
             posY = y;
         }
         moved = true;
