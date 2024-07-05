@@ -1,3 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/MainStyleSheet.uss?fileID=7433441132597879392&amp;guid=adbc92717d61611429515c2b18641fe0&amp;type=3#MainStyleSheet" />
+    <ui:VisualElement name="root" style="flex-grow: 1; position: relative; left: 0; top: 0; right: 0; bottom: 0;">
+        <ui:Button text="Vald" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ValidButton" style="position: absolute; left: 1910px; top: 1083px; right: 449px; bottom: 4px;" />
+        <ui:Button text="Undo" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UndoButton" style="position: absolute; left: 339px; top: 1083px; right: 2020px; bottom: 4px;" />
+        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LettersLabel" style="position: absolute; left: 25%; top: 85%; right: 25%; bottom: 0; -unity-text-align: middle-left; font-size: 122px;" />
+    </ui:VisualElement>
 </ui:UXML>

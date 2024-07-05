@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,101 +13,93 @@ public class GridManager : MonoBehaviour
     [SerializeField] Transform boxParent;
 
     public GameObject[,] gridArray;
+    public List<GameObject> boxs = new List<GameObject>();
 
     public int gridWidth = 10;
     public int gridHeight = 10;
+    public int cellMaxHeight = 6;
+    bool foundEmptyCell = true;
 
     void Start()
     {
         gridArray = new GameObject[gridWidth, gridHeight];
-        //test();
+        StartCoroutine(SpawnBox());
     }
 
-    // Update is called once per frame
     void Update()
     {
-       if (Input.GetKeyDown("space"))
-        {
-            RemoveBox(2, 3);
-        }
-        if (Input.GetKeyDown("z"))
-        {
-            SpawnBox();
-        }
-        if (Input.GetKeyDown("w"))
-        {
-            test();
-        }
+
     }
 
-    void SpawnBox()
+    IEnumerator SpawnBox()
     {
-        int maxAttempts = 100; 
-        int attempts = 0;
-        bool foundEmptyCell = false;
-
-        for (int i = 0; i < gridWidth; i++)
+        while (foundEmptyCell == true)
         {
-            if(gridArray[i, 2] == null)
+            yield return new WaitForSeconds(1.5f);
+            foundEmptyCell = false;
+            int maxAttempts = 100; 
+            int attempts = 0;
+
+            for (int i = 0; i < gridWidth; i++)//look for an empty cell
             {
-                foundEmptyCell = true;
+                if(gridArray[i, cellMaxHeight] == null)
+                {
+                    foundEmptyCell = true;
+                    break;
+                }
+            }
+
+            if (!foundEmptyCell)//all the cells are full so game over
+            {
+                //game over
+                Debug.Log("GAME OVER ARRAY FULL");
                 break;
+            } 
+
+            while (attempts < maxAttempts)//attempt to find a place to spawn a new box
+            {
+                attempts++;
+
+                System.Random rand = new System.Random();
+                int x = rand.Next(0, gridWidth);
+                int y = cellMaxHeight;
+
+                if (gridArray[x, y] == null)//found a empty cell
+                {
+                    Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y, 0));
+                    GameObject newBox = Instantiate(boxPrefab, worldPosition, Quaternion.identity, boxParent);
+
+                    gridArray[x, y] = newBox;
+                    break;
+                } 
             }
         }
-
-        if (!foundEmptyCell)
-        {
-            //game over
-            Debug.Log("GAME OVER ARRAY FULL");
-            return;
-        } 
-
-        while (attempts < maxAttempts)
-        {
-            attempts++;
-
-            System.Random rand = new System.Random();
-            int x = rand.Next(0, gridWidth);
-            int y = 2;
-
-            if (gridArray[x, y] == null)
-            {
-
-                Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y, 0));
-                GameObject newBox = Instantiate(boxPrefab, worldPosition, Quaternion.identity, boxParent);
-                
-
-                gridArray[x, y] = newBox;
-                return;
-            } 
-        }
-        Debug.LogError("BROKEN AF");
     }
 
-    public void UpdateArray(GameObject go, int x, int y)
+    public void UpdateArray(GameObject go, int x, int y)//update the array
     {
         gridArray[x, y] = null;
         gridArray[x, y - 1] = go;
     }
 
-    void test()
+    public void RemoveBox()//destroy all the boxes used to create a word
     {
-        for (int y = 0; y < 7; y++)
+        for (int i = 0; i < boxs.Count; i++)//for every boxs in the list
         {
-            for (int x = 0; x < 10; x++)
+            for (int x = 0; x < gridWidth; x++)//for every x position
             {
-                Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y, 0));
-                GameObject newBox = Instantiate(boxPrefab, worldPosition, Quaternion.identity, boxParent);
-
-                gridArray[x, y] = newBox;
+                for (int y = 0; y < gridHeight; y++)//for every y position
+                {
+                    if (gridArray[x, y] == boxs[i])//once we found the box in the array
+                    {
+                        gridArray[x, y] = null;
+                        Destroy(boxs[i]);
+                        Debug.Log(gridArray[x, y]);
+                        break;
+                    }
+                }
             }
         }
-    }
-
-    void RemoveBox(int x, int y)
-    {
-        Destroy(gridArray[x, y]);
-        gridArray[x, y] = null;
-        Debug.Log("DESTROYED");
+        boxs.Clear();
     }
 }
