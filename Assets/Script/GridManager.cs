@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField]  public Grid grid;
+    [SerializeField] public Grid grid;
     [SerializeField] GameObject boxPrefab;
     [SerializeField] Transform boxParent;
 
@@ -78,7 +78,9 @@ public class GridManager : MonoBehaviour
                 if (gridArray[x, y] == null)//found a empty cell
                 {
                     Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y));//create it's position in the grid
-                    GameObject newBox = Instantiate(boxPrefab, worldPosition, Quaternion.identity, boxParent);//instantiate the object 
+
+                    GameObject newBox = ObjectPool.BoxSpawn(boxPrefab, worldPosition, Quaternion.identity);//add gameobject to the pool
+                    newBox.transform.SetParent(boxParent);
 
                     gridArray[x, y] = newBox;//add it to the array
                     break;
@@ -104,7 +106,7 @@ public class GridManager : MonoBehaviour
                     if (gridArray[x, y] == selectedBoxs[i])//once we found the box in the array
                     {
                         gridArray[x, y] = null;
-                        Destroy(selectedBoxs[i]);
+                        ObjectPool.ReturnObjectToPool(selectedBoxs[i]);//disableobject and add it to the inactive object list
                         break;
                     }
                 }

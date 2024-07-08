@@ -31,6 +31,13 @@ public class BoxPrefabController : MonoBehaviour
         ChooseLetter();
     }
 
+    void OnEnable()
+    {
+        ChooseLetter();
+        //FindCell();
+        Invoke("FindCell", 0.01f);//broken AF don't know why so use invoke
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -87,6 +94,8 @@ public class BoxPrefabController : MonoBehaviour
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
+
+        Debug.Log(posX + " " + posY);
     }
 
     public void FindCell()//find in witch cell is this gameobject
