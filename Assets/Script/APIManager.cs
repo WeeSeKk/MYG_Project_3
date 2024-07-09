@@ -15,7 +15,7 @@ public class APIManager : MonoBehaviour
         {
             yield return webRequest.SendWebRequest();
 
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError) //word found
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)//word found
             {
                 Debug.Log("Error: " + webRequest.error);
 

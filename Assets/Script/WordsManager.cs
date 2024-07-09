@@ -46,6 +46,6 @@ public class WordsManager : MonoBehaviour
             uIManager.CleanLabel();
             Debug.Log("UNVALID");
         }
-        ResetWord(); // Reset the created word 
+        ResetWord(); //reset the created word 
     }
 }

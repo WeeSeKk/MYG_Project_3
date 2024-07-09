@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] public Grid grid;
     [SerializeField] GameObject boxPrefab;
     [SerializeField] Transform boxParent;
+    [SerializeField] UIManager uIManager;
 
     public GameObject[,] gridArray;
     public List<GameObject> selectedBoxs = new List<GameObject>();
@@ -19,24 +20,30 @@ public class GridManager : MonoBehaviour
     public int gridHeight = 7;
     public int cellMaxHeight = 6;
     bool foundEmptyCell = true;
+    Coroutine spawnBoxCoroutine;
 
     void Start()
     {
+        EventManager.gameOverEvent += GameOver;
         gridArray = new GameObject[gridWidth, gridHeight];
-        StartCoroutine(SpawnBox());
-        
+        StartSpawningBoxes();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown("space"))//test for debug
+        if (Input.GetKeyDown("w"))//test for debug
         {
             Time.timeScale = 5;
         }
-        if (Input.GetKeyDown("w"))//test for debug
+    }
+
+    public void StartSpawningBoxes()
+    {
+        if (spawnBoxCoroutine != null)
         {
-            StartCoroutine(SpawnBox());
+            StopCoroutine(spawnBoxCoroutine);
         }
+        spawnBoxCoroutine = StartCoroutine(SpawnBox());
     }
 
     IEnumerator SpawnBox()
@@ -63,7 +70,7 @@ public class GridManager : MonoBehaviour
             if (!foundEmptyCell)//all the cells are full so game over
             {
                 //game over
-                Debug.Log("GAME OVER ARRAY FULL");
+                EventManager.GameOverEvent();
                 break;
             } 
 
@@ -106,12 +113,43 @@ public class GridManager : MonoBehaviour
                     if (gridArray[x, y] == selectedBoxs[i])//once we found the box in the array
                     {
                         gridArray[x, y] = null;
-                        ObjectPool.ReturnObjectToPool(selectedBoxs[i]);//disableobject and add it to the inactive object list
+                        ObjectPool.ReturnObjectToPool(selectedBoxs[i]);//disable object and add it to the inactive object list
                         break;
                     }
                 }
             }
         }
         selectedBoxs.Clear();
+    }
+
+    public void ResetGridAndArray()
+    {
+        for (int x = 0; x < gridWidth; x++)//for every x position
+        {
+            for (int y = 0; y < gridHeight; y++)//for every y position
+            {
+                if (gridArray[x, y] != null)//once we found a != null location in the array
+                {
+                    gridArray[x, y] = null;
+                    break;
+                }
+            }
+        }
+
+        foreach (Transform child in boxParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        selectedBoxs.Clear();
+        foundEmptyCell = true;
+    }
+
+    void GameOver()
+    {
+        if (spawnBoxCoroutine != null)
+        {
+            StopCoroutine(spawnBoxCoroutine);
+        }
     }
 }

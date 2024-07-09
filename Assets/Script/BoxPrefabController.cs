@@ -15,10 +15,12 @@ public class BoxPrefabController : MonoBehaviour
     int posX;
     int posY;
     bool moved;
+    bool gameOver;
 
     // Start is called before the first frame update
     void Start()
     {
+        EventManager.gameOverEvent += GameOver;
         FindCell();
     }
     
@@ -35,6 +37,7 @@ public class BoxPrefabController : MonoBehaviour
     {
         ChooseLetter();
         //FindCell();
+        gameOver = false;
         Invoke("FindCell", 0.01f);//broken AF don't know why so use invoke
     }
 
@@ -89,7 +92,7 @@ public class BoxPrefabController : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (!gridManager.selectedBoxs.Contains(this.gameObject))
+        if (!gridManager.selectedBoxs.Contains(this.gameObject) && Time.timeScale == 1)
         {
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
@@ -117,7 +120,7 @@ public class BoxPrefabController : MonoBehaviour
 
     IEnumerator MoveCell(int x, int y)//if a cell have a empty cell under it then go down by one cell and continue until there is a cell or a max vector
     {
-        while (y > 0 && gridManager.gridArray[x, y - 1] == null)
+        while (y > 0 && gridManager.gridArray[x, y - 1] == null && !gameOver)
         {
             yield return new WaitForSeconds(1f);
             Vector3 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, y - 1));
@@ -127,5 +130,10 @@ public class BoxPrefabController : MonoBehaviour
             posY = y;
         }
         moved = true;
+    }
+
+    void GameOver()
+    {
+        gameOver = true;
     }
 }
