@@ -4,24 +4,26 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 public class BoxPrefabController : MonoBehaviour
 {
     GridManager gridManager;
     WordsManager wordsManager;
     [SerializeField] GameObject child;
+    [SerializeField] SpriteRenderer outline;
     TMP_Text text;
     char letter;
     int posX;
     int posY;
-    bool moved;
     bool gameOver;
+    bool moved;
 
     // Start is called before the first frame update
     void Start()
     {
         EventManager.gameOverEvent += GameOver;
-        FindCell();
+        EventManager.boxsFly += MakeBoxsFly;
     }
     
     void Awake()
@@ -36,9 +38,8 @@ public class BoxPrefabController : MonoBehaviour
     void OnEnable()
     {
         ChooseLetter();
-        //FindCell();
+        Invoke("FindCell", 0.01f);//broken AF so use invoke
         gameOver = false;
-        Invoke("FindCell", 0.01f);//broken AF don't know why so use invoke
     }
 
     // Update is called once per frame
@@ -50,6 +51,15 @@ public class BoxPrefabController : MonoBehaviour
             {
                 FindCell();
             }    
+        }
+    
+        if (gridManager.selectedBoxs.Contains(this.gameObject))
+        {
+            outline.enabled = true;
+        }
+        else
+        {
+            outline.enabled = false;
         }
     }
 
@@ -111,25 +121,41 @@ public class BoxPrefabController : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
-                    StartCoroutine(MoveCell(x, y));
+                    NewMoveCell(x, y);
                     break;
                 }
             }
         }
     }
 
-    IEnumerator MoveCell(int x, int y)//if a cell have a empty cell under it then go down by one cell and continue until there is a cell or a max vector
+    void NewMoveCell(int x, int y)
     {
-        while (y > 0 && gridManager.gridArray[x, y - 1] == null && !gameOver)
+        Vector3 newWorldPosition;
+
+        for (int i = 0; i < gridManager.gridHeight; i++)
         {
-            yield return new WaitForSeconds(1f);
-            Vector3 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, y - 1));
-            this.gameObject.transform.position = newWorldPosition;
-            gridManager.UpdateArray(this.gameObject, x, y);
-            y -= 1;
-            posY = y;
+            if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
+            {
+                newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i));
+                this.gameObject.transform.DOMove(newWorldPosition, 3f, false);
+                gridManager.UpdateArray(this.gameObject, x, i);
+                posY = i;
+                moved = true;
+                break;
+            }  
         }
-        moved = true;
+    }
+
+    void MakeBoxsFly()
+    {
+        if(gridManager.selectedBoxs.Contains(this.gameObject))
+        {
+            System.Random random = new System.Random();
+            int i = random.Next(0, 20);
+
+            Vector2 jumpEnd = new Vector2(i, 10);
+            this.gameObject.transform.DOJump(jumpEnd, 2f, 1, 1f, false);
+        }
     }
 
     void GameOver()

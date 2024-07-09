@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour
         undoButton = root.Q<Button>("UndoButton");
         retryButton = root.Q<Button>("RetryButton");
 
+        //gameOverTab.pickingMode = PickingMode.Ignore;
+
         validButton.RegisterCallback<ClickEvent>(evt => StartCoroutine(wordsManager.IsWordValid(lettersLabel.text)));
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
         retryButton.RegisterCallback<ClickEvent>(evt => Retry());

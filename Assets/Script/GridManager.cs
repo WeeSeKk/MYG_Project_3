@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using DG.Tweening;
 
 public class GridManager : MonoBehaviour
 {
@@ -33,7 +34,20 @@ public class GridManager : MonoBehaviour
     {
         if (Input.GetKeyDown("w"))//test for debug
         {
-            Time.timeScale = 5;
+            //Time.timeScale = 5;
+            //FillGrid();
+
+            for (int x = 0; x < gridWidth; x++)
+            {
+                for (int y = 0; y < gridHeight; y++)
+                {
+                    if (gridArray[x, y] != null)
+                    {
+                        Debug.Log("FULL " + x + " " + y);
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -80,7 +94,7 @@ public class GridManager : MonoBehaviour
 
                 System.Random rand = new System.Random();
                 int x = rand.Next(0, gridWidth);
-                int y = cellMaxHeight;
+                int y = 6;
 
                 if (gridArray[x, y] == null)//found a empty cell
                 {
@@ -98,24 +112,54 @@ public class GridManager : MonoBehaviour
 
     public void UpdateArray(GameObject go, int x, int y)//update the array
     {
-        gridArray[x, y - 1] = go;
-        gridArray[x, y] = null;
+        for (int a = 0; a < gridWidth; a ++)
+        {
+            for (int b = 0; b < gridHeight; b ++)
+            {
+                if (gridArray[a, b] == go)
+                {
+                    gridArray[a, b] = null;
+                    break;
+                }
+            }
+        }
+        gridArray[x, y] = go;
     }
 
-    public void RemoveBox()//destroy all the boxes used to create a word
+    public IEnumerator RemoveBox()//destroy all the boxes used to create a word
     {
-        for (int i = 0; i < selectedBoxs.Count; i++)//for every boxs in the list
+        for (int i = 0; i < selectedBoxs.Count; i++)//for every box in the list
         {
-            for (int x = 0; x < gridWidth; x++)//for every x position
+            GameObject box = selectedBoxs[i];
+
+            if (box != null)
             {
-                for (int y = 0; y < gridHeight; y++)//for every y position
+                for (int x = 0; x < gridWidth; x++)//for every x position
                 {
-                    if (gridArray[x, y] == selectedBoxs[i])//once we found the box in the array
+                    for (int y = 0; y < gridHeight; y++)//for every y position
                     {
-                        gridArray[x, y] = null;
-                        ObjectPool.ReturnObjectToPool(selectedBoxs[i]);//disable object and add it to the inactive object list
-                        break;
+                        if (gridArray[x, y] == box)//once we found the box in the array
+                        {
+                            gridArray[x, y] = null;
+                            
+                            
+                        }
                     }
+                }
+            }
+
+            foreach (GameObject go in selectedBoxs)
+            {
+                BoxsFly(go);
+            }
+            
+            yield return new WaitForSeconds(0.5f);
+            
+            foreach (GameObject boxs in selectedBoxs)
+            {
+                if (boxs != null)
+                {
+                    ObjectPool.ReturnObjectToPool(boxs); //disable object and add it to the inactive object list
                 }
             }
         }
@@ -150,6 +194,27 @@ public class GridManager : MonoBehaviour
         if (spawnBoxCoroutine != null)
         {
             StopCoroutine(spawnBoxCoroutine);
+        }
+    }
+
+    void BoxsFly(GameObject gameObject)
+    {
+        System.Random random = new System.Random();
+        int i = random.Next(0, 20);
+
+        Vector2 jumpEnd = new Vector2(i, 10);
+        gameObject.transform.DOJump(jumpEnd, 2f, 1, 1f, false);
+    }
+
+    void FillGrid()
+    {
+        for (int x = 0; x < gridWidth; x++)//for every x position
+        {
+            for (int y = 0; y < gridHeight; y++)//for every y position
+            {
+                Vector3 worldPosition = grid.GetCellCenterWorld(new Vector3Int(x, y));
+                Instantiate(boxPrefab, worldPosition, Quaternion.identity);
+            }
         }
     }
 }

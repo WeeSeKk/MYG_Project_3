@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
             //gamemode parameters
 
             gridManager.StartSpawningBoxes();
-            timerScript.SetupTimer(6f);
+            timerScript.SetupTimer(60f);
 
         }
     }

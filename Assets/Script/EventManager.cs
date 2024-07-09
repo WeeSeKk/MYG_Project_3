@@ -8,6 +8,7 @@ public class EventManager : MonoBehaviour
 {
     public static event Action gameOverEvent;
     public static event Action<bool> resetEvent;
+    public static event Action boxsFly;
 
     public static void GameOverEvent()
     {
@@ -17,5 +18,10 @@ public class EventManager : MonoBehaviour
     public static void ResetEvent(bool retry)
     {
         resetEvent?.Invoke(retry);
+    }
+
+    public static void BoxsFlyEvent()
+    {
+        boxsFly?.Invoke();
     }
 }
