@@ -8,10 +8,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Boxs
   - Water
   - UI
-  - 
+  - Overlay
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Boxs
+    uniqueID: 1057026529
+    locked: 0
+  - name: UI
+    uniqueID: 1736885605
     locked: 0

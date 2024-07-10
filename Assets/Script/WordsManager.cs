@@ -36,7 +36,7 @@ public class WordsManager : MonoBehaviour
         {
             //word is valid
             Debug.Log("VALID");
-            StartCoroutine(gridManager.RemoveBox());
+            StartCoroutine(gridManager.RemoveSelectedBox());
             uIManager.AddList(createdWord);
             uIManager.CleanLabel();
         }

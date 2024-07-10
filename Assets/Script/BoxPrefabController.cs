@@ -23,7 +23,6 @@ public class BoxPrefabController : MonoBehaviour
     void Start()
     {
         EventManager.gameOverEvent += GameOver;
-        EventManager.boxsFly += MakeBoxsFly;
     }
     
     void Awake()
@@ -107,8 +106,6 @@ public class BoxPrefabController : MonoBehaviour
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
-
-        Debug.Log(posX + " " + posY);
     }
 
     public void FindCell()//find in witch cell is this gameobject
@@ -137,24 +134,12 @@ public class BoxPrefabController : MonoBehaviour
             if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
             {
                 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i));
-                this.gameObject.transform.DOMove(newWorldPosition, 3f, false);
+                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);;
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
                 moved = true;
                 break;
             }  
-        }
-    }
-
-    void MakeBoxsFly()
-    {
-        if(gridManager.selectedBoxs.Contains(this.gameObject))
-        {
-            System.Random random = new System.Random();
-            int i = random.Next(0, 20);
-
-            Vector2 jumpEnd = new Vector2(i, 10);
-            this.gameObject.transform.DOJump(jumpEnd, 2f, 1, 1f, false);
         }
     }
 

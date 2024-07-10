@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] VisualTreeAsset elementList;
     VisualElement root;
     VisualElement gameOverTab;
+    VisualElement background;
     ListView wordsList;
     Label lettersLabel;
     Button validButton;
@@ -21,13 +22,14 @@ public class UIManager : MonoBehaviour
     {
         root = GetComponent<UIDocument>().rootVisualElement;
         gameOverTab = root.Q<VisualElement>("GameOverTab");
+        background = root.Q<VisualElement>("Background");
         wordsList = root.Q<ListView>("WordsList");
         lettersLabel = root.Q<Label>("LettersLabel");
         validButton = root.Q<Button>("ValidButton");
         undoButton = root.Q<Button>("UndoButton");
         retryButton = root.Q<Button>("RetryButton");
 
-        //gameOverTab.pickingMode = PickingMode.Ignore;
+        //background.pickingMode = PickingMode.Ignore;
 
         validButton.RegisterCallback<ClickEvent>(evt => StartCoroutine(wordsManager.IsWordValid(lettersLabel.text)));
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
