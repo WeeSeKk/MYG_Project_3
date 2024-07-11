@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class EventManager : MonoBehaviour
 {
     public static event Action gameOverEvent;
+    public static event Action shakeBoxs;
     public static event Action<bool> resetEvent;
 
     public static void GameOverEvent()
@@ -17,5 +18,10 @@ public class EventManager : MonoBehaviour
     public static void ResetEvent(bool retry)
     {
         resetEvent?.Invoke(retry);
+    }
+
+    public static void ShakeBoxs()
+    {
+        shakeBoxs?.Invoke();
     }
 }

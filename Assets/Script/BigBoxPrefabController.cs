@@ -37,6 +37,7 @@ public class BigBoxPrefabController : MonoBehaviour
             gridManager.RemoveBoxs(go);
         }
 
+        EventManager.ShakeBoxs();
         FindCell();
         hitBoxs.Clear();
     }
@@ -64,14 +65,15 @@ public class BigBoxPrefabController : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
-                    StartCoroutine(NewMoveCell(x, y));
+                    //StartCoroutine(NewMoveCell(x, y));
+                    NewMoveCell(x, y);
                     break;
                 }
             }
         }
     }
 
-    IEnumerator NewMoveCell(int x, int y)
+    void NewMoveCell(int x, int y)
     {
         Vector3 newWorldPosition;
         this.gameObject.transform.DOKill();
@@ -81,23 +83,23 @@ public class BigBoxPrefabController : MonoBehaviour
             if (gridManager.gridArray[x, 0] == null)  
             {
                 newWorldPosition = new Vector3( this.gameObject.transform.position.x,  this.gameObject.transform.position.y - 10,  this.gameObject.transform.position.z);
-                this.gameObject.transform.DOMove(newWorldPosition, 4f, false).SetEase(Ease.OutBounce);
-                gridManager.StartSpawningBoxes();
-                yield return new WaitForSeconds(4f);
-                this.gameObject.transform.DOKill();
-                gridManager.RemoveSpecialBoxs(this.gameObject);
-                break;
+                this.gameObject.transform.DOMove(newWorldPosition, 4f, false).SetEase(Ease.OutBounce).OnComplete(() => {
+
+                    gridManager.StartSpawningBoxes();
+                    this.gameObject.transform.DOKill();
+                    gridManager.RemoveSpecialBoxs(this.gameObject);
+                });
             }
             
             else if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
             {
                 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i + 1));
-                this.gameObject.transform.DOMove(newWorldPosition, 2f, false).SetEase(Ease.OutBounce);;
-                yield return new WaitForSeconds(2f);
-                gridManager.UpdateArray(this.gameObject, x, i);
-                posY = i;
-                moved = true;
-                break;
+                this.gameObject.transform.DOMove(newWorldPosition, 2f, false).SetEase(Ease.OutBounce).OnComplete(() => {
+                    
+                    gridManager.UpdateArray(this.gameObject, x, i);
+                    posY = i;
+                    moved = true;
+                });
             }
         }
     }

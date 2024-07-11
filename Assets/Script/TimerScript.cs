@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] UIManager uIManager;
+    [SerializeField] Canvas canvas;
     VisualElement root;
     VisualElement pauseBlackScreen;
     Label timerLabel;
@@ -34,6 +35,7 @@ public class TimerScript : MonoBehaviour
                 pauseBlackScreen.pickingMode = PickingMode.Position;
                 timerLabel.AddToClassList("TimerWhite");
                 pauseBlackScreen.AddToClassList("PauseBlackScreenVisible");
+                canvas.enabled = false;
             }
             else
             {
@@ -42,6 +44,7 @@ public class TimerScript : MonoBehaviour
                 pauseBlackScreen.pickingMode = PickingMode.Ignore;
                 timerLabel.RemoveFromClassList("TimerWhite");
                 pauseBlackScreen.RemoveFromClassList("PauseBlackScreenVisible");
+                canvas.enabled = true;
             }
         });
     }

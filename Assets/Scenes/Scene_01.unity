@@ -233,7 +233,7 @@ MonoBehaviour:
   animationManager: {fileID: 824970668}
   selectedBoxs: []
   gridWidth: 10
-  gridHeight: 7
+  gridHeight: 10
   cellMaxHeight: 6
 --- !u!212 &373122605
 SpriteRenderer:
@@ -370,7 +370,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 0
   m_HDR: 1
-  m_AllowMSAA: 0
+  m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
@@ -456,7 +456,7 @@ Camera:
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!4 &726554274
@@ -503,6 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2cff54a49b4ada4693aba3aa2ae4290, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridManager: {fileID: 373122604}
 --- !u!4 &824970669
 Transform:
   m_ObjectHideFlags: 0
@@ -849,7 +850,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uIManager: {fileID: 1536425945}
-  timeLeft: 60000
+  canvas: {fileID: 1369438048}
+  timeLeft: 300
 --- !u!1 &1901041612
 GameObject:
   m_ObjectHideFlags: 0

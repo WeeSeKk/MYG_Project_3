@@ -134,7 +134,7 @@ public class BoxPrefabController : MonoBehaviour
             if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
             {
                 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i));
-                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);;
+                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
                 moved = true;
