@@ -49,6 +49,8 @@ public class AnimationManager : MonoBehaviour
         {
             if(go.name != "bigBoxSquare(Clone)")
             {
+                go.transform.DOKill();
+
                 Vector3Int cellPosition = gridManager.grid.WorldToCell(go.transform.position);
                 Vector3 originalPosition = gridManager.grid.CellToWorld(cellPosition);
 

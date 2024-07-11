@@ -87,7 +87,7 @@ public class BigBoxPrefabController : MonoBehaviour
 
                     gridManager.StartSpawningBoxes();
                     this.gameObject.transform.DOKill();
-                    gridManager.RemoveSpecialBoxs(this.gameObject);
+                    gridManager.RemoveBoxs(this.gameObject);
                 });
             }
             

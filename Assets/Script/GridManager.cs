@@ -12,8 +12,10 @@ public class GridManager : MonoBehaviour
     [SerializeField] public Grid grid;
     [SerializeField] GameObject boxPrefab;
     [SerializeField] GameObject bigBoxPrefab;
+    [SerializeField] GameObject deathBoxPrefab;
+    [SerializeField] GameObject fireBoxPrefab;
     [SerializeField] Transform boxParent;
-    [SerializeField] AnimationManager animationManager;//zerft
+    [SerializeField] AnimationManager animationManager;
 
     public GameObject[,] gridArray;
     public List<GameObject> selectedBoxs = new List<GameObject>();
@@ -39,8 +41,15 @@ public class GridManager : MonoBehaviour
         }
         if (Input.GetKeyDown("z"))//test for debug
         {
-            //Time.timeScale = 5;
-            SpawnSpecialBoxs();
+            SpawnSpecialBoxs("crusher");
+        }
+        if (Input.GetKeyDown("q"))//test for debug
+        {
+            SpawnSpecialBoxs("death");
+        }
+        if (Input.GetKeyDown("e"))//test for debug
+        {
+            SpawnSpecialBoxs("fire");
         }
     }
 
@@ -111,30 +120,57 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void SpawnSpecialBoxs()
+    void SpawnSpecialBoxs(string type)
     {
         int maxAttempts = 100; 
         int attempts = 0;
         
         while (attempts < maxAttempts)//attempt to find a place to spawn a new box
         {
+            GameObject specialBox = new GameObject();
+
             attempts++;
 
-            int x = 5;
-            int y = 9;
+            int x = 0;
+            int y = 0;
+
+            if (type == "crusher")
+            {
+                specialBox = bigBoxPrefab;
+
+                x = 5;
+                y = 9;
+                
+            }
+            if (type == "death")
+            {
+                specialBox = deathBoxPrefab;
+
+                System.Random rand = new System.Random();
+                x = rand.Next(0, gridWidth);
+                y = 6;
+            }
+            if (type == "fire")
+            {
+                specialBox = fireBoxPrefab;
+
+                System.Random rand = new System.Random();
+                x = rand.Next(0, gridWidth);
+                y = 6;
+            }
+            
 
             if (gridArray[x, y] == null)//found a empty cell
             {
                 Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y));//create it's position in the grid
 
-                GameObject newBox = Instantiate(bigBoxPrefab, worldPosition, Quaternion.identity);
+                GameObject newBox = ObjectPool.BoxSpawn(specialBox, worldPosition, Quaternion.identity);
                 newBox.transform.SetParent(boxParent);
 
                 gridArray[x, y] = newBox;//add it to the array
                 break;
             } 
         }
-        
     }
 
     public void UpdateArray(GameObject go, int x, int y)//update the array
@@ -200,23 +236,6 @@ public class GridManager : MonoBehaviour
                 {
                     gridArray[x, y] = null;
                     ObjectPool.ReturnObjectToPool(gameObject);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void RemoveSpecialBoxs(GameObject gameObject)
-    {
-        for (int x = 0; x < gridWidth; x++)//for every x position
-        {
-            for (int y = 0; y < gridHeight; y++)//for every y position
-            {
-                if (gridArray[x, y] == gameObject)//once we found the box in the array
-                {
-                    gridArray[x, y] = null;
-                    Destroy(gameObject);
-                    break;
                 }
             }
         }

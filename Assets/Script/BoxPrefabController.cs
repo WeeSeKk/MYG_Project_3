@@ -12,12 +12,15 @@ public class BoxPrefabController : MonoBehaviour
     WordsManager wordsManager;
     [SerializeField] GameObject child;
     [SerializeField] SpriteRenderer outline;
+    [SerializeField] SpriteRenderer goSprite;
     TMP_Text text;
     char letter;
     int posX;
     int posY;
     bool gameOver;
     bool moved;
+    public List<Sprite> sprites;
+    public List<Sprite> outlineSprites;
 
     // Start is called before the first frame update
     void Start()
@@ -36,9 +39,32 @@ public class BoxPrefabController : MonoBehaviour
 
     void OnEnable()
     {
+        ChooseSprite();
         ChooseLetter();
         Invoke("FindCell", 0.01f);//broken AF so use invoke
         gameOver = false;
+    }
+
+    void OnDisable()
+    {
+        this.gameObject.transform.DOKill();
+    }
+
+    void ChooseSprite()
+    {
+        System.Random rand = new System.Random();
+        int num = rand.Next(0, 4);
+
+        goSprite.sprite = sprites[num];
+
+        if (num > 1)
+        {
+            outline.sprite = outlineSprites[1];
+        }
+        else
+        {
+            outline.sprite = outlineSprites[0];
+        }
     }
 
     // Update is called once per frame
@@ -119,7 +145,7 @@ public class BoxPrefabController : MonoBehaviour
                     posY = y;
                     posX = x;
                     NewMoveCell(x, y);
-                    break;
+                    return;
                 }
             }
         }
