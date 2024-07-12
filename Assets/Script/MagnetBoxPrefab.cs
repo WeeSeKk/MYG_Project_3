@@ -174,6 +174,7 @@ public class MagnetBoxPrefab : MonoBehaviour
                 }
             }
         }
+        lockedGo.Clear();
     }
 
     // Update is called once per frame

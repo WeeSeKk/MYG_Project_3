@@ -21,9 +21,9 @@ public class GridManager : MonoBehaviour
     public GameObject[,] gridArray;
     public List<GameObject> selectedBoxs = new List<GameObject>();
 
-    public int gridWidth = 10;
+    public int gridWidth = 11;
     public int gridHeight = 10;
-    public int cellMaxHeight = 6;
+    public int cellMaxHeight = 7;
     bool foundEmptyCell = true;
     Coroutine spawnBoxCoroutine;
 
@@ -32,6 +32,7 @@ public class GridManager : MonoBehaviour
         EventManager.gameOverEvent += StopSpawningBoxes;
         gridArray = new GameObject[gridWidth, gridHeight];
         StartSpawningBoxes();
+        //FillGrid();
     }
 
     void Update()
@@ -151,7 +152,7 @@ public class GridManager : MonoBehaviour
             }
             if (type == "magnet")
             {
-                x = 9;
+                x = 10;
                 y = 4;
                 
                 specialBox = magnetBoxPrefab;
@@ -265,7 +266,7 @@ public class GridManager : MonoBehaviour
     {
         for (int x = 0; x < gridWidth; x++)//for every x position
         {
-            for (int y = 0; y < 6; y++)//for every y position
+            for (int y = 0; y < cellMaxHeight; y++)//for every y position
             {
                 Vector3 worldPosition = grid.GetCellCenterWorld(new Vector3Int(x, y));
                 GameObject newBox = ObjectPool.BoxSpawn(boxPrefab, worldPosition, Quaternion.identity);//add gameobject to the pool
