@@ -8,14 +8,12 @@ public class BigBoxPrefabController : MonoBehaviour
     GridManager gridManager;
     int posX;
     int posY;
-    bool gameOver;
-    bool moved;
     public List<GameObject> hitBoxs = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
-
+        EventManager.gameOverEvent += GameOver;
     }
     
     void Awake()
@@ -45,7 +43,6 @@ public class BigBoxPrefabController : MonoBehaviour
     void OnEnable()
     {
         Invoke("FindCell", 0.01f);//broken AF so use invoke
-        gameOver = false;
         gridManager.StopSpawningBoxes();
     }
 
@@ -98,7 +95,6 @@ public class BigBoxPrefabController : MonoBehaviour
                     
                     gridManager.UpdateArray(this.gameObject, x, i);
                     posY = i;
-                    moved = true;
                 });
             }
         }
@@ -106,6 +102,6 @@ public class BigBoxPrefabController : MonoBehaviour
 
     void GameOver()
     {
-        gameOver = true;
+        this.gameObject.transform.DOKill();
     }
 }

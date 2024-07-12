@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] WordsManager wordsManager;
     [SerializeField] VisualTreeAsset elementList;
+    [SerializeField] GridManager gridManager;
     VisualElement root;
     VisualElement gameOverTab;
     VisualElement background;
@@ -15,6 +16,10 @@ public class UIManager : MonoBehaviour
     Button validButton;
     Button retryButton;
     Button undoButton;
+    Button CrusherButton;
+    Button FireButton;
+    Button DeathButton;
+    Button MagnetButton;
     List<string> words = new List<string>();
 
     // Start is called before the first frame update
@@ -27,13 +32,20 @@ public class UIManager : MonoBehaviour
         lettersLabel = root.Q<Label>("LettersLabel");
         validButton = root.Q<Button>("ValidButton");
         undoButton = root.Q<Button>("UndoButton");
-        retryButton = root.Q<Button>("RetryButton");
 
-        //background.pickingMode = PickingMode.Ignore;
+        CrusherButton = root.Q<Button>("CrusherButton");
+        FireButton = root.Q<Button>("FireButton");
+        DeathButton = root.Q<Button>("DeathButton");
+        MagnetButton = root.Q<Button>("MagnetButton");
 
         validButton.RegisterCallback<ClickEvent>(evt => StartCoroutine(wordsManager.IsWordValid(lettersLabel.text)));
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
-        retryButton.RegisterCallback<ClickEvent>(evt => Retry());
+        //retryButton.RegisterCallback<ClickEvent>(evt => Retry());
+
+        CrusherButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("crusher"));
+        FireButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("fire"));
+        DeathButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("death"));
+        MagnetButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("magnet"));
 
         EventManager.gameOverEvent += GameOver;
     }

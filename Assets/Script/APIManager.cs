@@ -17,7 +17,7 @@ public class APIManager : MonoBehaviour
 
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)//word found
             {
-                Debug.Log("Error: " + webRequest.error);
+                //Debug.Log("Error: " + webRequest.error);
 
                 if (isValidCallback != null)
                 {
@@ -26,7 +26,7 @@ public class APIManager : MonoBehaviour
             }
             else//word not found
             {
-                Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
+                //Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
                 words = JsonConvert.DeserializeObject<Word[]>(webRequest.downloadHandler.text);
 
                 if (isValidCallback != null)

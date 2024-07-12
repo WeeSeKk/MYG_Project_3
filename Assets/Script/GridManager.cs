@@ -14,6 +14,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] GameObject bigBoxPrefab;
     [SerializeField] GameObject deathBoxPrefab;
     [SerializeField] GameObject fireBoxPrefab;
+    [SerializeField] GameObject magnetBoxPrefab;
     [SerializeField] Transform boxParent;
     [SerializeField] AnimationManager animationManager;
 
@@ -35,22 +36,12 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("w"))//test for debug
-        {
-            FillGrid();
-        }
-        if (Input.GetKeyDown("z"))//test for debug
-        {
-            SpawnSpecialBoxs("crusher");
-        }
-        if (Input.GetKeyDown("q"))//test for debug
-        {
-            SpawnSpecialBoxs("death");
-        }
-        if (Input.GetKeyDown("e"))//test for debug
-        {
-            SpawnSpecialBoxs("fire");
-        }
+        
+    }
+
+    public void TempCallPowerUp(string type)
+    {
+        SpawnSpecialBoxs(type);
     }
 
     public void StartSpawningBoxes()
@@ -158,6 +149,13 @@ public class GridManager : MonoBehaviour
                 x = rand.Next(0, gridWidth);
                 y = 6;
             }
+            if (type == "magnet")
+            {
+                x = 9;
+                y = 4;
+                
+                specialBox = magnetBoxPrefab;
+            }
             
 
             if (gridArray[x, y] == null)//found a empty cell
@@ -182,7 +180,6 @@ public class GridManager : MonoBehaviour
                 if (gridArray[a, b] == go)
                 {
                     gridArray[a, b] = null;
-                    break;
                 }
             }
         }

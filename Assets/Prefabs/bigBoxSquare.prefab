@@ -148,7 +148,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.08285403, y: -0.045192957}
+  m_Offset: {x: -0.075442314, y: -0.045192957}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -159,7 +159,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.1929593, y: 3.2327023}
+  m_Size: {x: 3.0002546, y: 3.2327023}
   m_EdgeRadius: 0
 --- !u!50 &2462328829792820270
 Rigidbody2D:
@@ -202,7 +202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 141433446842962269, guid: 9fe8f8b3288e45a44af36ff8aa04486e, type: 3}
       propertyPath: m_Name
-      value: CFXR3 Hit Misc F Smoke (1)
+      value: 'CFXR3 Hit Misc F Smoke '
       objectReference: {fileID: 0}
     - target: {fileID: 141433446842962269, guid: 9fe8f8b3288e45a44af36ff8aa04486e, type: 3}
       propertyPath: m_Layer
@@ -349,7 +349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 141433446842962269, guid: 9fe8f8b3288e45a44af36ff8aa04486e, type: 3}
       propertyPath: m_Name
-      value: CFXR3 Hit Misc F Smoke (2)
+      value: 'CFXR3 Hit Misc F Smoke '
       objectReference: {fileID: 0}
     - target: {fileID: 141433446842962269, guid: 9fe8f8b3288e45a44af36ff8aa04486e, type: 3}
       propertyPath: m_Layer

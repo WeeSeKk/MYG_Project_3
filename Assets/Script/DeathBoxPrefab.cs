@@ -12,7 +12,6 @@ public class DeathBoxPrefab : MonoBehaviour
     [SerializeField] SpriteRenderer goSprite;
     int posX;
     int posY;
-    bool gameOver;
     bool moved;
 
     // Start is called before the first frame update
@@ -30,7 +29,6 @@ public class DeathBoxPrefab : MonoBehaviour
     void OnEnable()
     {
         Invoke("FindCell", 0.01f);//broken AF so use invoke
-        gameOver = false;
     }
 
     // Update is called once per frame
@@ -82,6 +80,6 @@ public class DeathBoxPrefab : MonoBehaviour
 
     void GameOver()
     {
-        gameOver = true;
+        this.gameObject.transform.DOKill();
     }
 }

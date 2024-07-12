@@ -12,7 +12,6 @@ public class FireBoxPrefab : MonoBehaviour
     WordsManager wordsManager;
     int posX;
     int posY;
-    bool gameOver;
     bool moved;
     bool fire;
     public List<GameObject> hitBoxs = new List<GameObject>();
@@ -32,7 +31,6 @@ public class FireBoxPrefab : MonoBehaviour
     void OnEnable()
     {
         Invoke("FindCell", 0.01f);//broken AF so use invoke
-        gameOver = false;
     }
 
     // Update is called once per frame
@@ -53,6 +51,7 @@ public class FireBoxPrefab : MonoBehaviour
         goSprite.enabled = false;
         fireParticle.Play();
         BurnBoxs();
+        StartCoroutine(KillMyself());
     }
 
     void OnDisable()
@@ -120,8 +119,14 @@ public class FireBoxPrefab : MonoBehaviour
         }
     }
 
+    IEnumerator KillMyself()
+    {
+        yield return new WaitForSeconds(30f);
+        gridManager.RemoveBoxs(this.gameObject);
+    }
+
     void GameOver()
     {
-        gameOver = true;
+        this.gameObject.transform.DOKill();
     }
 }
