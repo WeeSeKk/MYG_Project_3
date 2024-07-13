@@ -15,7 +15,7 @@ public class MagnetBoxPrefab : MonoBehaviour
     char letter;
     int posX;
     int posY;
-    bool moved;
+    bool isClickable;
     int x1;
     int y2;
     GameObject filler;
@@ -158,7 +158,7 @@ public class MagnetBoxPrefab : MonoBehaviour
     void OnEnable()
     {
         ChooseLetter();
-        Invoke("FindCell", 0.01f);//broken AF so use invoke
+        isClickable = false;
     }
 
     void OnDisable()
@@ -192,44 +192,20 @@ public class MagnetBoxPrefab : MonoBehaviour
 
     void ChooseLetter()
     {
-        System.Random rand = new System.Random();
-        int num = rand.Next(0, 100);
+        char letter = wordsManager.GenerateLetter();
 
-        if (num < 50)
-        {
-            string chars = "etaoinshr"; 
+        text.SetText(letter.ToString());
+    }
 
-            System.Random random = new System.Random();
-            int i = random.Next(0, chars.Length);
-            letter = chars[i];
-
-            text.SetText(letter.ToString());
-        }
-        else if (num >= 50 && num < 85)
-        {
-            string chars = "dlcumwfgy"; 
-
-            System.Random random = new System.Random();
-            int i = random.Next(0, chars.Length);
-            letter = chars[i];
-
-            text.SetText(letter.ToString());
-        }
-        else if (num >= 85)
-        {
-            string chars = "pbvkjxqz"; 
-
-            System.Random random = new System.Random();
-            int i = random.Next(0, chars.Length);
-            letter = chars[i];
-
-            text.SetText(letter.ToString());
-        }
+    public void ActivateBox()
+    {
+        isClickable = true;
+        FindCell();
     }
 
     void OnMouseDown()
     {
-        if (!gridManager.selectedBoxs.Contains(this.gameObject) && Time.timeScale == 1)
+        if (!gridManager.selectedBoxs.Contains(this.gameObject) && isClickable)
         {
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word

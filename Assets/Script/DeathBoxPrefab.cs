@@ -13,6 +13,7 @@ public class DeathBoxPrefab : MonoBehaviour
     int posX;
     int posY;
     bool moved;
+    bool spawned;
 
     // Start is called before the first frame update
     void Start()
@@ -26,20 +27,36 @@ public class DeathBoxPrefab : MonoBehaviour
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
     }
 
-    void OnEnable()
+    public void ActivateBox()
     {
-        Invoke("FindCell", 0.01f);//broken AF so use invoke
+        FindCell();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(posY > 0 && moved == true || posY == gridManager.cellMaxHeight)
+        if(posY > 0 && moved)
         {
             if(gridManager.gridArray[posX, posY - 1] == null)
             {
                 FindCell();
+                moved = false;
             }    
+        }
+        if (!spawned)
+        {
+            for (int x = 0; x < gridManager.gridWidth; x++)
+            {
+                for (int y = 0; y < gridManager.gridHeight; y++)
+                {
+                    if (gridManager.gridArray[x, y] == this.gameObject)
+                    {
+                        NewMoveCell(x, y);
+                        spawned = true;
+                        break;
+                    }
+                }
+            }
         }
     }
 

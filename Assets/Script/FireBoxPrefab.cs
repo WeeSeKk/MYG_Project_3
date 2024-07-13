@@ -12,8 +12,10 @@ public class FireBoxPrefab : MonoBehaviour
     WordsManager wordsManager;
     int posX;
     int posY;
-    bool moved;
     bool fire;
+    bool moved;
+    bool isClickable;
+    bool spawned;
     public List<GameObject> hitBoxs = new List<GameObject>();
 
     // Start is called before the first frame update
@@ -30,28 +32,52 @@ public class FireBoxPrefab : MonoBehaviour
 
     void OnEnable()
     {
-        Invoke("FindCell", 0.01f);//broken AF so use invoke
+        isClickable = false;
+    }
+    public void ActivateBox()
+    {
+        isClickable = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(posY > 0 && moved == true || posY == gridManager.cellMaxHeight)
+        if(posY > 0 && moved)
         {
             if(gridManager.gridArray[posX, posY - 1] == null)
             {
                 FindCell();
+                moved = false;
             }    
+        }
+        if (!spawned)
+        {
+            for (int x = 0; x < gridManager.gridWidth; x++)
+            {
+                for (int y = 0; y < gridManager.gridHeight; y++)
+                {
+                    if (gridManager.gridArray[x, y] == this.gameObject)
+                    {
+                        ActivateBox();
+                        NewMoveCell(x, y);
+                        spawned = true;
+                        break;
+                    }
+                }
+            }
         }
     }
 
     void OnMouseDown()
     {
-        fire = true;
-        goSprite.enabled = false;
-        fireParticle.Play();
-        BurnBoxs();
-        StartCoroutine(KillMyself());
+        if (isClickable)
+        {
+            fire = true;
+            goSprite.enabled = false;
+            fireParticle.Play();
+            BurnBoxs();
+            StartCoroutine(KillMyself());
+        }
     }
 
     void OnDisable()
@@ -94,6 +120,7 @@ public class FireBoxPrefab : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
+                    ActivateBox();
                     NewMoveCell(x, y);
                     break;
                 }

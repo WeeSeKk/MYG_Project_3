@@ -43,7 +43,6 @@ public class BigBoxPrefabController : MonoBehaviour
     void OnEnable()
     {
         Invoke("FindCell", 0.01f);//broken AF so use invoke
-        gridManager.StopSpawningBoxes();
     }
 
     // Update is called once per frame
@@ -62,7 +61,6 @@ public class BigBoxPrefabController : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
-                    //StartCoroutine(NewMoveCell(x, y));
                     NewMoveCell(x, y);
                     break;
                 }
@@ -82,7 +80,6 @@ public class BigBoxPrefabController : MonoBehaviour
                 newWorldPosition = new Vector3( this.gameObject.transform.position.x,  this.gameObject.transform.position.y - 10,  this.gameObject.transform.position.z);
                 this.gameObject.transform.DOMove(newWorldPosition, 4f, false).SetEase(Ease.OutBounce).OnComplete(() => {
 
-                    gridManager.StartSpawningBoxes();
                     this.gameObject.transform.DOKill();
                     gridManager.RemoveBoxs(this.gameObject);
                 });

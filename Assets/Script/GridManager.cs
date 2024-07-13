@@ -9,167 +9,77 @@ using DG.Tweening;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] public Grid grid;
-    [SerializeField] GameObject boxPrefab;
-    [SerializeField] GameObject bigBoxPrefab;
-    [SerializeField] GameObject deathBoxPrefab;
-    [SerializeField] GameObject fireBoxPrefab;
-    [SerializeField] GameObject magnetBoxPrefab;
-    [SerializeField] Transform boxParent;
-    [SerializeField] AnimationManager animationManager;
-
     public GameObject[,] gridArray;
+    [SerializeField] public Grid grid;
+    [SerializeField] Transform boxParent;
+    [SerializeField] GameManager gameManager;
+    [SerializeField] AnimationManager animationManager;
     public List<GameObject> selectedBoxs = new List<GameObject>();
-
     public int gridWidth = 11;
     public int gridHeight = 10;
-    public int cellMaxHeight = 7;
+    public int cellMaxHeight = 6;
     bool foundEmptyCell = true;
-    Coroutine spawnBoxCoroutine;
+    bool gameOver = false;
 
     void Start()
     {
-        EventManager.gameOverEvent += StopSpawningBoxes;
+        EventManager.gameOverEvent += GameOver;
         gridArray = new GameObject[gridWidth, gridHeight];
-        StartSpawningBoxes();
-        //FillGrid();
     }
 
-    void Update()
+    public void SpawnBox(GameObject gameObject, int boxNumber)
     {
-        
-    }
+        foundEmptyCell = false;
+        int maxAttempt = 100;
+        int attempt = 0;
+        bool safeguard = false;
 
-    public void TempCallPowerUp(string type)
-    {
-        SpawnSpecialBoxs(type);
-    }
-
-    public void StartSpawningBoxes()
-    {
-        if (spawnBoxCoroutine != null)
+        for (int a = 0; a < gridWidth; a++)//look for an empty cell
         {
-            StopCoroutine(spawnBoxCoroutine);
-        }
-        spawnBoxCoroutine = StartCoroutine(SpawnBox());
-    }
-
-    public void StopSpawningBoxes()
-    {
-        if (spawnBoxCoroutine != null)
-        {
-            StopCoroutine(spawnBoxCoroutine);
-        }
-    }
-
-    IEnumerator SpawnBox()
-    {
-        while (foundEmptyCell == true)
-        {
-            yield return new WaitForSeconds(1f);
-            int maxAttempts = 100; 
-            int attempts = 0;
-            foundEmptyCell = false;
-
-            for (int x = 0; x < gridWidth; x++)//look for an empty cell
+            for (int b = 0; b < 6; b++)
             {
-                for (int y = 0; y < 7; y++)
+                if (gridArray[a, b] == null)
                 {
-                    if (gridArray[x, y] == null)
-                    {
-                        foundEmptyCell = true;
-                        break;
-                    } 
-                }
-            }
-
-            if (!foundEmptyCell)//all the cells are full so game over
-            {
-                //game over
-                EventManager.GameOverEvent();
-                break;
-            } 
-
-            while (attempts < maxAttempts)//attempt to find a place to spawn a new box
-            {
-                attempts++;
-
-                System.Random rand = new System.Random();
-                int x = rand.Next(0, gridWidth);
-                int y = 6;
-
-                if (gridArray[x, y] == null)//found a empty cell
-                {
-                    Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y));//create it's position in the grid
-
-                    GameObject newBox = ObjectPool.BoxSpawn(boxPrefab, worldPosition, Quaternion.identity);//add gameobject to the pool
-                    newBox.transform.SetParent(boxParent);
-
-                    gridArray[x, y] = newBox;//add it to the array
+                    foundEmptyCell = true;
                     break;
                 } 
             }
         }
-    }
 
-    void SpawnSpecialBoxs(string type)
-    {
-        int maxAttempts = 100; 
-        int attempts = 0;
-        
-        while (attempts < maxAttempts)//attempt to find a place to spawn a new box
+        if (!foundEmptyCell)//all the cells are full so game over
         {
-            GameObject specialBox = new GameObject();
+            EventManager.GameOverEvent();
+        } 
 
-            attempts++;
+        safeguard = true;
 
-            int x = 0;
-            int y = 0;
-
-            if (type == "crusher")
+        for (int a = 0; a < gridWidth; a++)
+        {
+            if (gridArray[a, cellMaxHeight] == null)
             {
-                specialBox = bigBoxPrefab;
+                safeguard = false;
+                break;
+            }
+        }
 
-                x = 5;
-                y = 9;
-                
-            }
-            if (type == "death")
-            {
-                specialBox = deathBoxPrefab;
-
-                System.Random rand = new System.Random();
-                x = rand.Next(0, gridWidth);
-                y = 6;
-            }
-            if (type == "fire")
-            {
-                specialBox = fireBoxPrefab;
-
-                System.Random rand = new System.Random();
-                x = rand.Next(0, gridWidth);
-                y = 6;
-            }
-            if (type == "magnet")
-            {
-                x = 10;
-                y = 4;
-                
-                specialBox = magnetBoxPrefab;
-            }
-            
+        while (attempt < maxAttempt && !gameOver && !safeguard)
+        {
+            System.Random rand = new System.Random();
+            int x = rand.Next(0, gridWidth);
+            int y = cellMaxHeight;
 
             if (gridArray[x, y] == null)//found a empty cell
             {
                 Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y));//create it's position in the grid
 
-                GameObject newBox = ObjectPool.BoxSpawn(specialBox, worldPosition, Quaternion.identity);
-                newBox.transform.SetParent(boxParent);
+                gameObject.transform.DOMove(worldPosition, 1f, false).SetEase(Ease.OutCirc);
 
-                gridArray[x, y] = newBox;//add it to the array
-                break;
+                gridArray[x, y] = gameObject;//add it to the array  
+
+                break;    
             } 
         }
+        
     }
 
     public void UpdateArray(GameObject go, int x, int y)//update the array
@@ -188,41 +98,41 @@ public class GridManager : MonoBehaviour
     }
 
     public IEnumerator RemoveSelectedBox() //Destroy all the boxes used to create a word
-{
-    List<GameObject> boxesToRemove = new List<GameObject>();
-
-    for (int i = 0; i < selectedBoxs.Count; i++) // For every box in the list
     {
-        foreach (GameObject box in selectedBoxs)
+        List<GameObject> boxesToRemove = new List<GameObject>();
+
+        for (int i = 0; i < selectedBoxs.Count; i++) // For every box in the list
         {
-            for (int x = 0; x < gridWidth; x++) // For every x position
+            foreach (GameObject box in selectedBoxs)
             {
-                for (int y = 0; y < gridHeight; y++) // For every y position
+                for (int x = 0; x < gridWidth; x++) // For every x position
                 {
-                    if (gridArray[x, y] == box) // Once we found the box in the array
+                    for (int y = 0; y < gridHeight; y++) // For every y position
                     {
-                        gridArray[x, y] = null;
-                        boxesToRemove.Add(box);
+                        if (gridArray[x, y] == box) // Once we found the box in the array
+                        {
+                            gridArray[x, y] = null;
+                            boxesToRemove.Add(box);
+                        }
                     }
                 }
-            }
             
-            if (box != null)
-            {
-                animationManager.BoxsFly(box);
+                if (box != null)
+                {
+                    animationManager.BoxsFly(box);
+                }
             }
         }
+
+        yield return new WaitForSeconds(1f);
+
+        foreach (GameObject box in boxesToRemove)
+        {
+            ObjectPool.ReturnObjectToPool(box); 
+        }
+
+        selectedBoxs.Clear();
     }
-
-    yield return new WaitForSeconds(1f);
-
-    foreach (GameObject box in boxesToRemove)
-    {
-        ObjectPool.ReturnObjectToPool(box); 
-    }
-
-    selectedBoxs.Clear();
-}
 
     public void RemoveBoxs(GameObject gameObject)
     {
@@ -262,16 +172,8 @@ public class GridManager : MonoBehaviour
         foundEmptyCell = true;
     }
 
-    void FillGrid()//for debug and test
+    void GameOver()
     {
-        for (int x = 0; x < gridWidth; x++)//for every x position
-        {
-            for (int y = 0; y < cellMaxHeight; y++)//for every y position
-            {
-                Vector3 worldPosition = grid.GetCellCenterWorld(new Vector3Int(x, y));
-                GameObject newBox = ObjectPool.BoxSpawn(boxPrefab, worldPosition, Quaternion.identity);//add gameobject to the pool
-                gridArray[x, y] = newBox;
-            }
-        }
+        gameOver = true;
     }
 }

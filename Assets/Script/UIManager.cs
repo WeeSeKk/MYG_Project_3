@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     Button FireButton;
     Button DeathButton;
     Button MagnetButton;
+    Button BombButton;
     List<string> words = new List<string>();
 
     // Start is called before the first frame update
@@ -37,15 +38,17 @@ public class UIManager : MonoBehaviour
         FireButton = root.Q<Button>("FireButton");
         DeathButton = root.Q<Button>("DeathButton");
         MagnetButton = root.Q<Button>("MagnetButton");
+        BombButton = root.Q<Button>("BombButton");
 
         validButton.RegisterCallback<ClickEvent>(evt => StartCoroutine(wordsManager.IsWordValid(lettersLabel.text)));
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
         //retryButton.RegisterCallback<ClickEvent>(evt => Retry());
 
-        CrusherButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("crusher"));
-        FireButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("fire"));
-        DeathButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("death"));
-        MagnetButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("magnet"));
+        //CrusherButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("crusher"));
+        //FireButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("fire"));
+        //DeathButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("death"));
+        //MagnetButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("magnet"));
+        //BombButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("bomb"));
 
         EventManager.gameOverEvent += GameOver;
     }

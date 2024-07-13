@@ -1,28 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-using System;
 using DG.Tweening;
+using TMPro;
+using Unity.VisualScripting;
 
-public class BoxPrefabController : MonoBehaviour
+public class BombBoxPrefab : MonoBehaviour
 {
     GridManager gridManager;
     WordsManager wordsManager;
     [SerializeField] GameObject child;
-    [SerializeField] SpriteRenderer freeze;
+    [SerializeField] BoxCollider2D boxCollider2D;
     [SerializeField] SpriteRenderer outline;
     [SerializeField] SpriteRenderer goSprite;
-    TMP_Text text;
+    [SerializeField] ParticleSystem _particleSystem;
     bool isClickable;
-    bool moved;
     bool spawned;
+    bool moved;
+    TMP_Text text;
     char letter;
     int posX;
     int posY;
-    public List<Sprite> sprites;
-    public List<Sprite> outlineSprites;
+    int maxCount = 20;
+    int count = 0;  
+    float timeToTick = 2f;
+    public List<GameObject> explosionRange = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -42,37 +44,16 @@ public class BoxPrefabController : MonoBehaviour
 
     void OnEnable()
     {
+        boxCollider2D.enabled = false;
+        goSprite.enabled = true;
+        timeToTick = 2f;
         isClickable = false;
-        ChooseSprite();
         ChooseLetter();
-    }
-
-    public void ActivateBox()
-    {
-        isClickable = true;
-        FindCell();
     }
 
     void OnDisable()
     {
         this.gameObject.transform.DOKill();
-    }
-
-    void ChooseSprite()
-    {
-        System.Random rand = new System.Random();
-        int num = rand.Next(0, 4);
-
-        goSprite.sprite = sprites[num];
-
-        if (num > 1)
-        {
-            outline.sprite = outlineSprites[1];
-        }
-        else
-        {
-            outline.sprite = outlineSprites[0];
-        }
     }
 
     // Update is called once per frame
@@ -95,13 +76,13 @@ public class BoxPrefabController : MonoBehaviour
                     if (gridManager.gridArray[x, y] == this.gameObject)
                     {
                         NewMoveCell(x, y);
+                        ActivateBox();
                         spawned = true;
                         break;
                     }
                 }
             }
         }
-        
     
         if (gridManager.selectedBoxs.Contains(this.gameObject))
         {
@@ -120,6 +101,13 @@ public class BoxPrefabController : MonoBehaviour
             posX = x;
             posY = y;
         }
+    }
+
+    public void ActivateBox()
+    {
+        boxCollider2D.enabled = true;
+        isClickable = true;
+        StartCoroutine(BombTicking());
     }
 
     void ChooseLetter()
@@ -155,6 +143,79 @@ public class BoxPrefabController : MonoBehaviour
         }
     }
 
+    public void AddGoToList(GameObject gameObject)
+    {
+        if (!explosionRange.Contains(gameObject))
+        {
+            explosionRange.Add(gameObject);
+        }
+        else
+        {
+            explosionRange.Remove(gameObject);
+        }
+    }
+
+    IEnumerator BombTicking()
+    {
+        List<GameObject> toRemove = new List<GameObject>();
+
+        bool ticking = true;
+
+        Vector3 initScale = this.gameObject.transform.localScale;
+        Vector3 scaleBig = new Vector3(0.4f, 0.4f);
+
+        while (ticking == true)
+        {
+            if (count == maxCount)
+            {
+                ticking = false;
+                
+                text.SetText("");
+                goSprite.enabled = false;
+                _particleSystem.Play();
+
+                foreach (GameObject go in explosionRange)
+                {
+                    toRemove.Add(go);
+                }
+
+                foreach (GameObject go in toRemove)
+                {
+                    gridManager.RemoveBoxs(go);
+                }
+
+                toRemove.Clear();
+
+                yield return new WaitForSeconds(1f);
+
+    
+                gridManager.RemoveBoxs(this.gameObject);
+        
+            }
+            else if (count < maxCount)
+            {
+                yield return new WaitForSeconds(timeToTick * 2);
+                
+                this.gameObject.transform.DOScale(scaleBig, timeToTick).SetEase(Ease.OutCirc).OnComplete(() => {
+
+                    this.gameObject.transform.DOScale(initScale, timeToTick).SetEase(Ease.OutCirc).OnComplete(() => {
+
+                        count ++;
+
+                        if (timeToTick > 0.2)
+                        {
+                            timeToTick -= 0.2f;
+                        }
+                        else if (timeToTick == 0.2)
+                        {
+                            timeToTick -= 0.1f;
+                        }               
+                    });
+                });
+            }
+        }
+    }
+
     void NewMoveCell(int x, int y)
     {
         Vector3 newWorldPosition;
@@ -170,14 +231,6 @@ public class BoxPrefabController : MonoBehaviour
                 moved = true;
                 break;
             }  
-        }
-    }
-
-    public void Freezing(GameObject gameObject)
-    {
-        if (gameObject == this.gameObject)
-        {
-            freeze.DOFade(180, 5000f).SetEase(Ease.Linear);
         }
     }
 
