@@ -63,7 +63,7 @@ public class MagnetBoxPrefab : MonoBehaviour
                                 gameObject.transform.DOKill();//kill the precedent DOTWEEN !!!IMPORTANT!!
                             
                                 Vector3 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, posY));//i is the position null on the X and posY is this gameobject y Position
-                                gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
+                                gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutElastic);
                                 SendPositionToArray(gameObject, x, y);
                                 gridManager.UpdateArray(gameObject, x, posY);
 

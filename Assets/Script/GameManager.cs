@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         boxFrequencies.Add(boxsPrefab[1], 0);//crusher box
         boxFrequencies.Add(boxsPrefab[2], 0);//skull box
         boxFrequencies.Add(boxsPrefab[3], 0);//fire box
-        boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
+        boxFrequencies.Add(boxsPrefab[4], 50);//magnet box
         boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
     }
 
