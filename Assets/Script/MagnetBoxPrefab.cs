@@ -10,9 +10,11 @@ public class MagnetBoxPrefab : MonoBehaviour
     GridManager gridManager;
     WordsManager wordsManager;
     [SerializeField] GameObject child;
+    [SerializeField] BoxCollider2D _boxCollider2D;
     [SerializeField] SpriteRenderer outline;
     TMP_Text text;
     char letter;
+    bool spawned;
     int posX;
     int posY;
     bool isClickable;
@@ -21,6 +23,7 @@ public class MagnetBoxPrefab : MonoBehaviour
     GameObject filler;
     public List<GameObject> lockedGo = new List<GameObject>();
     public GameObject[,] fillerArray;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -49,7 +52,7 @@ public class MagnetBoxPrefab : MonoBehaviour
                 {
                     if (gridManager.gridArray[x, y] == gameObject)//found the gameobject that enter this gameobject box collider
                     {
-                        for (int i = x + 1; i < gridManager.gridHeight; i++)//look for every x position at the y position of the gameobject starting from the position of the gameobject
+                        for (int i = x + 1; i < gridManager.gridWidth; i++)//look for every x position at the y position of the gameobject starting from the position of the gameobject
                         {
                             if (gridManager.gridArray[i, posY] == null)//if there is a empty space between this gameobject and the magnet return
                             {
@@ -70,7 +73,6 @@ public class MagnetBoxPrefab : MonoBehaviour
                                 {
                                     lockedGo.Add(gameObject);
                                 }
-                                Debug.Log(lockedGo.Count);
                             }
                         }
                     }
@@ -107,7 +109,7 @@ public class MagnetBoxPrefab : MonoBehaviour
 
     public void FindLockedGo()
     {
-        for (int x = 0; x < gridManager.gridWidth; x++)
+        for (int x = 0; x < gridManager.maxgridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
             {
@@ -115,16 +117,16 @@ public class MagnetBoxPrefab : MonoBehaviour
                 {
                     foreach(GameObject go in lockedGo)
                     {
-                        RemoveFillerGameobject(go, x, y);
+                        RemoveFillerGameobject(x, y);
                     }
                 }
             }
         }
     }
 
-    public void RemoveFillerGameobject(GameObject gameObject, int x, int y) 
+    public void RemoveFillerGameobject(int x, int y) 
     {
-        for (int i = x ; i < gridManager.gridWidth; i++)
+        for (int i = x ; i < gridManager.maxgridWidth; i++)
         {
            if (gridManager.gridArray[i, posY] == null)//found a empty spot 
             {
@@ -140,7 +142,6 @@ public class MagnetBoxPrefab : MonoBehaviour
                                 {
                                     gridManager.gridArray[a, b] = null;
                                     fillerArray[a, b] = null;
-                                    Debug.Log(gridManager.gridArray[a, b] + " " + a + " " + b);
                                 }
                             }
                         }
@@ -152,18 +153,20 @@ public class MagnetBoxPrefab : MonoBehaviour
                 return;
             }
         }  
-     
     }
 
     void OnEnable()
     {
+        _boxCollider2D.enabled = false;
         ChooseLetter();
         isClickable = false;
     }
 
     void OnDisable()
     {
-        for (int x = 0; x < gridManager.gridWidth; x++)
+        _boxCollider2D.enabled = false;
+
+       for (int x = 0; x < gridManager.maxgridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
             {
@@ -180,6 +183,19 @@ public class MagnetBoxPrefab : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!spawned)
+        {
+            for (int x = 0; x < gridManager.maxgridWidth; x++)
+            { 
+                if (gridManager.gridArray[x, 9] == this.gameObject)
+                {
+                    ActivateBox();
+                    spawned = true;
+                    break;
+                }
+            }
+        }
+
         if (gridManager.selectedBoxs.Contains(this.gameObject))
         {
             outline.enabled = true;
@@ -192,7 +208,7 @@ public class MagnetBoxPrefab : MonoBehaviour
 
     void ChooseLetter()
     {
-        char letter = wordsManager.GenerateLetter();
+        letter = wordsManager.GenerateLetter();
 
         text.SetText(letter.ToString());
     }
@@ -210,9 +226,6 @@ public class MagnetBoxPrefab : MonoBehaviour
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
-
-        //gridManager.RemoveBoxs(this.gameObject);
-        Debug.Log(posX + " " +posY);
     }
 
     public void FindCell()//find in witch cell is this gameobject
@@ -223,13 +236,47 @@ public class MagnetBoxPrefab : MonoBehaviour
             {
                 if (gridManager.gridArray[x, y] == this.gameObject)
                 {
-                    posY = y;
-                    posX = x;
-                    SendPositionToArray(this.gameObject, x, y);
+                    NewMoveCell(x, y);
                     return;
                 }
             }
         }
+    }
+
+    void NewMoveCell(int x, int y)
+    {
+        Vector3 newWorldPosition;
+
+        posX = gridManager.gridWidth - 1;
+        posY = y - 5;
+            
+        newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(posX, posY));
+        this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc).OnComplete(() => {
+
+            _boxCollider2D.enabled = true;
+        });
+
+        gridManager.UpdateArray(this.gameObject, posX, posY);
+        SendPositionToArray(this.gameObject, posX, posY);
+    }
+
+    void TempSetPos()
+    {
+        Vector3 newWorldPosition;
+
+        posX = 11;
+        posY = 4;
+
+        gridManager.gridArray[posX, posY] = this.gameObject;
+
+        newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(posX, posY));
+        this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc).OnComplete(() => {
+
+            _boxCollider2D.enabled = true;
+        });
+
+        gridManager.UpdateArray(this.gameObject, posX, posY);
+        SendPositionToArray(this.gameObject, posX, posY);
     }
 
     void GameOver()

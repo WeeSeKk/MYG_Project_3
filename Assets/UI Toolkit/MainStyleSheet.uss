@@ -1,21 +1,6 @@
 VisualElement {
 }
 
-.PauseBlackScreenHidden {
-    flex-grow: 1;
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgb(0, 0, 0);
-    opacity: 0;
-}
-
-.PauseBlackScreenVisible {
-    opacity: 1;
-}
-
 .TimerBlack {
     position: absolute;
     left: 1%;
@@ -49,4 +34,20 @@ VisualElement {
 
 .GameOverTabHidden {
     scale: 0 0;
+}
+
+.PauseBlackScreen {
+    transition-duration: 1s;
+    opacity: 1;
+    display: flex;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(0, 0, 0);
+}
+
+.PauseBlackScreenHidden {
+    opacity: 0;
 }

@@ -8,12 +8,12 @@ public class FireBoxPrefab : MonoBehaviour
 {
     [SerializeField] SpriteRenderer goSprite;
     [SerializeField] ParticleSystem fireParticle;
+    [SerializeField] BoxCollider2D boxCollider2D;
+    [SerializeField] Rigidbody2D _rigidbody2D;
     GridManager gridManager;
-    WordsManager wordsManager;
     int posX;
     int posY;
     bool fire;
-    bool moved;
     bool isClickable;
     bool spawned;
     public List<GameObject> hitBoxs = new List<GameObject>();
@@ -27,13 +27,14 @@ public class FireBoxPrefab : MonoBehaviour
     void Awake()
     {
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
-        wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
+        isClickable = false;
     }
 
     void OnEnable()
     {
-        isClickable = false;
+        _rigidbody2D.bodyType = RigidbodyType2D.Static;
     }
+    
     public void ActivateBox()
     {
         isClickable = true;
@@ -42,27 +43,23 @@ public class FireBoxPrefab : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(posY > 0 && moved)
+        if(posY > 0)
         {
             if(gridManager.gridArray[posX, posY - 1] == null)
             {
                 FindCell();
-                moved = false;
             }    
         }
         if (!spawned)
         {
-            for (int x = 0; x < gridManager.gridWidth; x++)
-            {
-                for (int y = 0; y < gridManager.gridHeight; y++)
+            for (int x = 0; x < gridManager.maxgridWidth; x++)
+            { 
+                if (gridManager.gridArray[x, 9] == this.gameObject)
                 {
-                    if (gridManager.gridArray[x, y] == this.gameObject)
-                    {
-                        ActivateBox();
-                        NewMoveCell(x, y);
-                        spawned = true;
-                        break;
-                    }
+                    hitBoxs.Clear();
+                    FindCell();
+                    spawned = true;
+                    break;
                 }
             }
         }
@@ -72,6 +69,8 @@ public class FireBoxPrefab : MonoBehaviour
     {
         if (isClickable)
         {
+            _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+            boxCollider2D.isTrigger = true;
             fire = true;
             goSprite.enabled = false;
             fireParticle.Play();
@@ -82,6 +81,9 @@ public class FireBoxPrefab : MonoBehaviour
 
     void OnDisable()
     {
+        boxCollider2D.isTrigger = false;
+        this.gameObject.transform.DOKill();
+        spawned = false;
         fire = false;
         goSprite.enabled = true;
         fireParticle.Stop();
@@ -112,7 +114,7 @@ public class FireBoxPrefab : MonoBehaviour
     
     public void FindCell()//find in witch cell is this gameobject
     {
-        for (int x = 0; x < gridManager.gridWidth; x++)
+        for (int x = 0; x < gridManager.maxgridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
             {
@@ -140,7 +142,6 @@ public class FireBoxPrefab : MonoBehaviour
                 this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
-                moved = true;
                 break;
             }  
         }

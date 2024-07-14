@@ -5,10 +5,11 @@ using DG.Tweening;
 
 public class BigBoxPrefabController : MonoBehaviour
 {
+    [SerializeField] BoxCollider2D boxCollider2D;
     GridManager gridManager;
     int posX;
     int posY;
-    public List<GameObject> hitBoxs = new List<GameObject>();
+    bool spawned;
 
     // Start is called before the first frame update
     void Start()
@@ -23,37 +24,47 @@ public class BigBoxPrefabController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!hitBoxs.Contains(collision.gameObject))
-        {
-            hitBoxs.Add(collision.gameObject);
-        }
-
-        Debug.Log(hitBoxs.Count);
-
-        foreach (GameObject go in hitBoxs)
-        {
-            gridManager.RemoveBoxs(go);
-        }
-
+        gridManager.RemoveBoxs(collision.gameObject);
         EventManager.ShakeBoxs();
         FindCell();
-        hitBoxs.Clear();
+    }
+    void OnDisable()
+    {
+        spawned = false;
+        this.gameObject.transform.DOKill();
     }
 
     void OnEnable()
     {
-        Invoke("FindCell", 0.01f);//broken AF so use invoke
+        this.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 1);
+
+        if (boxCollider2D.enabled == true)
+        {
+            boxCollider2D.enabled = false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-    
+        if (!spawned)
+        {
+            for (int x = 0; x < gridManager.maxgridWidth; x++)
+            { 
+                if (gridManager.gridArray[x, 9] == this.gameObject)
+                {
+                    boxCollider2D.enabled = true;
+                    FindCell();
+                    spawned = true;
+                    break;
+                }
+            }
+        }
     }
 
     public void FindCell()//find in witch cell is this gameobject
     {
-        for (int x = 0; x < gridManager.gridWidth; x++)
+        for (int x = 0; x < gridManager.maxgridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
             {
@@ -72,12 +83,13 @@ public class BigBoxPrefabController : MonoBehaviour
     {
         Vector3 newWorldPosition;
         this.gameObject.transform.DOKill();
+        this.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
         for (int i = 0; i < 9; i++)
         {
             if (gridManager.gridArray[x, 0] == null)  
             {
-                newWorldPosition = new Vector3( this.gameObject.transform.position.x,  this.gameObject.transform.position.y - 10,  this.gameObject.transform.position.z);
+                newWorldPosition = new Vector3( this.gameObject.transform.position.x,  this.gameObject.transform.position.y - 20,  this.gameObject.transform.position.z);
                 this.gameObject.transform.DOMove(newWorldPosition, 4f, false).SetEase(Ease.OutBounce).OnComplete(() => {
 
                     this.gameObject.transform.DOKill();

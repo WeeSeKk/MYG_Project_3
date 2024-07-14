@@ -6,9 +6,8 @@ public class CrusherBlockVFX : MonoBehaviour
 {
     [SerializeField] ParticleSystem particle_System;
     
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("ouch!");
         particle_System.Play();
     }
 }

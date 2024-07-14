@@ -16,7 +16,6 @@ public class BombBoxPrefab : MonoBehaviour
     [SerializeField] ParticleSystem _particleSystem;
     bool isClickable;
     bool spawned;
-    bool moved;
     TMP_Text text;
     char letter;
     int posX;
@@ -53,29 +52,29 @@ public class BombBoxPrefab : MonoBehaviour
 
     void OnDisable()
     {
+        StopAllCoroutines();
+        spawned = false;
         this.gameObject.transform.DOKill();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(posY > 0 && moved)
+        if(posY > 0)
         {
             if(gridManager.gridArray[posX, posY - 1] == null)
             {
                 FindCell();
-                moved = false;
             }    
         }
         if (!spawned)
         {
-            for (int x = 0; x < gridManager.gridWidth; x++)
+            for (int x = 0; x < gridManager.maxgridWidth; x++)
             {
                 for (int y = 0; y < gridManager.gridHeight; y++)
                 {
                     if (gridManager.gridArray[x, y] == this.gameObject)
                     {
-                        NewMoveCell(x, y);
                         ActivateBox();
                         spawned = true;
                         break;
@@ -105,6 +104,7 @@ public class BombBoxPrefab : MonoBehaviour
 
     public void ActivateBox()
     {
+        FindCell();
         boxCollider2D.enabled = true;
         isClickable = true;
         StartCoroutine(BombTicking());
@@ -112,7 +112,7 @@ public class BombBoxPrefab : MonoBehaviour
 
     void ChooseLetter()
     {
-        char letter = wordsManager.GenerateLetter();
+        letter = wordsManager.GenerateLetter();
 
         text.SetText(letter.ToString());
     }
@@ -128,7 +128,7 @@ public class BombBoxPrefab : MonoBehaviour
 
     public void FindCell()//find in witch cell is this gameobject
     {
-        for (int x = 0; x < gridManager.gridWidth; x++)
+        for (int x = 0; x < gridManager.maxgridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
             {
@@ -228,7 +228,6 @@ public class BombBoxPrefab : MonoBehaviour
                 this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
-                moved = true;
                 break;
             }  
         }

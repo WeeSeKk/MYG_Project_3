@@ -34,7 +34,7 @@ public class TimerScript : MonoBehaviour
                 Time.timeScale = 0;
                 pauseBlackScreen.pickingMode = PickingMode.Position;
                 timerLabel.AddToClassList("TimerWhite");
-                pauseBlackScreen.AddToClassList("PauseBlackScreenVisible");
+                pauseBlackScreen.RemoveFromClassList("PauseBlackScreenHidden");
                 canvas.enabled = false;
             }
             else
@@ -43,7 +43,7 @@ public class TimerScript : MonoBehaviour
                 Time.timeScale = 1;
                 pauseBlackScreen.pickingMode = PickingMode.Ignore;
                 timerLabel.RemoveFromClassList("TimerWhite");
-                pauseBlackScreen.RemoveFromClassList("PauseBlackScreenVisible");
+                pauseBlackScreen.AddToClassList("PauseBlackScreenHidden");
                 canvas.enabled = true;
             }
         });

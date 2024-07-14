@@ -235,10 +235,10 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.017966747, y: 0.39037144}
+  m_Offset: {x: -0.035181075, y: 0.22450411}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -249,7 +249,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.601352, y: 3.8062217}
+  m_Size: {x: 1.4337244, y: 3.0578902}
   m_EdgeRadius: 0
 --- !u!50 &7866615542590279537
 Rigidbody2D:
@@ -259,7 +259,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8665857326951347012}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -292,6 +292,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goSprite: {fileID: 4352045415382675692}
   fireParticle: {fileID: 558609794493438481}
+  boxCollider2D: {fileID: 101798507350807764}
+  _rigidbody2D: {fileID: 7866615542590279537}
   hitBoxs: []
 --- !u!1001 &5807955864256536307
 PrefabInstance:

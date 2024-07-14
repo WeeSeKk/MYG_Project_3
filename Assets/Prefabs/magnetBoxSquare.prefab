@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 8025517064744067467}
   - component: {fileID: 591766834061316674}
   m_Layer: 3
-  m_Name: 'magnetBoxSquare '
+  m_Name: magnetBoxSquare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,7 +213,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.67, y: -1.67}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!96 &4363765527566512444
@@ -466,6 +466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   child: {fileID: 5484971575074432493}
+  _boxCollider2D: {fileID: 7815534847461795847}
   outline: {fileID: 6549949031373599415}
   lockedGo: []
 --- !u!1 &5946919886022766300
@@ -561,7 +562,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -5.742655, y: -0.08207399}
+  m_Offset: {x: -7.1023803, y: -0.08207399}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -572,7 +573,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10.463978, y: 0.5732151}
+  m_Size: {x: 13.183429, y: 0.5732151}
   m_EdgeRadius: 0
 --- !u!114 &5693708311853671116
 MonoBehaviour:

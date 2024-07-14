@@ -16,7 +16,6 @@ public class BoxPrefabController : MonoBehaviour
     [SerializeField] SpriteRenderer goSprite;
     TMP_Text text;
     bool isClickable;
-    bool moved;
     bool spawned;
     char letter;
     int posX;
@@ -37,11 +36,6 @@ public class BoxPrefabController : MonoBehaviour
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 
         text = child.GetComponent<TMP_Text>();
-        ChooseLetter();
-    }
-
-    void OnEnable()
-    {
         isClickable = false;
         ChooseSprite();
         ChooseLetter();
@@ -53,8 +47,14 @@ public class BoxPrefabController : MonoBehaviour
         FindCell();
     }
 
+    void OnEnable()
+    {
+        outline.enabled = false;
+    }
+
     void OnDisable()
     {
+        spawned = false;
         this.gameObject.transform.DOKill();
     }
 
@@ -78,30 +78,26 @@ public class BoxPrefabController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(posY > 0 && moved)
+        if(posY > 0)
         {
             if(gridManager.gridArray[posX, posY - 1] == null)
             {
                 FindCell();
-                moved = false;
             }    
         }
+
         if (!spawned)
         {
-            for (int x = 0; x < gridManager.gridWidth; x++)
-            {
-                for (int y = 0; y < gridManager.gridHeight; y++)
+            for (int x = 0; x < gridManager.maxgridWidth; x++)
+            { 
+                if (gridManager.gridArray[x, 9] == this.gameObject)
                 {
-                    if (gridManager.gridArray[x, y] == this.gameObject)
-                    {
-                        NewMoveCell(x, y);
-                        spawned = true;
-                        break;
-                    }
+                    ActivateBox();
+                    spawned = true;
+                    break;
                 }
             }
         }
-        
     
         if (gridManager.selectedBoxs.Contains(this.gameObject))
         {
@@ -124,7 +120,7 @@ public class BoxPrefabController : MonoBehaviour
 
     void ChooseLetter()
     {
-        char letter = wordsManager.GenerateLetter();
+        letter = wordsManager.GenerateLetter();
 
         text.SetText(letter.ToString());
     }
@@ -140,7 +136,7 @@ public class BoxPrefabController : MonoBehaviour
 
     public void FindCell()//find in witch cell is this gameobject
     {
-        for (int x = 0; x < gridManager.gridWidth; x++)
+        for (int x = 0; x < gridManager.maxgridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
             {
@@ -164,10 +160,12 @@ public class BoxPrefabController : MonoBehaviour
             if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
             {
                 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i));
-                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
+                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc).OnComplete(() => {
+
+                    
+                });;
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
-                moved = true;
                 break;
             }  
         }
@@ -183,6 +181,6 @@ public class BoxPrefabController : MonoBehaviour
 
     void GameOver()
     {
-        this.gameObject.transform.DOKill();
+        //this.gameObject.transform.DOKill();
     }
 }

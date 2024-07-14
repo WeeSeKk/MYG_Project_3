@@ -12,7 +12,6 @@ public class DeathBoxPrefab : MonoBehaviour
     [SerializeField] SpriteRenderer goSprite;
     int posX;
     int posY;
-    bool moved;
     bool spawned;
 
     // Start is called before the first frame update
@@ -32,29 +31,31 @@ public class DeathBoxPrefab : MonoBehaviour
         FindCell();
     }
 
+    void OnDisable()
+    {
+        this.gameObject.transform.DOKill();
+        spawned = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if(posY > 0 && moved)
+        if(posY > 0)
         {
             if(gridManager.gridArray[posX, posY - 1] == null)
             {
                 FindCell();
-                moved = false;
             }    
         }
         if (!spawned)
         {
-            for (int x = 0; x < gridManager.gridWidth; x++)
-            {
-                for (int y = 0; y < gridManager.gridHeight; y++)
+            for (int x = 0; x < gridManager.maxgridWidth; x++)
+            { 
+                if (gridManager.gridArray[x, 9] == this.gameObject)
                 {
-                    if (gridManager.gridArray[x, y] == this.gameObject)
-                    {
-                        NewMoveCell(x, y);
-                        spawned = true;
-                        break;
-                    }
+                    FindCell();
+                    spawned = true;
+                    break;
                 }
             }
         }
@@ -62,7 +63,7 @@ public class DeathBoxPrefab : MonoBehaviour
 
     public void FindCell()//find in witch cell is this gameobject
     {
-        for (int x = 0; x < gridManager.gridWidth; x++)
+        for (int x = 0; x < gridManager.maxgridWidth; x++)
         {
             for (int y = 0; y < gridManager.gridHeight; y++)
             {
@@ -89,7 +90,6 @@ public class DeathBoxPrefab : MonoBehaviour
                 this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
-                moved = true;
                 break;
             }  
         }

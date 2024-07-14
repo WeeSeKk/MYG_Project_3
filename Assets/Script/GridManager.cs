@@ -15,7 +15,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] GameManager gameManager;
     [SerializeField] AnimationManager animationManager;
     public List<GameObject> selectedBoxs = new List<GameObject>();
-    public int gridWidth = 11;
+    public int gridWidth = 12;
+    public int maxgridWidth = 11;
     public int gridHeight = 10;
     public int cellMaxHeight = 6;
     bool foundEmptyCell = true;
@@ -27,16 +28,16 @@ public class GridManager : MonoBehaviour
         gridArray = new GameObject[gridWidth, gridHeight];
     }
 
-    public void SpawnBox(GameObject gameObject, int boxNumber)
+    public void SpawnBox(GameObject gameObject)
     {
         foundEmptyCell = false;
         int maxAttempt = 100;
         int attempt = 0;
         bool safeguard = false;
 
-        for (int a = 0; a < gridWidth; a++)//look for an empty cell
+        for (int a = 0; a < maxgridWidth; a++)//look for an empty cell
         {
-            for (int b = 0; b < 6; b++)
+            for (int b = 0; b < 7; b++)
             {
                 if (gridArray[a, b] == null)
                 {
@@ -53,7 +54,7 @@ public class GridManager : MonoBehaviour
 
         safeguard = true;
 
-        for (int a = 0; a < gridWidth; a++)
+        for (int a = 0; a < maxgridWidth; a++)
         {
             if (gridArray[a, cellMaxHeight] == null)
             {
@@ -65,26 +66,25 @@ public class GridManager : MonoBehaviour
         while (attempt < maxAttempt && !gameOver && !safeguard)
         {
             System.Random rand = new System.Random();
-            int x = rand.Next(0, gridWidth);
-            int y = cellMaxHeight;
+            int x = rand.Next(0, maxgridWidth);
+            int y = 9;
 
-            if (gridArray[x, y] == null)//found a empty cell
+            if (gridArray[x, y] == null && gridArray[x, cellMaxHeight] == null)//found a empty cell
             {
                 Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y));//create it's position in the grid
 
-                gameObject.transform.DOMove(worldPosition, 1f, false).SetEase(Ease.OutCirc);
+                gameObject.transform.DOMove(worldPosition, 1f, false).SetEase(Ease.OutCirc).OnComplete(() => {
 
-                gridArray[x, y] = gameObject;//add it to the array  
-
+                    gridArray[x, y] = gameObject;//add it to the array  
+                });
                 break;    
             } 
         }
-        
     }
 
     public void UpdateArray(GameObject go, int x, int y)//update the array
     {
-        for (int a = 0; a < gridWidth; a ++)
+        for (int a = 0; a < maxgridWidth; a ++)
         {
             for (int b = 0; b < gridHeight; b ++)
             {
@@ -144,6 +144,7 @@ public class GridManager : MonoBehaviour
                 {
                     gridArray[x, y] = null;
                     ObjectPool.ReturnObjectToPool(gameObject);
+                    selectedBoxs.Remove(gameObject);
                 }
             }
         }

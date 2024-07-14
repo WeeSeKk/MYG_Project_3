@@ -19,8 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject[,] spawnPosition;
     int currentGamemode;
     int gridWidth = 1;
-    int gridHeight = 9;
-    int listNumber = 0;
+    int gridHeight = 10;
     bool gameOver;
 
     // Start is called before the first frame update
@@ -51,10 +50,10 @@ public class GameManager : MonoBehaviour
     {
         boxFrequencies.Add(boxsPrefab[0], 100);//default box
         boxFrequencies.Add(boxsPrefab[1], 0);//crusher box
-        boxFrequencies.Add(boxsPrefab[2], 100);//skull box
-        boxFrequencies.Add(boxsPrefab[3], 100);//fire box
+        boxFrequencies.Add(boxsPrefab[2], 0);//skull box
+        boxFrequencies.Add(boxsPrefab[3], 0);//fire box
         boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
-        boxFrequencies.Add(boxsPrefab[5], 100);//bomb box
+        boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
     }
 
     GameObject GenerateBox()
@@ -117,20 +116,25 @@ public class GameManager : MonoBehaviour
         {
             GameObject box = GenerateBox();
 
-            for (int i = 0; i < 6; i++)
+            for (int a = 0; a < gridManager.gridWidth; a++)//prevent a second magnet from spawning if there is already one in one of the array
             {
-                if (box == boxsPrefab[i])
+                for (int b = 0; b < gridManager.gridHeight; b++)
                 {
-                    listNumber = i;
-                    break;
+                    if (gridManager.gridArray[a, b] != null && gridManager.gridArray[a, b].name == "magnetBoxSquare(Clone)" || spawnPosition[0, b] != null && spawnPosition[0, b].name == "magnetBoxSquare(Clone)")
+                    {
+                        if (box.name == "magnetBoxSquare")
+                        {
+                            box = boxsPrefab[0];
+                        }
+                    }   
                 }
             }
             
-            Vector3 worldPosition = lineGrid.CellToWorld(new Vector3Int(x, y));//create it's position in the grid
-            GameObject newBox = ObjectPool.BoxSpawn(box, worldPosition, Quaternion.identity);//add gameobject to the pool
+            Vector3 worldPosition = lineGrid.CellToWorld(new Vector3Int(x, y));
+            GameObject newBox = ObjectPool.BoxSpawn(box, worldPosition, Quaternion.identity);
 
             newBox.transform.SetParent(boxParent.transform);
-            spawnPosition[x, y] = newBox;//add it to the array
+            spawnPosition[x, y] = newBox;
 
             MoveBoxs(newBox);
 
@@ -166,7 +170,7 @@ public class GameManager : MonoBehaviour
             lastBox.transform.DOKill();
             lastBox.transform.position = boxPosBeforeArray.transform.position;
             spawnPosition[0, gridHeight - 2] = null;
-            gridManager.SpawnBox(lastBox, listNumber);
+            gridManager.SpawnBox(lastBox);
         }
     }   
 
