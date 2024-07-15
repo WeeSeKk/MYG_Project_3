@@ -51,11 +51,11 @@ public class GameManager : MonoBehaviour
     void InitializeBoxFrequencies()
     {
         boxFrequencies.Add(boxsPrefab[0], 100);//default box
-        boxFrequencies.Add(boxsPrefab[1], 50);//crusher box
+        boxFrequencies.Add(boxsPrefab[1], 0);//crusher box
         boxFrequencies.Add(boxsPrefab[2], 0);//skull box
         boxFrequencies.Add(boxsPrefab[3], 0);//fire box
         boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
-        boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
+        boxFrequencies.Add(boxsPrefab[5], 50);//bomb box 
     }
 
     GameObject GenerateBox()

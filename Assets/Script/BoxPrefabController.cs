@@ -63,11 +63,7 @@ public class BoxPrefabController : MonoBehaviour
         {
             ChooseLetter();
 
-            this.gameObject.transform.DOShakeRotation(2f, rot, 3, 60f, true).SetEase(Ease.OutCirc).OnComplete(() => {
-
-                    
-            });
-            
+            this.gameObject.transform.DOShakeRotation(2f, rot, 3, 60f, true).SetEase(Ease.OutCirc);
         }
     }
 

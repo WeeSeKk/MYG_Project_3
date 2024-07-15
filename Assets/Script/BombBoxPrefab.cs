@@ -20,9 +20,6 @@ public class BombBoxPrefab : MonoBehaviour
     char letter;
     int posX;
     int posY;
-    int maxCount = 20;
-    int count = 0;  
-    float timeToTick = 2f;
     public List<GameObject> explosionRange = new List<GameObject>();
 
     // Start is called before the first frame update
@@ -34,8 +31,6 @@ public class BombBoxPrefab : MonoBehaviour
     
     void Awake()
     {
-        EventManager.updatePosition += UpdatePos;
-
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 
@@ -47,9 +42,9 @@ public class BombBoxPrefab : MonoBehaviour
     {
         boxCollider2D.enabled = false;
         goSprite.enabled = true;
-        timeToTick = 2f;
         isClickable = false;
         ChooseLetter();
+        explosionRange.Clear();
     }
 
     void OnDisable()
@@ -159,63 +154,59 @@ public class BombBoxPrefab : MonoBehaviour
 
     IEnumerator BombTicking()
     {
-        List<GameObject> toRemove = new List<GameObject>();
-
-        bool ticking = true;
+        int timeTicking = 0;
+        int maxTicking = 10;
+        float timeToTick = 1f;
+        int lastTicking = 0;
 
         Vector3 initScale = this.gameObject.transform.localScale;
         Vector3 scaleBig = new Vector3(0.4f, 0.4f);
 
-        while (ticking == true)
+        while (timeTicking < maxTicking)
         {
-            if (count == maxCount)
+           //scale up animation
+            this.gameObject.transform.DOScale(scaleBig, timeToTick);
+            yield return new WaitForSeconds(timeToTick);
+
+           //scale down animation
+            this.gameObject.transform.DOScale(initScale, timeToTick);
+            yield return new WaitForSeconds(timeToTick);
+
+            timeToTick -= 0.1f;
+            timeTicking ++;
+        }
+
+        while (lastTicking < maxTicking)
+        {
+           //scale up animation
+            this.gameObject.transform.DOScale(scaleBig, 0.1f);
+            yield return new WaitForSeconds(0.1f);
+
+           //scale down animation
+            this.gameObject.transform.DOScale(initScale, 0.1f);
+            yield return new WaitForSeconds(0.1f);
+
+            lastTicking ++;
+        }
+
+        goSprite.enabled = false;
+        _particleSystem.Play();
+        text.SetText("");
+
+        List<GameObject> explosionRangeCopy = new List<GameObject>(explosionRange);
+
+        foreach (GameObject gameObject in explosionRangeCopy)
+        {
+            if (gameObject != null)
             {
-                ticking = false;
-                
-                text.SetText("");
-                goSprite.enabled = false;
-                _particleSystem.Play();
-
-                foreach (GameObject go in explosionRange)
-                {
-                    toRemove.Add(go);
-                }
-
-                foreach (GameObject go in toRemove)
-                {
-                    gridManager.RemoveBoxs(go);
-                }
-
-                toRemove.Clear();
-
-                yield return new WaitForSeconds(1f);
-
-    
-                gridManager.RemoveBoxs(this.gameObject);
-        
-            }
-            else if (count < maxCount)
-            {
-                yield return new WaitForSeconds(timeToTick * 2);
-                
-                this.gameObject.transform.DOScale(scaleBig, timeToTick).SetEase(Ease.OutCirc).OnComplete(() => {
-
-                    this.gameObject.transform.DOScale(initScale, timeToTick).SetEase(Ease.OutCirc).OnComplete(() => {
-
-                        count ++;
-
-                        if (timeToTick > 0.2)
-                        {
-                            timeToTick -= 0.2f;
-                        }
-                        else if (timeToTick == 0.2)
-                        {
-                            timeToTick -= 0.1f;
-                        }               
-                    });
-                });
+                gridManager.RemoveBoxs(gameObject);
+                explosionRange.Remove(gameObject);
             }
         }
+
+        yield return new WaitForSeconds(0.5f);
+
+        gridManager.RemoveBoxs(this.gameObject);
     }
 
     void NewMoveCell(int x, int y)
