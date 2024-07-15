@@ -22,6 +22,7 @@ public class FireBoxPrefab : MonoBehaviour
     void Start()
     {
         EventManager.gameOverEvent += GameOver;
+        EventManager.updatePosition += UpdatePos;
     }
     
     void Awake()
@@ -33,6 +34,15 @@ public class FireBoxPrefab : MonoBehaviour
     void OnEnable()
     {
         _rigidbody2D.bodyType = RigidbodyType2D.Static;
+    }
+
+    void UpdatePos(GameObject gameObject, int x, int y)
+    {
+        if(gameObject == this.gameObject)
+        {
+            posX = x;
+            posY = y;
+        }
     }
     
     public void ActivateBox()

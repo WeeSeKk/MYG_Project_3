@@ -34,6 +34,8 @@ public class BombBoxPrefab : MonoBehaviour
     
     void Awake()
     {
+        EventManager.updatePosition += UpdatePos;
+
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 

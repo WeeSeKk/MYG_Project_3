@@ -14,12 +14,11 @@ public class UIManager : MonoBehaviour
     ListView wordsList;
     Label lettersLabel;
     Button validButton;
+    Button swapLettersButton;
     Button retryButton;
     Button undoButton;
     Button CrusherButton;
     Button FireButton;
-    Button DeathButton;
-    Button MagnetButton;
     Button BombButton;
     List<string> words = new List<string>();
 
@@ -36,12 +35,12 @@ public class UIManager : MonoBehaviour
 
         CrusherButton = root.Q<Button>("CrusherButton");
         FireButton = root.Q<Button>("FireButton");
-        DeathButton = root.Q<Button>("DeathButton");
-        MagnetButton = root.Q<Button>("MagnetButton");
         BombButton = root.Q<Button>("BombButton");
+        swapLettersButton = root.Q<Button>("SwapLetters");
 
         validButton.RegisterCallback<ClickEvent>(evt => StartCoroutine(wordsManager.IsWordValid(lettersLabel.text)));
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
+        swapLettersButton.RegisterCallback<ClickEvent>(evt => EventManager.SwapLetters());
         //retryButton.RegisterCallback<ClickEvent>(evt => Retry());
 
         //CrusherButton.RegisterCallback<ClickEvent>(evt => gridManager.TempCallPowerUp("crusher"));
@@ -72,6 +71,11 @@ public class UIManager : MonoBehaviour
         }
 
         UpdateList();
+    }
+
+    public void UpdateScoreLabel(int score)
+    {
+        //update the label at the gameover screen
     }
 
     void UpdateList()//update the list to add new words 

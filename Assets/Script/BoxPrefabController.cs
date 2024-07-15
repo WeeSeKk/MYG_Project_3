@@ -14,6 +14,7 @@ public class BoxPrefabController : MonoBehaviour
     [SerializeField] SpriteRenderer freeze;
     [SerializeField] SpriteRenderer outline;
     [SerializeField] SpriteRenderer goSprite;
+    [SerializeField] GameObject visualGo;
     TMP_Text text;
     bool isClickable;
     bool spawned;
@@ -28,6 +29,8 @@ public class BoxPrefabController : MonoBehaviour
     {
         EventManager.gameOverEvent += GameOver;
         EventManager.updatePosition += UpdatePos;
+        EventManager.swapLetters += SwapLetters;
+        EventManager.shakeBoxs += ShakeBoxsAnimation;
     }
     
     void Awake()
@@ -50,6 +53,22 @@ public class BoxPrefabController : MonoBehaviour
     void OnEnable()
     {
         outline.enabled = false;
+    }
+
+    void SwapLetters()
+    {
+        Vector3 rot = new Vector3(0,0,360);
+
+        if (spawned)
+        {
+            ChooseLetter();
+
+            this.gameObject.transform.DOShakeRotation(2f, rot, 3, 60f, true).SetEase(Ease.OutCirc).OnComplete(() => {
+
+                    
+            });
+            
+        }
     }
 
     void OnDisable()
@@ -160,10 +179,7 @@ public class BoxPrefabController : MonoBehaviour
             if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
             {
                 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i));
-                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc).OnComplete(() => {
-
-                    
-                });;
+                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
                 break;
@@ -171,6 +187,14 @@ public class BoxPrefabController : MonoBehaviour
         }
     }
 
+    void ShakeBoxsAnimation()
+    {
+        visualGo.transform.DOShakePosition(1f, 0.1f, 10, 60f, false, true).OnComplete(() =>
+        {
+            visualGo.transform.position = this.gameObject.transform.position;
+        });
+    }
+        
     public void Freezing(GameObject gameObject)
     {
         if (gameObject == this.gameObject)

@@ -18,8 +18,6 @@ public class MagnetBoxPrefab : MonoBehaviour
     int posX;
     int posY;
     bool isClickable;
-    int x1;
-    int y2;
     GameObject filler;
     public List<GameObject> lockedGo = new List<GameObject>();
     public GameObject[,] fillerArray;

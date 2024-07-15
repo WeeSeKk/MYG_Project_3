@@ -18,6 +18,7 @@ public class DeathBoxPrefab : MonoBehaviour
     void Start()
     {
         EventManager.gameOverEvent += GameOver;
+        EventManager.updatePosition += UpdatePos;
     }
     
     void Awake()
@@ -29,6 +30,15 @@ public class DeathBoxPrefab : MonoBehaviour
     public void ActivateBox()
     {
         FindCell();
+    }
+
+    void UpdatePos(GameObject gameObject, int x, int y)
+    {
+        if(gameObject == this.gameObject)
+        {
+            posX = x;
+            posY = y;
+        }
     }
 
     void OnDisable()

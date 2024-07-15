@@ -15,6 +15,7 @@ public class BigBoxPrefabController : MonoBehaviour
     void Start()
     {
         EventManager.gameOverEvent += GameOver;
+        EventManager.updatePosition += UpdatePos;
     }
     
     void Awake()
@@ -32,6 +33,15 @@ public class BigBoxPrefabController : MonoBehaviour
     {
         spawned = false;
         this.gameObject.transform.DOKill();
+    }
+
+    void UpdatePos(GameObject gameObject, int x, int y)
+    {
+        if(gameObject == this.gameObject)
+        {
+            posX = x;
+            posY = y;
+        }
     }
 
     void OnEnable()

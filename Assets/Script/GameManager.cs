@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     int gridWidth = 1;
     int gridHeight = 10;
     bool gameOver;
+    int score;
+
 
     // Start is called before the first frame update
     void Start()
@@ -49,10 +51,10 @@ public class GameManager : MonoBehaviour
     void InitializeBoxFrequencies()
     {
         boxFrequencies.Add(boxsPrefab[0], 100);//default box
-        boxFrequencies.Add(boxsPrefab[1], 0);//crusher box
+        boxFrequencies.Add(boxsPrefab[1], 50);//crusher box
         boxFrequencies.Add(boxsPrefab[2], 0);//skull box
         boxFrequencies.Add(boxsPrefab[3], 0);//fire box
-        boxFrequencies.Add(boxsPrefab[4], 50);//magnet box
+        boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
         boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
     }
 
@@ -92,6 +94,26 @@ public class GameManager : MonoBehaviour
             timerScript.SetupTimer(60f);
 
         }
+    }
+
+    public void CountScore(int value)
+    {
+        int baseLetterPoint = 15;
+
+        baseLetterPoint -= value;
+
+        score += baseLetterPoint;
+
+        if (value < 10)
+        {
+            timerScript.AddTimerTime(1);
+        }
+        else 
+        {
+            timerScript.AddTimerTime(5);
+        }
+
+        Debug.Log(score);
     }
 
     void ResetCurrentGamemode(bool retry)

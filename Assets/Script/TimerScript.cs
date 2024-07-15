@@ -66,6 +66,16 @@ public class TimerScript : MonoBehaviour
                 timerOn = false;
             }
         } 
+
+        if (Input.GetKeyDown("e"))//test for debug
+        {
+            AddTimerTime(60);
+        }
+    }
+
+    public void AddTimerTime(float timeAdded)
+    {
+        timeLeft += timeAdded;
     }
 
     void UpdateTimer(float timerTime)

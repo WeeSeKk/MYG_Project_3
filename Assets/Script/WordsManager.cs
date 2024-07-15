@@ -6,6 +6,7 @@ using UnityEngine;
 public class WordsManager : MonoBehaviour
 {
     [SerializeField] APIManager aPIManager;
+    [SerializeField] GameManager gameManager;
     [SerializeField] GridManager gridManager;
     [SerializeField] UIManager uIManager;
     private static readonly Dictionary<char, int> letterFrequencies = new Dictionary<char, int>
@@ -17,6 +18,7 @@ public class WordsManager : MonoBehaviour
     };
     string createdWord;
     System.Random random = new System.Random();
+    public List<string> correctWordsFound = new List<string>();
 
     public char GenerateLetter()
     {
@@ -39,6 +41,17 @@ public class WordsManager : MonoBehaviour
         }
 
         return 'a'; 
+    }
+
+    void CountWordPoint(string word)
+    {
+        int value;
+        
+        foreach (char letter in word)
+        {
+            letterFrequencies.TryGetValue(letter, out value);
+            gameManager.CountScore(value);
+        }
     }
 
     public void AddLetter(char letter)
@@ -69,6 +82,8 @@ public class WordsManager : MonoBehaviour
             Debug.Log("VALID");
             StartCoroutine(gridManager.RemoveSelectedBox());
             uIManager.AddList(createdWord);
+            correctWordsFound.Add(createdWord);
+            CountWordPoint(createdWord);
             uIManager.CleanLabel();
         }
         else
@@ -77,6 +92,7 @@ public class WordsManager : MonoBehaviour
             uIManager.CleanLabel();
             Debug.Log("UNVALID");
         }
+        
         ResetWord(); //reset the created word 
     }
 }
