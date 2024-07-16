@@ -5,11 +5,9 @@ using DG.Tweening;
 
 public class DeathBoxPrefab : MonoBehaviour
 {
+    [SerializeField] GameObject visualGo;
     GridManager gridManager;
     WordsManager wordsManager;
-    [SerializeField] GameObject child;
-    [SerializeField] SpriteRenderer outline;
-    [SerializeField] SpriteRenderer goSprite;
     int posX;
     int posY;
     bool spawned;
@@ -19,6 +17,7 @@ public class DeathBoxPrefab : MonoBehaviour
     {
         EventManager.gameOverEvent += GameOver;
         EventManager.updatePosition += UpdatePos;
+        EventManager.shakeBoxs += ShakeBoxsAnimation;
     }
     
     void Awake()
@@ -103,6 +102,14 @@ public class DeathBoxPrefab : MonoBehaviour
                 break;
             }  
         }
+    }
+
+    void ShakeBoxsAnimation()
+    {
+        visualGo.transform.DOShakePosition(1f, 0.1f, 10, 60f, false, true).OnComplete(() =>
+        {
+            visualGo.transform.position = this.gameObject.transform.position;
+        });
     }
 
     void GameOver()

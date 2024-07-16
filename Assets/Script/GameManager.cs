@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     int gridHeight = 10;
     bool gameOver;
     int score;
+    int powerUpUseCrusher = 0;
+    int powerUpUseFire = 0;
+    int powerUpUseBomb = 0;
 
 
     // Start is called before the first frame update
@@ -55,7 +58,7 @@ public class GameManager : MonoBehaviour
         boxFrequencies.Add(boxsPrefab[2], 0);//skull box
         boxFrequencies.Add(boxsPrefab[3], 0);//fire box
         boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
-        boxFrequencies.Add(boxsPrefab[5], 50);//bomb box 
+        boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
     }
 
     GameObject GenerateBox()
@@ -106,14 +109,36 @@ public class GameManager : MonoBehaviour
 
         if (value < 10)
         {
-            timerScript.AddTimerTime(1);
+            StartCoroutine(timerScript.AddTimerTime(1));
         }
         else 
         {
-            timerScript.AddTimerTime(5);
+            StartCoroutine(timerScript.AddTimerTime(5));
         }
 
         Debug.Log(score);
+        
+    }
+
+    public void CountPowerupUse(int type)
+    {
+        switch (type)
+        {
+            case 0:
+                powerUpUseCrusher ++;
+
+            break;
+
+            case 1:
+                powerUpUseFire ++;
+
+            break;
+
+            case 2:
+                powerUpUseBomb ++;
+
+            break;
+        }
     }
 
     void ResetCurrentGamemode(bool retry)

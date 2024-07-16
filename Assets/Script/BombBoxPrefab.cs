@@ -14,6 +14,7 @@ public class BombBoxPrefab : MonoBehaviour
     [SerializeField] SpriteRenderer outline;
     [SerializeField] SpriteRenderer goSprite;
     [SerializeField] ParticleSystem _particleSystem;
+    [SerializeField] GameObject visualGo;
     bool isClickable;
     bool spawned;
     TMP_Text text;
@@ -27,6 +28,7 @@ public class BombBoxPrefab : MonoBehaviour
     {
         EventManager.gameOverEvent += GameOver;
         EventManager.updatePosition += UpdatePos;
+        EventManager.swapLetters += SwapLetters;
     }
     
     void Awake()
@@ -45,6 +47,7 @@ public class BombBoxPrefab : MonoBehaviour
         isClickable = false;
         ChooseLetter();
         explosionRange.Clear();
+        visualGo.transform.localScale= new Vector3(1f, 1f);
     }
 
     void OnDisable()
@@ -52,6 +55,18 @@ public class BombBoxPrefab : MonoBehaviour
         StopAllCoroutines();
         spawned = false;
         this.gameObject.transform.DOKill();
+    }
+
+    void SwapLetters()
+    {
+        Vector3 rot = new Vector3(0,0,360);
+
+        if (spawned)
+        {
+            ChooseLetter();
+
+            this.gameObject.transform.DOShakeRotation(2f, rot, 3, 60f, true).SetEase(Ease.OutCirc);
+        }
     }
 
     // Update is called once per frame
@@ -159,17 +174,17 @@ public class BombBoxPrefab : MonoBehaviour
         float timeToTick = 1f;
         int lastTicking = 0;
 
-        Vector3 initScale = this.gameObject.transform.localScale;
-        Vector3 scaleBig = new Vector3(0.4f, 0.4f);
+        Vector3 initScale = visualGo.transform.localScale;
+        Vector3 scaleBig = new Vector3(1.5f, 1.5f);
 
         while (timeTicking < maxTicking)
         {
            //scale up animation
-            this.gameObject.transform.DOScale(scaleBig, timeToTick);
+            visualGo.transform.DOScale(scaleBig, timeToTick);
             yield return new WaitForSeconds(timeToTick);
 
            //scale down animation
-            this.gameObject.transform.DOScale(initScale, timeToTick);
+            visualGo.transform.DOScale(initScale, timeToTick);
             yield return new WaitForSeconds(timeToTick);
 
             timeToTick -= 0.1f;
@@ -179,11 +194,11 @@ public class BombBoxPrefab : MonoBehaviour
         while (lastTicking < maxTicking)
         {
            //scale up animation
-            this.gameObject.transform.DOScale(scaleBig, 0.1f);
+            visualGo.transform.DOScale(scaleBig, 0.1f);
             yield return new WaitForSeconds(0.1f);
 
            //scale down animation
-            this.gameObject.transform.DOScale(initScale, 0.1f);
+            visualGo.transform.DOScale(initScale, 0.1f);
             yield return new WaitForSeconds(0.1f);
 
             lastTicking ++;

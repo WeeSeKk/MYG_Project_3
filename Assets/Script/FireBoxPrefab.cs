@@ -10,6 +10,7 @@ public class FireBoxPrefab : MonoBehaviour
     [SerializeField] ParticleSystem fireParticle;
     [SerializeField] BoxCollider2D boxCollider2D;
     [SerializeField] Rigidbody2D _rigidbody2D;
+    [SerializeField] GameObject visualGo;
     GridManager gridManager;
     int posX;
     int posY;
@@ -23,6 +24,7 @@ public class FireBoxPrefab : MonoBehaviour
     {
         EventManager.gameOverEvent += GameOver;
         EventManager.updatePosition += UpdatePos;
+        EventManager.shakeBoxs += ShakeBoxsAnimation;
     }
     
     void Awake()
@@ -155,6 +157,14 @@ public class FireBoxPrefab : MonoBehaviour
                 break;
             }  
         }
+    }
+
+    void ShakeBoxsAnimation()
+    {
+        visualGo.transform.DOShakePosition(1f, 0.1f, 10, 60f, false, true).OnComplete(() =>
+        {
+            visualGo.transform.position = this.gameObject.transform.position;
+        });
     }
 
     IEnumerator KillMyself()

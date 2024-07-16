@@ -12,13 +12,15 @@ public class GridManager : MonoBehaviour
     public GameObject[,] gridArray;
     [SerializeField] public Grid grid;
     [SerializeField] Transform boxParent;
+    [SerializeField] GameObject spawnPoint;
     [SerializeField] GameManager gameManager;
     [SerializeField] AnimationManager animationManager;
     public List<GameObject> selectedBoxs = new List<GameObject>();
+    public List<GameObject> powerUp = new List<GameObject>();
     public int gridWidth = 12;
     public int maxgridWidth = 11;
     public int gridHeight = 10;
-    public int cellMaxHeight = 6;
+    public int cellMaxHeight = 7;
     bool foundEmptyCell = true;
     bool gameOver = false;
 
@@ -80,6 +82,14 @@ public class GridManager : MonoBehaviour
                 break;    
             } 
         }
+    }
+
+    public void SpawnPowerUp(int type)
+    {
+        GameObject newBox = ObjectPool.BoxSpawn(powerUp[type], spawnPoint.transform.position, Quaternion.identity);
+        newBox.transform.SetParent(boxParent.transform);
+
+        SpawnBox(newBox);
     }
 
     public void UpdateArray(GameObject go, int x, int y)//update the array

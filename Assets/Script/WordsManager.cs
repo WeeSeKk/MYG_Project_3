@@ -46,12 +46,22 @@ public class WordsManager : MonoBehaviour
     void CountWordPoint(string word)
     {
         int value;
+        int wordScore = 0;
         
         foreach (char letter in word)
         {
             letterFrequencies.TryGetValue(letter, out value);
             gameManager.CountScore(value);
         }
+
+        foreach (char letter in word)
+        {
+            letterFrequencies.TryGetValue(letter, out value);
+
+            wordScore += (15 - value);
+        }
+
+        StartCoroutine(uIManager.ShowPointUp(wordScore));
     }
 
     public void AddLetter(char letter)
@@ -85,6 +95,7 @@ public class WordsManager : MonoBehaviour
             correctWordsFound.Add(createdWord);
             CountWordPoint(createdWord);
             uIManager.CleanLabel();
+            StartCoroutine(uIManager.ShowGreenLine());
         }
         else
         {
