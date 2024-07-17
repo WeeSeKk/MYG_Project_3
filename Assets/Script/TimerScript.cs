@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] UIManager uIManager;
-    [SerializeField] GameManager gameManager;
     [SerializeField] Canvas canvas;
     VisualElement root;
     VisualElement pauseBlackScreen;
@@ -194,8 +193,7 @@ public class TimerScript : MonoBehaviour
                 bombTime = 60f;
             break;
         }
-        
-        gameManager.CountPowerupUse(powerUp);
+        GameManager.instance.CountPowerupUse(powerUp);
     }
 
     void UpdateCrusherTimer(float timerTime)

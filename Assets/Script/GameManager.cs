@@ -2,24 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using JetBrains.Annotations;
 using Unity.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    //static GameManager _instance;
+    public static GameManager instance;
     static readonly Dictionary<GameObject, int> boxFrequencies = new Dictionary<GameObject, int>();
-    [SerializeField] GridManager gridManager;
-    [SerializeField] WordsManager wordsManager;
-    [SerializeField] UIManager uIManager;
-    [SerializeField] TimerScript timerScript;
-    [SerializeField] GameObject boxParent;
-    [SerializeField] GameObject boxPosBeforeArray;
-    [SerializeField] Grid lineGrid;
+    GridManager gridManager;
+    WordsManager wordsManager;
+    UIManager uIManager;
+    TimerScript timerScript;
+    GameObject boxParent;
+    GameObject boxPosBeforeArray;
+    Grid lineGrid;
     public List<GameObject> boxsPrefab;
-    public List<string> wordsToFind = new List<string>(){"Lion", "Tiger", "Elephant", "Giraffe", "Zebra", "Kangaroo", "Koala", "Panda", "Gorilla", "Chimpanzee", "Dolphin", "Whale", "Shark", "Penguin", "Seal", 
-    "Walrus", "Otter", "Crocodile", "Alligator", "Hippopotamus", "Rhinoceros", "Leopard", "Cheetah", "Jaguar", "Buffalo", "Antelope", "Deer", "Moose", "Elk", "Bison", "Wolf", "Fox", "Raccoon", "Opossum", "Squirrel"};
     public GameObject[,] spawnPosition;
     public float spawnSpeed;
     int currentGamemode;
@@ -30,22 +29,19 @@ public class GameManager : MonoBehaviour
     int powerUpUseCrusher = 0;
     int powerUpUseFire = 0;
     int powerUpUseBomb = 0;
+    int test = 0;
 
-
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        spawnPosition = new GameObject[gridWidth, gridHeight];
-
-        EventManager.gameOverEvent += GameOver;
-        EventManager.resetEvent += ResetCurrentGamemode;
-
-        currentGamemode = 1;
-
-        InitializeBoxFrequencies();
-
-        StartCoroutine(SpawnNewBoxs());
-        //StartCoroutine(FillGrid());
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(this.gameObject);
     }
 
     // Update is called once per frame
@@ -53,7 +49,13 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))//test for debug
         {
-            Time.timeScale = 5;
+            //Time.timeScale = 5;
+            StartCoroutine(LoadScene("Scene_Gamemode_01"));
+        }
+        if (Input.GetKeyDown("w"))//test for debug
+        {
+            //Time.timeScale = 5;
+            Debug.Log(test);
         }
     }
 
@@ -65,6 +67,33 @@ public class GameManager : MonoBehaviour
         boxFrequencies.Add(boxsPrefab[3], 0);//fire box
         boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
         boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
+    }
+
+    public IEnumerator LoadScene(string scene)
+    {
+        
+        if (scene == "Scene_Gamemode_01")
+        {
+            yield return SceneManager.LoadSceneAsync(scene);
+            gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
+            wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
+            uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
+            timerScript = GameObject.Find("UIDocument").GetComponent<TimerScript>();
+            boxParent = GameObject.Find("BoxParent");
+            boxPosBeforeArray = GameObject.Find("BoxPosBeforeArray");
+            lineGrid = GameObject.Find("BoxLinePosition").GetComponent<Grid>();
+
+            spawnPosition = new GameObject[gridWidth, gridHeight];
+
+            EventManager.gameOverEvent += GameOver;
+            EventManager.resetEvent += ResetCurrentGamemode;
+
+            currentGamemode = 1;
+
+            InitializeBoxFrequencies();
+
+            StartCoroutine(SpawnNewBoxs());
+        }
     }
 
     GameObject GenerateBox()
@@ -245,58 +274,6 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(spawnSpeed);
         }
-    }
-
-    public IEnumerator FillGrid()
-    {  
-        bool arrayFull = false;
-        int x = 0;
-        int y = 0;
-
-        while (!arrayFull)
-        {
-            GameObject box = GenerateBox();
-
-            for (int a = 0; a < gridManager.gridWidth; a++)//prevent a second magnet from spawning if there is already one in one of the array
-            {
-                for (int b = 0; b < gridManager.gridHeight; b++)
-                {
-                    if (gridManager.gridArray[a, b] != null && gridManager.gridArray[a, b].name == "magnetBoxSquare(Clone)" || spawnPosition[0, b] != null && spawnPosition[0, b].name == "magnetBoxSquare(Clone)")
-                    {
-                        if (box.name == "magnetBoxSquare")
-                        {
-                            box = boxsPrefab[0];
-                        }
-                    }   
-                }
-            }
-            
-            Vector3 worldPosition = lineGrid.CellToWorld(new Vector3Int(x, y));
-            GameObject newBox = ObjectPool.BoxSpawn(box, worldPosition, Quaternion.identity);
-
-            newBox.transform.SetParent(boxParent.transform);
-            spawnPosition[x, y] = newBox;
-
-            MoveBoxs(newBox);
-
-
-            yield return new WaitForSeconds(0.2f);
-
-            for (int a = 0; a < gridManager.maxgridWidth; a++)
-            {
-                for (int b = 0; b < gridManager.gridHeight; b++)
-                {
-                    if (gridManager.gridArray[x, y] == null)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        arrayFull = true;
-                    }
-                }
-            }
-        }    
     }
 
     void MoveBoxs(GameObject go)

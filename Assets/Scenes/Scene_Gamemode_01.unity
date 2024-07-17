@@ -193,11 +193,11 @@ Transform:
   m_GameObject: {fileID: 36314066}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.05, y: 8.64, z: 0.09273817}
+  m_LocalPosition: {x: 0.05171609, y: 10.198798, z: 0}
   m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1005226813}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &36314068
 SpriteRenderer:
@@ -313,7 +313,7 @@ MonoBehaviour:
   grid: {fileID: 373122602}
   boxParent: {fileID: 497466869}
   spawnPoint: {fileID: 36314066}
-  gameManager: {fileID: 1005226814}
+  gameManager: {fileID: 0}
   animationManager: {fileID: 824970668}
   selectedBoxs: []
   powerUp:
@@ -389,6 +389,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73ac107594f7dc0499a580c2381e835c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &429743863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 429743864}
+  m_Layer: 0
+  m_Name: PlayfabManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &429743864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429743863}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.4852848, y: 3.0683353, z: -0.06847953}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &497466868
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,103 +671,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1005226812
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1005226813}
-  - component: {fileID: 1005226814}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1005226813
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005226812}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.101716, y: 1.5587975, z: -0.09273817}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1597064310}
-  - {fileID: 36314067}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1005226814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005226812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8071feb8bb5a444fa63dccef0e30580, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridManager: {fileID: 373122604}
-  wordsManager: {fileID: 1995382827}
-  uIManager: {fileID: 1536425945}
-  timerScript: {fileID: 1536425946}
-  boxParent: {fileID: 497466868}
-  boxPosBeforeArray: {fileID: 36314066}
-  lineGrid: {fileID: 1597064312}
-  boxsPrefab:
-  - {fileID: 6384151933265506706, guid: a06fb9be627588c47a085d50688724db, type: 3}
-  - {fileID: 4612867490924019535, guid: 059d1f5460c281d4a9960ac6b6d310c0, type: 3}
-  - {fileID: 1875633478648810950, guid: 63725321735fb9446b01a29817d072ac, type: 3}
-  - {fileID: 8665857326951347012, guid: 9ab975e5dcc2ba64f882f2eef36c2348, type: 3}
-  - {fileID: 5769404327233256390, guid: 33008eb903bc7c2489b042dca0fa9c23, type: 3}
-  - {fileID: 5663635164573233340, guid: 4f12043808ae11e4c8bef16f30f9a87a, type: 3}
-  wordsToFind:
-  - Lion
-  - Tiger
-  - Elephant
-  - Giraffe
-  - Zebra
-  - Kangaroo
-  - Koala
-  - Panda
-  - Gorilla
-  - Chimpanzee
-  - Dolphin
-  - Whale
-  - Shark
-  - Penguin
-  - Seal
-  - Walrus
-  - Otter
-  - Crocodile
-  - Alligator
-  - Hippopotamus
-  - Rhinoceros
-  - Leopard
-  - Cheetah
-  - Jaguar
-  - Buffalo
-  - Antelope
-  - Deer
-  - Moose
-  - Elk
-  - Bison
-  - Wolf
-  - Fox
-  - Raccoon
-  - Opossum
-  - Squirrel
-  spawnSpeed: 1
 --- !u!1 &1369438043
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,7 +943,7 @@ MonoBehaviour:
   elementList: {fileID: 9197481963319205126, guid: 9377d8ccdf37c62498bad139ed4a992a, type: 3}
   gridManager: {fileID: 373122604}
   timerScript: {fileID: 1536425946}
-  gameManager: {fileID: 1005226814}
+  gameManager: {fileID: 0}
   canvas: {fileID: 1369438048}
 --- !u!114 &1536425946
 MonoBehaviour:
@@ -1024,7 +958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uIManager: {fileID: 1536425945}
-  gameManager: {fileID: 1005226814}
+  gameManager: {fileID: 0}
   canvas: {fileID: 1369438048}
   timeLeft: 300
   crusherTime: 0
@@ -1057,11 +991,11 @@ Transform:
   m_GameObject: {fileID: 1597064309}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8, y: -7.35, z: 0.09273817}
+  m_LocalPosition: {x: 10.101716, y: -5.7912025, z: 0}
   m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1005226813}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1597064311
 SpriteRenderer:
@@ -1201,7 +1135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aPIManager: {fileID: 7249773}
-  gameManager: {fileID: 1005226814}
+  gameManager: {fileID: 0}
   gridManager: {fileID: 373122604}
   uIManager: {fileID: 1536425945}
   correctWordsFound: []
@@ -1226,7 +1160,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 726554274}
-  - {fileID: 1005226813}
   - {fileID: 373122603}
   - {fileID: 1536425944}
   - {fileID: 7249774}
@@ -1235,4 +1168,7 @@ SceneRoots:
   - {fileID: 1500771236}
   - {fileID: 1369438049}
   - {fileID: 824970669}
+  - {fileID: 429743864}
+  - {fileID: 1597064310}
+  - {fileID: 36314067}
   - {fileID: 497466869}

@@ -26,12 +26,13 @@ public class MagnetBoxPrefab : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventManager.gameOverEvent += GameOver;
-        fillerArray = new GameObject[gridManager.gridWidth, gridManager.gridHeight];
+        
     }
     
     void Awake()
     {
+        EventManager.gameOverEvent += GameOver;
+        fillerArray = new GameObject[gridManager.gridWidth, gridManager.gridHeight];
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 

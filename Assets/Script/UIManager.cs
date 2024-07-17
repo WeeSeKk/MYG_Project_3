@@ -9,7 +9,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] VisualTreeAsset elementList;
     [SerializeField] GridManager gridManager;
     [SerializeField] TimerScript timerScript;
-    [SerializeField] GameManager gameManager;
     [SerializeField] Canvas canvas;
     VisualElement root;
     VisualElement gameOverTab;
@@ -52,7 +51,7 @@ public class UIManager : MonoBehaviour
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
         swapLettersButton.RegisterCallback<ClickEvent>(evt => EventManager.SwapLetters());
 
-        retryButton.RegisterCallback<ClickEvent>(evt => gameManager.ResetAll());
+        retryButton.RegisterCallback<ClickEvent>(evt => GameManager.instance.ResetAll());
 
         crusherButton.RegisterCallback<ClickEvent>(evt => {
             crusherButton.pickingMode = PickingMode.Ignore;

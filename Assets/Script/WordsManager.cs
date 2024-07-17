@@ -6,7 +6,6 @@ using UnityEngine;
 public class WordsManager : MonoBehaviour
 {
     [SerializeField] APIManager aPIManager;
-    [SerializeField] GameManager gameManager;
     [SerializeField] GridManager gridManager;
     [SerializeField] UIManager uIManager;
     private static readonly Dictionary<char, int> letterFrequencies = new Dictionary<char, int>
@@ -51,7 +50,7 @@ public class WordsManager : MonoBehaviour
         foreach (char letter in word)
         {
             letterFrequencies.TryGetValue(letter, out value);
-            gameManager.CountScore(value);
+            GameManager.instance.CountScore(value);
         }
 
         foreach (char letter in word)

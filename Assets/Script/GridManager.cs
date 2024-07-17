@@ -13,7 +13,6 @@ public class GridManager : MonoBehaviour
     [SerializeField] public Grid grid;
     [SerializeField] Transform boxParent;
     [SerializeField] GameObject spawnPoint;
-    [SerializeField] GameManager gameManager;
     [SerializeField] AnimationManager animationManager;
     public List<GameObject> selectedBoxs = new List<GameObject>();
     public List<GameObject> powerUp = new List<GameObject>();
@@ -24,7 +23,7 @@ public class GridManager : MonoBehaviour
     bool foundEmptyCell = true;
     public bool gameOver = false;
 
-    void Start()
+    void Awake()
     {
         EventManager.gameOverEvent += GameOver;
         gridArray = new GameObject[gridWidth, gridHeight];

@@ -27,14 +27,16 @@ public class BoxPrefabController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventManager.gameOverEvent += GameOver;
-        EventManager.updatePosition += UpdatePos;
-        EventManager.swapLetters += SwapLetters;
-        EventManager.shakeBoxs += ShakeBoxsAnimation;
+        
     }
     
     void Awake()
     {
+        EventManager.gameOverEvent += GameOver;
+        EventManager.updatePosition += UpdatePos;
+        EventManager.swapLetters += SwapLetters;
+        EventManager.shakeBoxs += ShakeBoxsAnimation;
+        
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 
