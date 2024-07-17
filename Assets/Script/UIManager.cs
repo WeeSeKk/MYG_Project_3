@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] VisualTreeAsset elementList;
     [SerializeField] GridManager gridManager;
     [SerializeField] TimerScript timerScript;
+    [SerializeField] GameManager gameManager;
+    [SerializeField] Canvas canvas;
     VisualElement root;
     VisualElement gameOverTab;
     VisualElement greenLine;
@@ -28,6 +30,8 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        EventManager.gameOverEvent += GameOver;
+
         root = GetComponent<UIDocument>().rootVisualElement;
         gameOverTab = root.Q<VisualElement>("GameOverTab");
         background = root.Q<VisualElement>("Background");
@@ -37,6 +41,7 @@ public class UIManager : MonoBehaviour
         validButton = root.Q<Button>("ValidButton");
         undoButton = root.Q<Button>("UndoButton");
         pointLabel = root.Q<Label>("PointLabel");
+        retryButton = root.Q<Button>("RetryButton");
 
         crusherButton = root.Q<Button>("CrusherButton");
         FireButton = root.Q<Button>("FireButton");
@@ -46,7 +51,8 @@ public class UIManager : MonoBehaviour
         validButton.RegisterCallback<ClickEvent>(evt => StartCoroutine(wordsManager.IsWordValid(lettersLabel.text)));
         undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
         swapLettersButton.RegisterCallback<ClickEvent>(evt => EventManager.SwapLetters());
-        //retryButton.RegisterCallback<ClickEvent>(evt => Retry());
+
+        retryButton.RegisterCallback<ClickEvent>(evt => gameManager.ResetAll());
 
         crusherButton.RegisterCallback<ClickEvent>(evt => {
             crusherButton.pickingMode = PickingMode.Ignore;
@@ -66,8 +72,6 @@ public class UIManager : MonoBehaviour
             gridManager.SpawnPowerUp(2);
             timerScript.SetupPowerupTimer(2);
         });
-
-        EventManager.gameOverEvent += GameOver;
     }
     
     public void UpdateLabel(string word)
@@ -133,7 +137,16 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
+        canvas.enabled = false;
         gameOverTab.RemoveFromClassList("GameOverTabHidden");
+        gameOverTab.pickingMode = PickingMode.Position;
+    }
+
+    public void Reset()
+    {
+        canvas.enabled = true;
+        gameOverTab.AddToClassList("GameOverTabHidden");
+        gameOverTab.pickingMode = PickingMode.Ignore;
     }
 
     void Retry()

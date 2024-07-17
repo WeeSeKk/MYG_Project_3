@@ -201,6 +201,7 @@ public class BoxPrefabController : MonoBehaviour
 
     void GameOver()
     {
-        //this.gameObject.transform.DOKill();
+        isClickable = false;
+        this.gameObject.transform.DOKill();
     }
 }

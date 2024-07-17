@@ -22,7 +22,7 @@ public class GridManager : MonoBehaviour
     public int gridHeight = 10;
     public int cellMaxHeight = 7;
     bool foundEmptyCell = true;
-    bool gameOver = false;
+    public bool gameOver = false;
 
     void Start()
     {
@@ -75,7 +75,7 @@ public class GridManager : MonoBehaviour
             {
                 Vector3 worldPosition = grid.CellToWorld(new Vector3Int(x, y));//create it's position in the grid
 
-                gameObject.transform.DOMove(worldPosition, 1f, false).SetEase(Ease.OutCirc).OnComplete(() => {
+                gameObject.transform.DOMove(worldPosition, 0.1f, false).SetEase(Ease.OutCirc).OnComplete(() => {
 
                     gridArray[x, y] = gameObject;//add it to the array  
                 });

@@ -31,6 +31,7 @@ public class TimerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        EventManager.gameOverEvent += GameOver;
         uIManager = GetComponent<UIManager>();
         root = GetComponent<UIDocument>().rootVisualElement; 
         pauseBlackScreen = root.Q<VisualElement>("PauseBlackScreen");
@@ -222,5 +223,30 @@ public class TimerScript : MonoBehaviour
         float secondes = Mathf.FloorToInt(timerTime % 60);
 
         bombTimerLabel.text = string.Format("{00}", secondes);
+    }
+    
+    void GameOver()
+    {
+        timerOn = false;
+        crusherTimer = false;
+        fireTimer = false;
+        bombTimer = false;
+    }
+
+    public void Reset()
+    {
+        timerOn = true;
+
+        BombButton.pickingMode = PickingMode.Position;
+        BombButton.style.unityBackgroundImageTintColor = Color.white;
+        bombTimerLabel.text = "";
+
+        FireButton.pickingMode = PickingMode.Position;
+        FireButton.style.unityBackgroundImageTintColor = Color.white;
+        fireTimerLabel.text = "";
+
+        crusherButton.pickingMode = PickingMode.Position;
+        crusherButton.style.unityBackgroundImageTintColor = Color.white;
+        crusherTimerLabel.text = "";
     }
 }

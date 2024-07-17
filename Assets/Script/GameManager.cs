@@ -4,9 +4,11 @@ using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
 using JetBrains.Annotations;
+using Unity.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    //static GameManager _instance;
     static readonly Dictionary<GameObject, int> boxFrequencies = new Dictionary<GameObject, int>();
     [SerializeField] GridManager gridManager;
     [SerializeField] WordsManager wordsManager;
@@ -16,7 +18,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject boxPosBeforeArray;
     [SerializeField] Grid lineGrid;
     public List<GameObject> boxsPrefab;
+    public List<string> wordsToFind = new List<string>(){"Lion", "Tiger", "Elephant", "Giraffe", "Zebra", "Kangaroo", "Koala", "Panda", "Gorilla", "Chimpanzee", "Dolphin", "Whale", "Shark", "Penguin", "Seal", 
+    "Walrus", "Otter", "Crocodile", "Alligator", "Hippopotamus", "Rhinoceros", "Leopard", "Cheetah", "Jaguar", "Buffalo", "Antelope", "Deer", "Moose", "Elk", "Bison", "Wolf", "Fox", "Raccoon", "Opossum", "Squirrel"};
     public GameObject[,] spawnPosition;
+    public float spawnSpeed;
     int currentGamemode;
     int gridWidth = 1;
     int gridHeight = 10;
@@ -40,6 +45,7 @@ public class GameManager : MonoBehaviour
         InitializeBoxFrequencies();
 
         StartCoroutine(SpawnNewBoxs());
+        //StartCoroutine(FillGrid());
     }
 
     // Update is called once per frame
@@ -99,6 +105,51 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ResetAll()
+    {
+        foreach (Transform child in boxParent.transform)
+        {
+            ObjectPool.ReturnObjectToPool(child.gameObject); 
+        }
+
+        for (int x = 0; x < gridManager.gridWidth; x++) // For every x position
+        {
+            for (int y = 0; y < gridManager.gridHeight; y++) // For every y position
+            {
+                if (gridManager.gridArray[x, y] != null) // Once we found the box in the array
+                {
+                    gridManager.gridArray[x, y] = null;
+                }
+            }
+        }
+
+        for (int x = 0; x < gridWidth; x++) // For every x position
+        {
+            for (int y = 0; y < gridHeight; y++) // For every y position
+            {
+                if (spawnPosition[x, y] != null) // Once we found the box in the array
+                {
+                    spawnPosition[x, y] = null;
+                }
+            }
+        }
+
+        gridManager.selectedBoxs.Clear();
+        timerScript.timeLeft = 300;
+        powerUpUseCrusher = 0;
+        powerUpUseFire = 0;
+        powerUpUseBomb = 0;
+        wordsManager.correctWordsFound.Clear();
+        uIManager.CleanLabel();
+        uIManager.Reset();
+        Time.timeScale = 1;
+        timerScript.Reset();
+        gameOver = false;
+        gridManager.gameOver = false;
+
+        StartCoroutine(SpawnNewBoxs());
+    }
+
     public void CountScore(int value)
     {
         int baseLetterPoint = 15;
@@ -156,6 +207,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator SpawnNewBoxs()
     {
+        float timeChange = 0;
         int x = 0;
         int y = 0;
 
@@ -185,8 +237,66 @@ public class GameManager : MonoBehaviour
 
             MoveBoxs(newBox);
 
-            yield return new WaitForSeconds(1f);
+            if (timeChange < Time.time && spawnSpeed > 0.4f)//speed up spawn speed with game time
+            {
+                timeChange = Time.time +1;
+                spawnSpeed -=0.002f;
+            }
+
+            yield return new WaitForSeconds(spawnSpeed);
         }
+    }
+
+    public IEnumerator FillGrid()
+    {  
+        bool arrayFull = false;
+        int x = 0;
+        int y = 0;
+
+        while (!arrayFull)
+        {
+            GameObject box = GenerateBox();
+
+            for (int a = 0; a < gridManager.gridWidth; a++)//prevent a second magnet from spawning if there is already one in one of the array
+            {
+                for (int b = 0; b < gridManager.gridHeight; b++)
+                {
+                    if (gridManager.gridArray[a, b] != null && gridManager.gridArray[a, b].name == "magnetBoxSquare(Clone)" || spawnPosition[0, b] != null && spawnPosition[0, b].name == "magnetBoxSquare(Clone)")
+                    {
+                        if (box.name == "magnetBoxSquare")
+                        {
+                            box = boxsPrefab[0];
+                        }
+                    }   
+                }
+            }
+            
+            Vector3 worldPosition = lineGrid.CellToWorld(new Vector3Int(x, y));
+            GameObject newBox = ObjectPool.BoxSpawn(box, worldPosition, Quaternion.identity);
+
+            newBox.transform.SetParent(boxParent.transform);
+            spawnPosition[x, y] = newBox;
+
+            MoveBoxs(newBox);
+
+
+            yield return new WaitForSeconds(0.2f);
+
+            for (int a = 0; a < gridManager.maxgridWidth; a++)
+            {
+                for (int b = 0; b < gridManager.gridHeight; b++)
+                {
+                    if (gridManager.gridArray[x, y] == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        arrayFull = true;
+                    }
+                }
+            }
+        }    
     }
 
     void MoveBoxs(GameObject go)
