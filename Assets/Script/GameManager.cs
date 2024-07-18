@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
     int powerUpUseCrusher = 0;
     int powerUpUseFire = 0;
     int powerUpUseBomb = 0;
-    int test = 0;
 
     void Awake()
     {
@@ -52,11 +51,6 @@ public class GameManager : MonoBehaviour
             //Time.timeScale = 5;
             StartCoroutine(LoadScene("Scene_Gamemode_01"));
         }
-        if (Input.GetKeyDown("w"))//test for debug
-        {
-            //Time.timeScale = 5;
-            Debug.Log(test);
-        }
     }
 
     void InitializeBoxFrequencies()
@@ -67,6 +61,11 @@ public class GameManager : MonoBehaviour
         boxFrequencies.Add(boxsPrefab[3], 0);//fire box
         boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
         boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
+    }
+
+    public void LaunchGamemode_1()
+    {
+        StartCoroutine(LoadScene("Scene_Gamemode_01"));
     }
 
     public IEnumerator LoadScene(string scene)

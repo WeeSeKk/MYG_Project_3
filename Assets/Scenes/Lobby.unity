@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 26699054}
   - component: {fileID: 26699053}
+  - component: {fileID: 26699055}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -170,6 +171,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &26699055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26699052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84bceec4f4f015744ad14e5fbd951c2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &717602250
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,42 +219,6 @@ MonoBehaviour:
   - {fileID: 8665857326951347012, guid: 9ab975e5dcc2ba64f882f2eef36c2348, type: 3}
   - {fileID: 5769404327233256390, guid: 33008eb903bc7c2489b042dca0fa9c23, type: 3}
   - {fileID: 5663635164573233340, guid: 4f12043808ae11e4c8bef16f30f9a87a, type: 3}
-  wordsToFind:
-  - Lion
-  - Tiger
-  - Elephant
-  - Giraffe
-  - Zebra
-  - Kangaroo
-  - Koala
-  - Panda
-  - Gorilla
-  - Chimpanzee
-  - Dolphin
-  - Whale
-  - Shark
-  - Penguin
-  - Seal
-  - Walrus
-  - Otter
-  - Crocodile
-  - Alligator
-  - Hippopotamus
-  - Rhinoceros
-  - Leopard
-  - Cheetah
-  - Jaguar
-  - Buffalo
-  - Antelope
-  - Deer
-  - Moose
-  - Elk
-  - Bison
-  - Wolf
-  - Fox
-  - Raccoon
-  - Opossum
-  - Squirrel
   spawnSpeed: 1
 --- !u!4 &717602252
 Transform:
@@ -253,6 +230,50 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.4852848, y: 3.0683353, z: -0.06847953}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1021940343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1021940345}
+  - component: {fileID: 1021940344}
+  m_Layer: 0
+  m_Name: PlayfabManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1021940344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021940343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c055f88f2e7d35144bed136516ae7b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1021940345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021940343}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.339592, y: 1.0539718, z: -0.08006384}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -357,3 +378,4 @@ SceneRoots:
   - {fileID: 1501313932}
   - {fileID: 26699054}
   - {fileID: 717602252}
+  - {fileID: 1021940345}
