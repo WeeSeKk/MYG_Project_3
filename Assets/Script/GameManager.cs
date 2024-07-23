@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
-using JetBrains.Annotations;
-using Unity.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +10,7 @@ public class GameManager : MonoBehaviour
     static readonly Dictionary<GameObject, int> boxFrequencies = new Dictionary<GameObject, int>();
     GridManager gridManager;
     WordsManager wordsManager;
+    ObjectPool objectPool;
     UIManager uIManager;
     TimerScript timerScript;
     GameObject boxParent;
@@ -48,19 +46,18 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))//test for debug
         {
-            //Time.timeScale = 5;
-            StartCoroutine(LoadScene("Scene_Gamemode_01"));
+            Time.timeScale = 5;
         }
     }
 
     void InitializeBoxFrequencies()
     {
-        boxFrequencies.Add(boxsPrefab[0], 100);//default box
-        boxFrequencies.Add(boxsPrefab[1], 0);//crusher box
-        boxFrequencies.Add(boxsPrefab[2], 0);//skull box
-        boxFrequencies.Add(boxsPrefab[3], 0);//fire box
-        boxFrequencies.Add(boxsPrefab[4], 0);//magnet box
-        boxFrequencies.Add(boxsPrefab[5], 0);//bomb box 
+        boxFrequencies.Add(boxsPrefab[0], 100);//default box  100
+        boxFrequencies.Add(boxsPrefab[1], 0);//crusher box  5
+        boxFrequencies.Add(boxsPrefab[2], 0);//skull box  10
+        boxFrequencies.Add(boxsPrefab[3], 0);//fire box  3
+        boxFrequencies.Add(boxsPrefab[4], 0);//magnet box  2
+        boxFrequencies.Add(boxsPrefab[5], 0);//bomb box   3
     }
 
     public void LaunchGamemode_1()
@@ -70,17 +67,17 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator LoadScene(string scene)
     {
-        
         if (scene == "Scene_Gamemode_01")
         {
             yield return SceneManager.LoadSceneAsync(scene);
             gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
+            objectPool = GameObject.Find("GridManager").GetComponent<ObjectPool>();
             wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
             uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
             timerScript = GameObject.Find("UIDocument").GetComponent<TimerScript>();
+            lineGrid = GameObject.Find("BoxLinePosition").GetComponent<Grid>();
             boxParent = GameObject.Find("BoxParent");
             boxPosBeforeArray = GameObject.Find("BoxPosBeforeArray");
-            lineGrid = GameObject.Find("BoxLinePosition").GetComponent<Grid>();
 
             spawnPosition = new GameObject[gridWidth, gridHeight];
 
@@ -95,7 +92,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    GameObject GenerateBox()
+    public GameObject GenerateBox()
     {
         int totalWeight = 0;
         foreach (var weight in boxFrequencies.Values)
@@ -135,11 +132,6 @@ public class GameManager : MonoBehaviour
 
     public void ResetAll()
     {
-        foreach (Transform child in boxParent.transform)
-        {
-            ObjectPool.ReturnObjectToPool(child.gameObject); 
-        }
-
         for (int x = 0; x < gridManager.gridWidth; x++) // For every x position
         {
             for (int y = 0; y < gridManager.gridHeight; y++) // For every y position
@@ -160,6 +152,11 @@ public class GameManager : MonoBehaviour
                     spawnPosition[x, y] = null;
                 }
             }
+        }
+
+        foreach (Transform child in boxParent.transform)
+        {
+            ObjectPool.ReturnObjectToPool(child.gameObject);
         }
 
         gridManager.selectedBoxs.Clear();
@@ -195,7 +192,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(timerScript.AddTimerTime(5));
         }
 
-        Debug.Log(score);
+        uIManager.UpdateScoreLabel(score);
         
     }
 
@@ -309,7 +306,6 @@ public class GameManager : MonoBehaviour
 
     void GameOver()
     {
-        Debug.Log("THE GAME IS OVER");
         gameOver = true;
     }
 }

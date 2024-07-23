@@ -131,6 +131,10 @@ public class BombBoxPrefab : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (spawned)
+        {
+            isClickable = true;
+        }
         if (!gridManager.selectedBoxs.Contains(this.gameObject) && isClickable)
         {
             wordsManager.AddLetter(letter);
@@ -148,6 +152,7 @@ public class BombBoxPrefab : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
+                    spawned = true;
                     NewMoveCell(x, y);
                     return;
                 }

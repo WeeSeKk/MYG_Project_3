@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 public class LobbyUIManager : MonoBehaviour
 {
     VisualElement root;
+    VisualElement settingsTab;
+    public Slider musicSlider;
     Button singleplayerButton;
     Button multiplayerButton;
     Button settingsButton;
@@ -16,15 +18,19 @@ public class LobbyUIManager : MonoBehaviour
     void Start()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
+        settingsTab = root.Q<VisualElement>("SettingsTab");
         singleplayerButton = root.Q<Button>("SingleplayerButton");
         multiplayerButton = root.Q<Button>("MultiplayerButton");
         connectingLabel = root.Q<Label>("ConnectingLabel");
         settingsButton = root.Q<Button>("SettingsButton");
         returnButton = root.Q<Button>("ReturnButton");
+        musicSlider = root.Q<Slider>("MusicSlider");
 
         singleplayerButton.RegisterCallback<ClickEvent>(evt => ConnectingScreen());
         settingsButton.RegisterCallback<ClickEvent>(evt => OpenCloseSettings(settingsButton));
         returnButton.RegisterCallback<ClickEvent>(evt => OpenCloseSettings(returnButton));
+
+        musicSlider.value = 0.05f;
     }
 
     void ConnectingScreen()
@@ -39,11 +45,11 @@ public class LobbyUIManager : MonoBehaviour
     {
         if (button == settingsButton)
         {
-            //open settings
+           settingsTab.RemoveFromClassList("SettingsTabHidden");
         }
         else
         {
-            //close settings
+            settingsTab.AddToClassList("SettingsTabHidden");
         }
     }
 }

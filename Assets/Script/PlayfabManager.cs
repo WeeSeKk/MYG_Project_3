@@ -43,4 +43,9 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.LogError(error.GenerateErrorReport());
     }
+
+    void UpdateUsernam(string username)
+    {
+        //PlayFabClientAPI.UpdateUserTitleDisplayName
+    }
 }

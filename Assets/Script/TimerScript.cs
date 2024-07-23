@@ -11,6 +11,7 @@ public class TimerScript : MonoBehaviour
     VisualElement pauseBlackScreen;
     Label timerLabel;
     Label timerTimeAdd;
+    Label timeLabel;
     Label crusherTimerLabel;
     Label fireTimerLabel;
     Label bombTimerLabel;
@@ -26,6 +27,7 @@ public class TimerScript : MonoBehaviour
     public float fireTime;
     bool bombTimer;
     public float bombTime;
+    float timePlaying = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +37,7 @@ public class TimerScript : MonoBehaviour
         root = GetComponent<UIDocument>().rootVisualElement; 
         pauseBlackScreen = root.Q<VisualElement>("PauseBlackScreen");
         timerLabel = root.Q<Label>("TimerLabel");
+        timeLabel = root.Q<Label>("TimeLabel");
         timerTimeAdd = root.Q<Label>("TimerTimeAdd");
         crusherTimerLabel = root.Q<Label>("CrusherTimer");
         fireTimerLabel = root.Q<Label>("FireTimer");
@@ -81,10 +84,13 @@ public class TimerScript : MonoBehaviour
             if (timeLeft > 0)
             {
                 timeLeft -= Time.deltaTime;
+                timePlaying += Time.deltaTime;
                 UpdateTimer(timeLeft);
+                UpdateFinalTime(timePlaying);
             }
             else 
             {
+                StopAllCoroutines();
                 EventManager.GameOverEvent();
                 ResetTimer();
                 timerOn = false;
@@ -128,7 +134,7 @@ public class TimerScript : MonoBehaviour
             if (bombTime > 0)
             {
                 bombTime -= Time.deltaTime;
-                UpdateBombTimer(crusherTime);
+                UpdateBombTimer(bombTime);
             }
             else 
             {
@@ -222,6 +228,16 @@ public class TimerScript : MonoBehaviour
 
         bombTimerLabel.text = string.Format("{00}", secondes);
     }
+
+    void UpdateFinalTime(float timerTime)
+    {
+        timerTime += 1;
+
+        float minutes = Mathf.FloorToInt(timerTime / 60);
+        float secondes = Mathf.FloorToInt(timerTime % 60);
+
+        timeLabel.text = string.Format("{0:00}:{1:00}", minutes, secondes);
+    }
     
     void GameOver()
     {
@@ -234,6 +250,8 @@ public class TimerScript : MonoBehaviour
     public void Reset()
     {
         timerOn = true;
+
+        timePlaying = 0;
 
         BombButton.pickingMode = PickingMode.Position;
         BombButton.style.unityBackgroundImageTintColor = Color.white;

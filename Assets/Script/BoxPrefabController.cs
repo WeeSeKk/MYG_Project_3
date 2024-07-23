@@ -23,12 +23,6 @@ public class BoxPrefabController : MonoBehaviour
     int posY;
     public List<Sprite> sprites;
     public List<Sprite> outlineSprites;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
     
     void Awake()
     {
@@ -41,9 +35,6 @@ public class BoxPrefabController : MonoBehaviour
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 
         text = child.GetComponent<TMP_Text>();
-        isClickable = false;
-        ChooseSprite();
-        ChooseLetter();
     }
 
     public void ActivateBox()
@@ -54,7 +45,10 @@ public class BoxPrefabController : MonoBehaviour
 
     void OnEnable()
     {
+        ChooseSprite();
+        ChooseLetter();
         outline.enabled = false;
+        spawned = false;
     }
 
     void SwapLetters()
@@ -71,8 +65,12 @@ public class BoxPrefabController : MonoBehaviour
 
     void OnDisable()
     {
-        spawned = false;
         this.gameObject.transform.DOKill();
+        
+        if (gridManager.selectedBoxs.Contains(this.gameObject))
+        {
+            gridManager.selectedBoxs.Remove(this.gameObject);
+        }
     }
 
     void ChooseSprite()
@@ -109,8 +107,8 @@ public class BoxPrefabController : MonoBehaviour
             { 
                 if (gridManager.gridArray[x, 9] == this.gameObject)
                 {
-                    ActivateBox();
                     spawned = true;
+                    ActivateBox();
                     break;
                 }
             }
@@ -144,8 +142,13 @@ public class BoxPrefabController : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (spawned)
+        {
+            isClickable = true;
+        }
         if (!gridManager.selectedBoxs.Contains(this.gameObject) && isClickable)
         {
+            AudioManager.instance.TestSoundEffect();
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
@@ -161,6 +164,7 @@ public class BoxPrefabController : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
+                    spawned = true;
                     NewMoveCell(x, y);
                     return;
                 }
@@ -204,6 +208,6 @@ public class BoxPrefabController : MonoBehaviour
     void GameOver()
     {
         isClickable = false;
-        this.gameObject.transform.DOKill();
+        //this.gameObject.transform.DOKill();
     }
 }

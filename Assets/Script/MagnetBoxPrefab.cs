@@ -32,7 +32,6 @@ public class MagnetBoxPrefab : MonoBehaviour
     void Awake()
     {
         EventManager.gameOverEvent += GameOver;
-        fillerArray = new GameObject[gridManager.gridWidth, gridManager.gridHeight];
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 
@@ -156,6 +155,7 @@ public class MagnetBoxPrefab : MonoBehaviour
 
     void OnEnable()
     {
+        fillerArray = new GameObject[gridManager.gridWidth, gridManager.gridHeight];
         _boxCollider2D.enabled = false;
         ChooseLetter();
         isClickable = false;
@@ -220,6 +220,10 @@ public class MagnetBoxPrefab : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (spawned)
+        {
+            isClickable = true;
+        }
         if (!gridManager.selectedBoxs.Contains(this.gameObject) && isClickable)
         {
             wordsManager.AddLetter(letter);
@@ -235,6 +239,7 @@ public class MagnetBoxPrefab : MonoBehaviour
             {
                 if (gridManager.gridArray[x, y] == this.gameObject)
                 {
+                    spawned = true;
                     NewMoveCell(x, y);
                     return;
                 }

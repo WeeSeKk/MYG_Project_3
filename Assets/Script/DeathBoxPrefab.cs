@@ -80,6 +80,7 @@ public class DeathBoxPrefab : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
+                    spawned = true;
                     NewMoveCell(x, y);
                     break;
                 }

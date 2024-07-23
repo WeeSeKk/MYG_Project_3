@@ -313,8 +313,9 @@ MonoBehaviour:
   grid: {fileID: 373122602}
   boxParent: {fileID: 497466869}
   spawnPoint: {fileID: 36314066}
-  gameManager: {fileID: 0}
   animationManager: {fileID: 824970668}
+  objectPool: {fileID: 373122606}
+  defaultBox: {fileID: 6384151933265506706, guid: a06fb9be627588c47a085d50688724db, type: 3}
   selectedBoxs: []
   powerUp:
   - {fileID: 4612867490924019535, guid: 059d1f5460c281d4a9960ac6b6d310c0, type: 3}
@@ -943,7 +944,6 @@ MonoBehaviour:
   elementList: {fileID: 9197481963319205126, guid: 9377d8ccdf37c62498bad139ed4a992a, type: 3}
   gridManager: {fileID: 373122604}
   timerScript: {fileID: 1536425946}
-  gameManager: {fileID: 0}
   canvas: {fileID: 1369438048}
 --- !u!114 &1536425946
 MonoBehaviour:
@@ -958,7 +958,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uIManager: {fileID: 1536425945}
-  gameManager: {fileID: 0}
   canvas: {fileID: 1369438048}
   timeLeft: 300
   crusherTime: 0
@@ -1135,7 +1134,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aPIManager: {fileID: 7249773}
-  gameManager: {fileID: 0}
   gridManager: {fileID: 373122604}
   uIManager: {fileID: 1536425945}
   correctWordsFound: []

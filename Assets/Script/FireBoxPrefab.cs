@@ -79,6 +79,10 @@ public class FireBoxPrefab : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (spawned)
+        {
+            isClickable = true;
+        }
         if (isClickable)
         {
             _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
@@ -134,6 +138,7 @@ public class FireBoxPrefab : MonoBehaviour
                 {
                     posY = y;
                     posX = x;
+                    spawned = true;
                     ActivateBox();
                     NewMoveCell(x, y);
                     break;

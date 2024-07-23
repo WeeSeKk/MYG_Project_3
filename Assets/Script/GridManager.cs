@@ -14,6 +14,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] Transform boxParent;
     [SerializeField] GameObject spawnPoint;
     [SerializeField] AnimationManager animationManager;
+    [SerializeField] ObjectPool objectPool;
+    [SerializeField] GameObject defaultBox;
     public List<GameObject> selectedBoxs = new List<GameObject>();
     public List<GameObject> powerUp = new List<GameObject>();
     public int gridWidth = 12;
@@ -137,7 +139,7 @@ public class GridManager : MonoBehaviour
 
         foreach (GameObject box in boxesToRemove)
         {
-            ObjectPool.ReturnObjectToPool(box); 
+            ObjectPool.ReturnObjectToPool(gameObject);
         }
 
         selectedBoxs.Clear();
