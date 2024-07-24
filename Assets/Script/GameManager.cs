@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
             lineGrid = GameObject.Find("BoxLinePosition").GetComponent<Grid>();
             boxParent = GameObject.Find("BoxParent");
             boxPosBeforeArray = GameObject.Find("BoxPosBeforeArray");
+            AudioManager.instance.ChangeUIManager(1);
 
             spawnPosition = new GameObject[gridWidth, gridHeight];
 
@@ -89,6 +90,11 @@ public class GameManager : MonoBehaviour
             InitializeBoxFrequencies();
 
             StartCoroutine(SpawnNewBoxs());
+        }
+        else
+        {
+            yield return SceneManager.LoadSceneAsync(scene);
+            AudioManager.instance.ChangeUIManager(0);
         }
     }
 

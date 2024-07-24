@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class ObjectPool : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class ObjectPool : MonoBehaviour
 
         GameObject spawnAbleObject = null;
         
-
         foreach (GameObject obj in pool.InactiveObjects)//look for inactive object in the pool 
         {
             if (obj != null)
@@ -49,7 +49,7 @@ public class ObjectPool : MonoBehaviour
 
         if(pool == null)
         {
-            Debug.LogWarning("ERROR");
+            Debug.LogWarning("ERROR" + gameObject);
         }
         else
         {
@@ -63,47 +63,4 @@ public class PooledObjectInfo
 {
     public string LookUpString;
     public List<GameObject> InactiveObjects = new List<GameObject>();
-}
-/*
-    ObjectPool<GameObject> boxs;
-
-    void Awake()
-    {
-        CreateBoxObjectPool();
-    }
-
-    public void CreateBoxObjectPool() {
-        boxs = new ObjectPool<GameObject>(() => {
-            return CreateBox();                     //Creation Function
-        }, boxs => {
-            OnGet(boxs);                            //On Get
-        }, boxs => {
-            boxs.SetActive(false);                  //On Release
-        }, boxs => {
-            Destroy(boxs);                          //On Destroy
-        }, false,                                   //Check Collection
-        20,                                         //Initial Array Size (to avoid recreations)
-        80                                          //Max Array Size
-        );
-    }
-
-    GameObject CreateBox()
-    {
-        return Instantiate(GameManager.instance.GenerateBox());
-    }
-
-    public GameObject GetBox()
-    {
-        return boxs.Get();
-    }
-
-    void OnGet(GameObject box)
-    {
-        box.SetActive(true);
-    }
-
-    public void ReleaseBox(GameObject box)
-    {
-        boxs.Release(box);
-    }
- */   
+}   

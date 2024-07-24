@@ -226,6 +226,7 @@ public class MagnetBoxPrefab : MonoBehaviour
         }
         if (!gridManager.selectedBoxs.Contains(this.gameObject) && isClickable)
         {
+            AudioManager.instance.PlayAudioClip(1);
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
@@ -254,25 +255,6 @@ public class MagnetBoxPrefab : MonoBehaviour
         posX = gridManager.gridWidth - 1;
         posY = y - 5;
             
-        newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(posX, posY));
-        this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc).OnComplete(() => {
-
-            _boxCollider2D.enabled = true;
-        });
-
-        gridManager.UpdateArray(this.gameObject, posX, posY);
-        SendPositionToArray(this.gameObject, posX, posY);
-    }
-
-    void TempSetPos()
-    {
-        Vector3 newWorldPosition;
-
-        posX = 11;
-        posY = 4;
-
-        gridManager.gridArray[posX, posY] = this.gameObject;
-
         newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(posX, posY));
         this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc).OnComplete(() => {
 

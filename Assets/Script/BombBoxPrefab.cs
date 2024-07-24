@@ -137,6 +137,7 @@ public class BombBoxPrefab : MonoBehaviour
         }
         if (!gridManager.selectedBoxs.Contains(this.gameObject) && isClickable)
         {
+            AudioManager.instance.PlayAudioClip(1);
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
@@ -210,6 +211,7 @@ public class BombBoxPrefab : MonoBehaviour
         }
 
         goSprite.enabled = false;
+        AudioManager.instance.PlayAudioClip(4);
         _particleSystem.Play();
         text.SetText("");
 

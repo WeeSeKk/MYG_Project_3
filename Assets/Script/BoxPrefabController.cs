@@ -148,7 +148,7 @@ public class BoxPrefabController : MonoBehaviour
         }
         if (!gridManager.selectedBoxs.Contains(this.gameObject) && isClickable)
         {
-            AudioManager.instance.TestSoundEffect();
+            AudioManager.instance.PlayAudioClip(1);
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }

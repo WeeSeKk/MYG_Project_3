@@ -85,6 +85,7 @@ public class FireBoxPrefab : MonoBehaviour
         }
         if (isClickable)
         {
+            AudioManager.instance.PlayAudioClip(1);
             _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
             boxCollider2D.isTrigger = true;
             fire = true;

@@ -8,6 +8,7 @@ public class LobbyUIManager : MonoBehaviour
     VisualElement root;
     VisualElement settingsTab;
     public Slider musicSlider;
+    public Slider audioSlider;
     Button singleplayerButton;
     Button multiplayerButton;
     Button settingsButton;
@@ -25,12 +26,26 @@ public class LobbyUIManager : MonoBehaviour
         settingsButton = root.Q<Button>("SettingsButton");
         returnButton = root.Q<Button>("ReturnButton");
         musicSlider = root.Q<Slider>("MusicSlider");
+        audioSlider = root.Q<Slider>("AudioSlider");
 
-        singleplayerButton.RegisterCallback<ClickEvent>(evt => ConnectingScreen());
-        settingsButton.RegisterCallback<ClickEvent>(evt => OpenCloseSettings(settingsButton));
-        returnButton.RegisterCallback<ClickEvent>(evt => OpenCloseSettings(returnButton));
+        singleplayerButton.RegisterCallback<ClickEvent>(evt => {
+            ConnectingScreen();
+            EventManager.ButtonClicked(0);
+        });
+        settingsButton.RegisterCallback<ClickEvent>(evt => {
+            OpenCloseSettings(settingsButton);
+            EventManager.ButtonClicked(0);
+        });
+        returnButton.RegisterCallback<ClickEvent>(evt => {
+            OpenCloseSettings(returnButton);
+            EventManager.ButtonClicked(0);
+        });
+        audioSlider.RegisterCallback<ClickEvent>(evt => {
+            EventManager.ButtonClicked(0);
+        });
 
         musicSlider.value = 0.05f;
+        audioSlider.value = 0.5f;
     }
 
     void ConnectingScreen()

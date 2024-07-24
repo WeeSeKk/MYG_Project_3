@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using DG.Tweening;
 
 public class AudioManager : MonoBehaviour
 {
@@ -11,10 +12,18 @@ public class AudioManager : MonoBehaviour
     UIManager uIManager;
     [SerializeField] AudioSource musicAudioSource;
     [SerializeField] AudioSource soundAudioSource;
+    [SerializeField] List<AudioClip> clips;
+    bool paused;
+    public float musicValue;
+    public float soundValue;
+    int scene;
 
     void Awake()
     {
+        EventManager.buttonClicked += PlayAudioClip;
+
         lobbyUIManager = GameObject.Find("UIDocument").GetComponent<LobbyUIManager>();
+        scene = 0;
 
         if (instance != null && instance != this)
         {
@@ -25,35 +34,74 @@ public class AudioManager : MonoBehaviour
             instance = this;
         }
         DontDestroyOnLoad(this.gameObject);
-        CreateAudioSoundObjectPool();
+        //CreateAudioSoundObjectPool();
     }
 
-    public void ChangeUIManager()
+    public void ChangeUIManager(int num)
     {
         //on scene load change ui manager for settings
         //called from GameManager
+        if (num == 1)
+        {
+            uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
+            scene = 1;
+        }
+        else
+        {
+            lobbyUIManager = GameObject.Find("UIDocument").GetComponent<LobbyUIManager>();
+            scene = 0;
+        }
     }
 
-    public void TestSoundEffect()
+    public void PlayAudioClip(int num)
     {
+        soundAudioSource.clip = clips[num];
         soundAudioSource.Play();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void PauseMusic()
     {
-        
+        if (paused)
+        {
+            //slider value = musicValue
+            musicAudioSource.Play();
+            paused = false;
+            
+        }
+        else
+        {
+            //musicValue = slider value
+            //go to 0
+            musicAudioSource.Pause();
+            paused = true;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if scene lobby
-        musicAudioSource.volume = lobbyUIManager.musicSlider.value;
-        //scene gameplay slider value == scene lobby slider value
-        //or if scene gameplay
-    }
+        if (scene == 0)
+        {
+            musicAudioSource.volume = lobbyUIManager.musicSlider.value;
+            musicValue = musicAudioSource.volume;
 
+
+
+            soundAudioSource.volume = lobbyUIManager.audioSlider.value;
+            soundValue = soundAudioSource.volume;
+        }
+        else 
+        {
+            musicAudioSource.volume = uIManager.musicSlider.value;
+            musicValue = musicAudioSource.volume;
+
+
+
+            soundAudioSource.volume = uIManager.audioSlider.value;
+            soundValue = soundAudioSource.volume;
+        }
+    }
+    /*
     public void CreateAudioSoundObjectPool() {
         audioSound = new ObjectPool<GameObject>(() => {
             return CreateAudioSound();                      //Creation Function
@@ -83,4 +131,5 @@ public class AudioManager : MonoBehaviour
     {
         audioSound.Release(go);
     }
+    */
 }

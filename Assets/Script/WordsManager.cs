@@ -88,6 +88,7 @@ public class WordsManager : MonoBehaviour
         if (isValid)
         {
             //word is valid
+            AudioManager.instance.PlayAudioClip(2);
             Debug.Log("VALID");
             StartCoroutine(gridManager.RemoveSelectedBox());
             uIManager.AddList(createdWord);
@@ -99,8 +100,10 @@ public class WordsManager : MonoBehaviour
         else
         {
             //word is not valid
+            AudioManager.instance.PlayAudioClip(3);
             uIManager.CleanLabel();
             Debug.Log("UNVALID");
+            StartCoroutine(uIManager.ShowRedLine());
         }
         
         ResetWord(); //reset the created word 

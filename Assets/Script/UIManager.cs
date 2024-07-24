@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     VisualElement root;
     VisualElement gameOverTab;
     VisualElement greenLine;
+    public Slider musicSlider;
+    public Slider audioSlider;
     VisualElement background;
     VisualElement topleftStar;
     VisualElement topmiddleStar;
@@ -20,6 +22,7 @@ public class UIManager : MonoBehaviour
     VisualElement topbottomStar;
     VisualElement middlebottomStar;
     VisualElement bottombottomStar;
+    VisualElement settingsTab;
     ListView wordsList;
     Label lettersLabel;
     Label crusherCount;
@@ -28,12 +31,15 @@ public class UIManager : MonoBehaviour
     Label pointLabel;
     Label scoreLabel;
     Button validButton;
+    Button settingsReturnButton;
     Button swapLettersButton;
     Button retryButton;
     Button undoButton;
+    Button settingsButton;
     Button crusherButton;
     Button FireButton;
     Button BombButton;
+    Button quitButton;
     List<string> words = new List<string>();
     int crusher = 0;
     int fire = 0;
@@ -48,9 +54,12 @@ public class UIManager : MonoBehaviour
         gameOverTab = root.Q<VisualElement>("GameOverTab");
         background = root.Q<VisualElement>("Background");
         greenLine = root.Q<VisualElement>("GreenLine");
+        settingsTab = root.Q<VisualElement>("SettingsTab");
         wordsList = root.Q<ListView>("WordsList");
         lettersLabel = root.Q<Label>("LettersLabel");
         validButton = root.Q<Button>("ValidButton");
+        settingsButton = root.Q<Button>("SettingsButton");
+        settingsReturnButton = root.Q<Button>("SettingsReturnButton");
         undoButton = root.Q<Button>("UndoButton");
         pointLabel = root.Q<Label>("PointLabel");
         retryButton = root.Q<Button>("RetryButton");
@@ -58,6 +67,9 @@ public class UIManager : MonoBehaviour
         fireCount = root.Q<Label>("FireCount");
         bombCount = root.Q<Label>("BombCount");
         scoreLabel = root.Q<Label>("ScoreLabel");
+        musicSlider = root.Q<Slider>("MusicSlider");
+        audioSlider = root.Q<Slider>("AudioSlider");
+        quitButton = root.Q<Button>("QuitButton");
 
         crusherButton = root.Q<Button>("CrusherButton");
         FireButton = root.Q<Button>("FireButton");
@@ -71,11 +83,37 @@ public class UIManager : MonoBehaviour
         middlebottomStar = root.Q<VisualElement>("MiddlebottomStar");
         bottombottomStar = root.Q<VisualElement>("BottombottomStar");
 
-        validButton.RegisterCallback<ClickEvent>(evt => StartCoroutine(wordsManager.IsWordValid(lettersLabel.text)));
-        undoButton.RegisterCallback<ClickEvent>(evt => CleanLabel());
-        swapLettersButton.RegisterCallback<ClickEvent>(evt => EventManager.SwapLetters());
+        quitButton.RegisterCallback<ClickEvent>(evt => {
+            StartCoroutine(GameManager.instance.LoadScene("Lobby"));
+            EventManager.ButtonClicked(0);
+        });
+        settingsReturnButton.RegisterCallback<ClickEvent>(evt => {
+            ShowSettings(settingsReturnButton);
+            EventManager.ButtonClicked(0);
+        });
+        settingsButton.RegisterCallback<ClickEvent>(evt => {
+            ShowSettings(settingsButton);
+            EventManager.ButtonClicked(0);
+        });
+        validButton.RegisterCallback<ClickEvent>(evt => {
+            StartCoroutine(wordsManager.IsWordValid(lettersLabel.text));
+            EventManager.ButtonClicked(0);
+        });
+        undoButton.RegisterCallback<ClickEvent>(evt => {
+            CleanLabel();
+            EventManager.ButtonClicked(0);
+        });
+        swapLettersButton.RegisterCallback<ClickEvent>(evt => {
+            swapLettersButton.pickingMode = PickingMode.Ignore;
+            swapLettersButton.style.unityBackgroundImageTintColor = Color.grey;
+            EventManager.SwapLetters();
+            EventManager.ButtonClicked(0);
+        });
 
-        retryButton.RegisterCallback<ClickEvent>(evt => GameManager.instance.ResetAll());
+        retryButton.RegisterCallback<ClickEvent>(evt => {
+            GameManager.instance.ResetAll();
+            EventManager.ButtonClicked(0);
+        });
 
         crusherButton.RegisterCallback<ClickEvent>(evt => {
             crusherButton.pickingMode = PickingMode.Ignore;
@@ -83,6 +121,7 @@ public class UIManager : MonoBehaviour
             gridManager.SpawnPowerUp(0);
             timerScript.SetupPowerupTimer(0);
             UpdatePowerupUsed(crusherButton);
+            EventManager.ButtonClicked(0);
         });
         FireButton.RegisterCallback<ClickEvent>(evt => {
             FireButton.pickingMode = PickingMode.Ignore;
@@ -90,6 +129,7 @@ public class UIManager : MonoBehaviour
             gridManager.SpawnPowerUp(1);
             timerScript.SetupPowerupTimer(1);
             UpdatePowerupUsed(FireButton);
+            EventManager.ButtonClicked(0);
         });
         BombButton.RegisterCallback<ClickEvent>(evt => {
             BombButton.pickingMode = PickingMode.Ignore;
@@ -97,12 +137,33 @@ public class UIManager : MonoBehaviour
             gridManager.SpawnPowerUp(2);
             timerScript.SetupPowerupTimer(2);
             UpdatePowerupUsed(BombButton);
+            EventManager.ButtonClicked(0);
         });
+        audioSlider.RegisterCallback<ClickEvent>(evt => {
+            EventManager.ButtonClicked(0);
+        });
+
+        musicSlider.value = AudioManager.instance.musicValue;
+        audioSlider.value = AudioManager.instance.soundValue;
     }
     
     public void UpdateLabel(string word)
     {
         lettersLabel.text = word;
+    }
+
+    void ShowSettings(Button button)
+    {
+        if (button == settingsButton)
+        {
+           settingsTab.RemoveFromClassList("SettingsTabHidden");
+           settingsTab.pickingMode = PickingMode.Position;
+        }
+        else
+        {
+            settingsTab.AddToClassList("SettingsTabHidden");
+            settingsTab.pickingMode = PickingMode.Ignore;
+        }
     }
 
     public void CleanLabel()
@@ -176,6 +237,21 @@ public class UIManager : MonoBehaviour
 
     public IEnumerator ShowGreenLine()
     {
+        greenLine.RemoveFromClassList("LineRed");
+        greenLine.AddToClassList("LineGreen");
+        greenLine.AddToClassList("GreenLineVisible");
+        yield return new WaitForSeconds(0.3f);
+        greenLine.AddToClassList("GreenLineHiddenRight");
+        yield return new WaitForSeconds(0.3f);
+
+        greenLine.RemoveFromClassList("GreenLineVisible");
+        greenLine.RemoveFromClassList("GreenLineHiddenRight");
+    }
+
+    public IEnumerator ShowRedLine()
+    {
+        greenLine.RemoveFromClassList("LineGreen");
+        greenLine.AddToClassList("LineRed");
         greenLine.AddToClassList("GreenLineVisible");
         yield return new WaitForSeconds(0.3f);
         greenLine.AddToClassList("GreenLineHiddenRight");

@@ -110,6 +110,7 @@ VisualElement {
 
 .GreenLineVisible {
     right: 0;
+    transition-duration: 0.3s;
 }
 
 .GreenLineHiddenRight {
@@ -124,10 +125,19 @@ VisualElement {
     right: 25%;
     bottom: 10%;
     background-color: rgb(53, 53, 53);
-    overflow: hidden;
+    overflow: visible;
     display: flex;
 }
 
 .SettingsTabHidden {
     scale: 0 0;
+}
+
+.LineGreen {
+    transition-duration: 0.3s;
+    background-color: rgb(22, 187, 119);
+}
+
+.LineRed {
+    background-color: rgb(238, 39, 71);
 }

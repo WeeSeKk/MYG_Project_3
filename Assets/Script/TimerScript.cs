@@ -12,6 +12,7 @@ public class TimerScript : MonoBehaviour
     Label timerLabel;
     Label timerTimeAdd;
     Label timeLabel;
+    Label swapLettersTimer;
     Label crusherTimerLabel;
     Label fireTimerLabel;
     Label bombTimerLabel;
@@ -19,6 +20,7 @@ public class TimerScript : MonoBehaviour
     Button crusherButton;
     Button FireButton;
     Button BombButton;
+    Button swapButton;
     public float timeLeft;
     bool timerOn;
     bool crusherTimer;
@@ -27,6 +29,8 @@ public class TimerScript : MonoBehaviour
     public float fireTime;
     bool bombTimer;
     public float bombTime;
+    bool swapTimer;
+    public float swapTime;
     float timePlaying = 0;
 
     // Start is called before the first frame update
@@ -35,6 +39,7 @@ public class TimerScript : MonoBehaviour
         EventManager.gameOverEvent += GameOver;
         uIManager = GetComponent<UIManager>();
         root = GetComponent<UIDocument>().rootVisualElement; 
+        swapLettersTimer = root.Q<Label>("SwapLettersTimer");
         pauseBlackScreen = root.Q<VisualElement>("PauseBlackScreen");
         timerLabel = root.Q<Label>("TimerLabel");
         timeLabel = root.Q<Label>("TimeLabel");
@@ -46,6 +51,7 @@ public class TimerScript : MonoBehaviour
         crusherButton = root.Q<Button>("CrusherButton");
         FireButton = root.Q<Button>("FireButton");
         BombButton = root.Q<Button>("BombButton");
+        swapButton = root.Q<Button>("SwapLetters");
 
         timerOn = true;
 
@@ -53,10 +59,13 @@ public class TimerScript : MonoBehaviour
         crusherTimerLabel.text = "";
         fireTimerLabel.text = "";
         bombTimerLabel.text = "";
+        swapLettersTimer.text = "";
 
         pauseButton.RegisterCallback<ClickEvent>(evt => {
             if(timerOn == true)
             {
+                AudioManager.instance.PauseMusic();
+                EventManager.ButtonClicked(0);
                 timerOn = false;
                 Time.timeScale = 0;
                 pauseBlackScreen.pickingMode = PickingMode.Position;
@@ -66,6 +75,8 @@ public class TimerScript : MonoBehaviour
             }
             else
             {
+                AudioManager.instance.PauseMusic();
+                EventManager.ButtonClicked(0);
                 timerOn = true;
                 Time.timeScale = 1;
                 pauseBlackScreen.pickingMode = PickingMode.Ignore;
@@ -143,6 +154,22 @@ public class TimerScript : MonoBehaviour
                 BombButton.pickingMode = PickingMode.Position;
                 BombButton.style.unityBackgroundImageTintColor = Color.white;
                 bombTimerLabel.text = "";
+            }
+        }
+        if (swapTimer)
+        {
+            if (swapTime > 0)
+            {
+                swapTime -= Time.deltaTime;
+                UpdateSwapTimer(swapTime);
+            }
+            else 
+            {
+                swapTimer = false;
+
+                swapButton.pickingMode = PickingMode.Position;
+                swapButton.style.unityBackgroundImageTintColor = Color.white;
+                swapLettersTimer.text = "";
             }
         }
     }
@@ -227,6 +254,14 @@ public class TimerScript : MonoBehaviour
         float secondes = Mathf.FloorToInt(timerTime % 60);
 
         bombTimerLabel.text = string.Format("{00}", secondes);
+    }
+    void UpdateSwapTimer(float timerTime)
+    {
+        timerTime += 1;
+
+        float secondes = Mathf.FloorToInt(timerTime % 60);
+
+        swapLettersTimer.text = string.Format("{00}", secondes);
     }
 
     void UpdateFinalTime(float timerTime)

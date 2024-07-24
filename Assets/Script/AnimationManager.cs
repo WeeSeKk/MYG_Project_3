@@ -7,18 +7,7 @@ using Unity.VisualScripting;
 public class AnimationManager : MonoBehaviour
 {
     [SerializeField] GridManager gridManager;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void BoxsFly(GameObject gameObject)
     {
         System.Random random = new System.Random();
@@ -27,10 +16,5 @@ public class AnimationManager : MonoBehaviour
         Vector2 jumpEnd = new Vector2(i, 10);
         gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -1);
         gameObject.transform.DOMoveY(gameObject.transform.position.y + 10f, 1, false).SetEase(Ease.InBack);
-    }
-
-    public void CrushBoxs()
-    {
-        //do stuff
     }
 }

@@ -139,7 +139,7 @@ public class GridManager : MonoBehaviour
 
         foreach (GameObject box in boxesToRemove)
         {
-            ObjectPool.ReturnObjectToPool(gameObject);
+            ObjectPool.ReturnObjectToPool(box);
         }
 
         selectedBoxs.Clear();
