@@ -141,3 +141,31 @@ VisualElement {
 .LineRed {
     background-color: rgb(238, 39, 71);
 }
+
+.unity-base-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Fonts/This%20Cafe%20SDF.asset?fileID=11400000&guid=8545070a369019248b559cdc4c2b1b3e&type=2#This Cafe SDF");
+    color: rgb(255, 255, 255);
+    font-size: 40px;
+    -unity-text-align: upper-left;
+}
+
+.unity-text-element {
+    -unity-text-align: middle-left;
+}
+
+.unity-base-field__label {
+    -unity-text-align: upper-center;
+    position: absolute;
+    left: 0;
+    top: -59%;
+    right: 0;
+    bottom: 0;
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Fonts/This%20Cafe%20SDF.asset?fileID=11400000&guid=8545070a369019248b559cdc4c2b1b3e&type=2#This Cafe SDF");
+    color: rgb(255, 255, 255);
+    font-size: 50px;
+}

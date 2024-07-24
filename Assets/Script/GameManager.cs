@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -78,22 +79,21 @@ public class GameManager : MonoBehaviour
             lineGrid = GameObject.Find("BoxLinePosition").GetComponent<Grid>();
             boxParent = GameObject.Find("BoxParent");
             boxPosBeforeArray = GameObject.Find("BoxPosBeforeArray");
-            AudioManager.instance.ChangeUIManager(1);
 
             spawnPosition = new GameObject[gridWidth, gridHeight];
 
             EventManager.gameOverEvent += GameOver;
-            EventManager.resetEvent += ResetCurrentGamemode;
 
-            currentGamemode = 1;
+            timerScript.SetupTimer(300f);
 
             InitializeBoxFrequencies();
 
             StartCoroutine(SpawnNewBoxs());
+            //AudioManager.instance.ChangeUIManager(1);
         }
-        else
+        else if (scene == "Lobby")
         {
-            yield return SceneManager.LoadSceneAsync(scene);
+            SceneManager.LoadSceneAsync(scene);
             AudioManager.instance.ChangeUIManager(0);
         }
     }
@@ -117,23 +117,6 @@ public class GameManager : MonoBehaviour
         }
 
         return boxsPrefab[0];
-    }
-
-    void SetupGameMode(int gamemode)
-    {
-        //do different parameters for different gamemodes 
-        //gamemode 1
-        //gamemode 2
-        //etc ..
-
-        if(gamemode == 1)
-        {
-            //gamemode parameters
-
-            //gridManager.StartSpawningBoxes();
-            timerScript.SetupTimer(60f);
-
-        }
     }
 
     public void ResetAll()
@@ -223,21 +206,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void ResetCurrentGamemode(bool retry)
-    {
-        //reset all parameters for all gamemodes
-
-        gridManager.ResetGridAndArray();
-        timerScript.ResetTimer();
-
-        if(retry == true)
-        {
-           SetupGameMode(currentGamemode); 
-        }
-    }
-
     public IEnumerator SpawnNewBoxs()
     {
+        Debug.Log("test");
         float timeChange = 0;
         int x = 0;
         int y = 0;

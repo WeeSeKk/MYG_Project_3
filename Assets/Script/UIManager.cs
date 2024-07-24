@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TimerScript timerScript;
     [SerializeField] Canvas canvas;
     VisualElement root;
+    Button pauseButton;
     VisualElement gameOverTab;
     VisualElement greenLine;
     public Slider musicSlider;
@@ -70,6 +71,7 @@ public class UIManager : MonoBehaviour
         musicSlider = root.Q<Slider>("MusicSlider");
         audioSlider = root.Q<Slider>("AudioSlider");
         quitButton = root.Q<Button>("QuitButton");
+        pauseButton = root.Q<Button>("PauseButton");
 
         crusherButton = root.Q<Button>("CrusherButton");
         FireButton = root.Q<Button>("FireButton");
@@ -158,11 +160,13 @@ public class UIManager : MonoBehaviour
         {
            settingsTab.RemoveFromClassList("SettingsTabHidden");
            settingsTab.pickingMode = PickingMode.Position;
+           pauseButton.pickingMode = PickingMode.Ignore;
         }
         else
         {
             settingsTab.AddToClassList("SettingsTabHidden");
             settingsTab.pickingMode = PickingMode.Ignore;
+            pauseButton.pickingMode = PickingMode.Position;
         }
     }
 

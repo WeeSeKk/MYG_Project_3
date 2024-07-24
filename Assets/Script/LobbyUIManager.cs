@@ -14,6 +14,7 @@ public class LobbyUIManager : MonoBehaviour
     Button settingsButton;
     Button returnButton;
     Label connectingLabel;
+    Label playerUsername;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,9 @@ public class LobbyUIManager : MonoBehaviour
         returnButton = root.Q<Button>("ReturnButton");
         musicSlider = root.Q<Slider>("MusicSlider");
         audioSlider = root.Q<Slider>("AudioSlider");
+        playerUsername = root.Q<Label>("PlayerUsernameLabel");
+
+        ShowUsername();
 
         singleplayerButton.RegisterCallback<ClickEvent>(evt => {
             ConnectingScreen();
@@ -53,7 +57,12 @@ public class LobbyUIManager : MonoBehaviour
         singleplayerButton.style.opacity = 0;
         multiplayerButton.style.opacity = 0;
         connectingLabel.style.opacity = 100;
-        PlayfabManager.instance.Login();
+        GameManager.instance.LaunchGamemode_1();
+    }
+
+    public void ShowUsername()
+    {
+        playerUsername.text = PlayfabManager.instance.Player_Username();
     }
 
     void OpenCloseSettings(Button button)
