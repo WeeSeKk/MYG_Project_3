@@ -45,6 +45,7 @@ public class UIManager : MonoBehaviour
     int crusher = 0;
     int fire = 0;
     int bomb = 0;
+    bool gameOver;
 
     // Start is called before the first frame update
     void Start()
@@ -86,7 +87,7 @@ public class UIManager : MonoBehaviour
         bottombottomStar = root.Q<VisualElement>("BottombottomStar");
 
         quitButton.RegisterCallback<ClickEvent>(evt => {
-            StartCoroutine(GameManager.instance.LoadScene("Lobby"));
+            GameManager.instance.LaunchLobby();
             EventManager.ButtonClicked(0);
         });
         settingsReturnButton.RegisterCallback<ClickEvent>(evt => {
@@ -172,7 +173,10 @@ public class UIManager : MonoBehaviour
 
     public void CleanLabel()
     {
-        lettersLabel.text = null;
+        if (lettersLabel != null)
+        {
+            lettersLabel.text = null;
+        }
         wordsManager.ResetWord();
     }
 
@@ -267,6 +271,7 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
+        gameOver = true;
         canvas.enabled = false;
         gameOverTab.RemoveFromClassList("GameOverTabHidden");
         gameOverTab.pickingMode = PickingMode.Position;
@@ -275,16 +280,20 @@ public class UIManager : MonoBehaviour
     public void Reset()
     {
         canvas.enabled = true;
-        gameOverTab.AddToClassList("GameOverTabHidden");
-        gameOverTab.pickingMode = PickingMode.Ignore;
-        scoreLabel.text = "";
-        crusher = 0;
-        fire = 0;
-        bomb = 0;
-        crusherCount.text = "x 0";
-        fireCount.text = "x 0";
-        bombCount.text = "x 0";
-        words.Clear(); 
-        UpdateList();
+        if (gameOver)
+        {
+            gameOverTab.AddToClassList("GameOverTabHidden");
+            gameOverTab.pickingMode = PickingMode.Ignore;
+            scoreLabel.text = "";
+            crusher = 0;
+            fire = 0;
+            bomb = 0;
+            crusherCount.text = "x 0";
+            fireCount.text = "x 0";
+            bombCount.text = "x 0";
+            words.Clear(); 
+            UpdateList();
+            gameOver = false;
+        }
     }
 }

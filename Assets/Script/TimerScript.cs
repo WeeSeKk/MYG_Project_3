@@ -32,6 +32,7 @@ public class TimerScript : MonoBehaviour
     bool swapTimer;
     public float swapTime;
     float timePlaying = 0;
+    bool gameOver;
 
     // Start is called before the first frame update
     void Start()
@@ -276,6 +277,7 @@ public class TimerScript : MonoBehaviour
     
     void GameOver()
     {
+        gameOver = true;
         timerOn = false;
         crusherTimer = false;
         fireTimer = false;
@@ -284,20 +286,23 @@ public class TimerScript : MonoBehaviour
 
     public void Reset()
     {
-        timerOn = true;
+        if (gameOver)
+        {
+            timerOn = true;
 
-        timePlaying = 0;
+            timePlaying = 0;
 
-        BombButton.pickingMode = PickingMode.Position;
-        BombButton.style.unityBackgroundImageTintColor = Color.white;
-        bombTimerLabel.text = "";
+            BombButton.pickingMode = PickingMode.Position;
+            BombButton.style.unityBackgroundImageTintColor = Color.white;
+            bombTimerLabel.text = "";
 
-        FireButton.pickingMode = PickingMode.Position;
-        FireButton.style.unityBackgroundImageTintColor = Color.white;
-        fireTimerLabel.text = "";
+            FireButton.pickingMode = PickingMode.Position;
+            FireButton.style.unityBackgroundImageTintColor = Color.white;
+            fireTimerLabel.text = "";
 
-        crusherButton.pickingMode = PickingMode.Position;
-        crusherButton.style.unityBackgroundImageTintColor = Color.white;
-        crusherTimerLabel.text = "";
+            crusherButton.pickingMode = PickingMode.Position;
+            crusherButton.style.unityBackgroundImageTintColor = Color.white;
+            crusherTimerLabel.text = "";
+        }
     }
 }

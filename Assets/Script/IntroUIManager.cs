@@ -25,9 +25,11 @@ public class IntroUIManager : MonoBehaviour
 
 
         registerButton.RegisterCallback<ClickEvent>(evt => {
+            EventManager.ButtonClicked(0);
             PlayfabManager.instance.OnRegister(usernameTextField.text, passwordTextField.text);//if inputfield are correct
         });
         loginButton.RegisterCallback<ClickEvent>(evt => {
+            EventManager.ButtonClicked(0);
             PlayfabManager.instance.OnLogin(usernameTextField.text, passwordTextField.text);
         });
     }

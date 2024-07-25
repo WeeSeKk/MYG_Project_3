@@ -21,8 +21,6 @@ public class AudioManager : MonoBehaviour
     void Awake()
     {
         EventManager.buttonClicked += PlayAudioClip;
-
-        lobbyUIManager = GameObject.Find("UIDocument").GetComponent<LobbyUIManager>();
         scene = -1;
 
         if (instance != null && instance != this)
@@ -80,8 +78,7 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (scene == 0)
+        if (scene == 0 && lobbyUIManager != null)
         {
             musicAudioSource.volume = lobbyUIManager.musicSlider.value;
             musicValue = musicAudioSource.volume;
@@ -91,7 +88,7 @@ public class AudioManager : MonoBehaviour
             soundAudioSource.volume = lobbyUIManager.audioSlider.value;
             soundValue = soundAudioSource.volume;
         }
-        else if (scene == 1)
+        else if (scene == 1 && uIManager != null)
         {
             musicAudioSource.volume = uIManager.musicSlider.value;
             musicValue = musicAudioSource.volume;
@@ -100,7 +97,7 @@ public class AudioManager : MonoBehaviour
 
             soundAudioSource.volume = uIManager.audioSlider.value;
             soundValue = soundAudioSource.volume;
-        }*/
+        }
     }
     /*
     public void CreateAudioSoundObjectPool() {

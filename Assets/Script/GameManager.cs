@@ -53,17 +53,24 @@ public class GameManager : MonoBehaviour
 
     void InitializeBoxFrequencies()
     {
-        boxFrequencies.Add(boxsPrefab[0], 100);//default box  100
-        boxFrequencies.Add(boxsPrefab[1], 0);//crusher box  5
-        boxFrequencies.Add(boxsPrefab[2], 0);//skull box  10
-        boxFrequencies.Add(boxsPrefab[3], 0);//fire box  3
-        boxFrequencies.Add(boxsPrefab[4], 0);//magnet box  2
-        boxFrequencies.Add(boxsPrefab[5], 0);//bomb box   3
+        if (boxFrequencies == null)
+        {
+            boxFrequencies.Add(boxsPrefab[0], 100);//default box  100
+            boxFrequencies.Add(boxsPrefab[1], 0);//crusher box  5
+            boxFrequencies.Add(boxsPrefab[2], 0);//skull box  10
+            boxFrequencies.Add(boxsPrefab[3], 0);//fire box  3
+            boxFrequencies.Add(boxsPrefab[4], 0);//magnet box  2
+            boxFrequencies.Add(boxsPrefab[5], 0);//bomb box   3
+        }
     }
 
     public void LaunchGamemode_1()
     {
         StartCoroutine(LoadScene("Scene_Gamemode_01"));
+    }
+    public void LaunchLobby()
+    {
+        StartCoroutine(LoadScene("Lobby"));
     }
 
     public IEnumerator LoadScene(string scene)
@@ -88,13 +95,17 @@ public class GameManager : MonoBehaviour
 
             InitializeBoxFrequencies();
 
-            StartCoroutine(SpawnNewBoxs());
-            //AudioManager.instance.ChangeUIManager(1);
+            //StartCoroutine(SpawnNewBoxs());
+            AudioManager.instance.ChangeUIManager(1);
+
+            ResetAll();
         }
         else if (scene == "Lobby")
         {
-            SceneManager.LoadSceneAsync(scene);
+            yield return SceneManager.LoadSceneAsync(scene);
+            PlayfabManager.instance.GetLeaderboard();
             AudioManager.instance.ChangeUIManager(0);
+            Debug.Log("LOBBY");
         }
     }
 
@@ -121,6 +132,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetAll()
     {
+        StopAllCoroutines();
         for (int x = 0; x < gridManager.gridWidth; x++) // For every x position
         {
             for (int y = 0; y < gridManager.gridHeight; y++) // For every y position
@@ -283,6 +295,7 @@ public class GameManager : MonoBehaviour
 
     void GameOver()
     {
+        PlayfabManager.instance.SendLeaderboard(score);
         gameOver = true;
     }
 }

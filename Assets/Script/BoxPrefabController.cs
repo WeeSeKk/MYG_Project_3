@@ -22,6 +22,7 @@ public class BoxPrefabController : MonoBehaviour
     int posX;
     int posY;
     public List<Sprite> sprites;
+    public List<Sprite> kSprites;
     public List<Sprite> outlineSprites;
     
     void Awake()
@@ -75,6 +76,7 @@ public class BoxPrefabController : MonoBehaviour
 
     void ChooseSprite()
     {
+        
         System.Random rand = new System.Random();
         int num = rand.Next(0, 4);
 
@@ -88,6 +90,12 @@ public class BoxPrefabController : MonoBehaviour
         {
             outline.sprite = outlineSprites[0];
         }
+        /*
+        System.Random rand = new System.Random();
+        int num = rand.Next(0, 15);
+
+        goSprite.sprite = kSprites[num];
+        */
     }
 
     // Update is called once per frame

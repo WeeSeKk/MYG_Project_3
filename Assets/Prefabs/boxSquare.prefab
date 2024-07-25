@@ -454,7 +454,7 @@ RectTransform:
   m_GameObject: {fileID: 6384151933265506706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.43000004, y: 0.43000004, z: 1}
+  m_LocalScale: {x: 0.43, y: 0.43, z: 0.9999998}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3527257111581588514}
@@ -604,6 +604,23 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1258ac417dd158a48b05eeedb739c469, type: 3}
   - {fileID: 21300000, guid: 28c51f93b6260224c867f45f411a0e85, type: 3}
   - {fileID: 21300000, guid: 60cfd84ae231a4943b3f0f6cf0dcf409, type: 3}
+  kSprites:
+  - {fileID: 21300000, guid: 65ebfd0fc633bdb4eb8a63eaa8130473, type: 3}
+  - {fileID: 21300000, guid: 5e1db43b7c0212848984eb313330d7df, type: 3}
+  - {fileID: 21300000, guid: 48928f9af277fe24c8e9633e675cab0f, type: 3}
+  - {fileID: 21300000, guid: ffa12bb4c7790a546a20de7931535c02, type: 3}
+  - {fileID: 21300000, guid: 67a039dc42ef5464c9a03adbda766cd1, type: 3}
+  - {fileID: 21300000, guid: f34135d0b6ba9c94191d69a6d8316fe3, type: 3}
+  - {fileID: 21300000, guid: 1eb874d1c53d67f4c9bcffad44d9b69f, type: 3}
+  - {fileID: 21300000, guid: 79a518aa9610eaf4993ecb50c7c72bc6, type: 3}
+  - {fileID: 21300000, guid: c18ce180d676e3b418daa71c24d9d4b8, type: 3}
+  - {fileID: 21300000, guid: 4c3627e972a51ea4cac995d5d0855723, type: 3}
+  - {fileID: 21300000, guid: 4f67e067d2e4cf040ba6b6012fc6f310, type: 3}
+  - {fileID: 21300000, guid: b09646062867caa4294b1a4ef45795d3, type: 3}
+  - {fileID: 21300000, guid: e69f954b197efad4e918844b3cda0a36, type: 3}
+  - {fileID: 21300000, guid: 966e35ec716e7ff49b6567a6b6b570c8, type: 3}
+  - {fileID: 21300000, guid: 0860063a3385148419669c82813e60cd, type: 3}
+  - {fileID: 21300000, guid: 604e6afa31f1795468a077c4df1c09d3, type: 3}
   outlineSprites:
   - {fileID: 21300000, guid: 07d868e0fd2a23942bd04c6dffb76ed7, type: 3}
   - {fileID: 21300000, guid: f9f25bb6be8733f4894d60fe54097b1d, type: 3}

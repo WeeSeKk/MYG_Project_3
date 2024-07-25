@@ -1535,7 +1535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1449764505}
   m_Layer: 0
-  m_Name: Holder
+  m_Name: Title_Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
