@@ -9,6 +9,8 @@ public class EventManager : MonoBehaviour
     public static EventManager instance;
     public static event Action gameOverEvent;
     public static event Action shakeBoxs;
+    public static event Action<float> musicVolulmeChange;
+    public static event Action<float> sfxVolulmeChange;
     public static event Action<int> buttonClicked;
     public static event Action swapLetters;
     public static event Action<bool> resetEvent;
@@ -54,5 +56,13 @@ public class EventManager : MonoBehaviour
     public static void ButtonClicked(int num)
     {
         buttonClicked?.Invoke(0);
+    }
+    public static void MusicVolumeChange(float value)
+    {
+        musicVolulmeChange?.Invoke(value);
+    }
+    public static void SFXVolumeChange(float value)
+    {
+        sfxVolulmeChange?.Invoke(value);
     }
 }

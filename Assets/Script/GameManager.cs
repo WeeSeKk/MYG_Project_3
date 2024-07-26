@@ -47,7 +47,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))//test for debug
         {
-            Time.timeScale = 5;
+            //Time.timeScale = 5;
+            PlayfabManager.instance.GetCategory();
         }
     }
 
@@ -56,11 +57,11 @@ public class GameManager : MonoBehaviour
         if (boxFrequencies == null)
         {
             boxFrequencies.Add(boxsPrefab[0], 100);//default box  100
-            boxFrequencies.Add(boxsPrefab[1], 0);//crusher box  5
-            boxFrequencies.Add(boxsPrefab[2], 0);//skull box  10
-            boxFrequencies.Add(boxsPrefab[3], 0);//fire box  3
-            boxFrequencies.Add(boxsPrefab[4], 0);//magnet box  2
-            boxFrequencies.Add(boxsPrefab[5], 0);//bomb box   3
+            boxFrequencies.Add(boxsPrefab[1], 4);//crusher box  4
+            boxFrequencies.Add(boxsPrefab[2], 6);//skull box  6
+            boxFrequencies.Add(boxsPrefab[3], 3);//fire box  3
+            boxFrequencies.Add(boxsPrefab[4], 2);//magnet box  2
+            boxFrequencies.Add(boxsPrefab[5], 3);//bomb box   3
         }
     }
 
@@ -68,6 +69,12 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(LoadScene("Scene_Gamemode_01"));
     }
+
+    public void LaunchGamemode_2()
+    {
+        StartCoroutine(LoadScene("Scene_Gamemode_02"));
+    }
+
     public void LaunchLobby()
     {
         StartCoroutine(LoadScene("Lobby"));
@@ -95,17 +102,39 @@ public class GameManager : MonoBehaviour
 
             InitializeBoxFrequencies();
 
-            //StartCoroutine(SpawnNewBoxs());
-            AudioManager.instance.ChangeUIManager(1);
-
             ResetAll();
+        }
+        else if (scene == "Scene_Gamemode_02")
+        {
+            yield return SceneManager.LoadSceneAsync(scene);
+            gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
+            objectPool = GameObject.Find("GridManager").GetComponent<ObjectPool>();
+            wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
+            uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
+            timerScript = GameObject.Find("UIDocument").GetComponent<TimerScript>();
+            lineGrid = GameObject.Find("BoxLinePosition").GetComponent<Grid>();
+            boxParent = GameObject.Find("BoxParent");
+            boxPosBeforeArray = GameObject.Find("BoxPosBeforeArray");
+
+            PlayfabManager.instance.GetCategory();
+
+            yield return new WaitForSeconds(1f);
+
+            wordsManager.AddWordsToCategoryList();
+            wordsManager.ChooseWords();
+
+            spawnPosition = new GameObject[gridWidth, gridHeight];
+
+            EventManager.gameOverEvent += GameOver;
+
+            timerScript.SetupTimer(300f);
+
+            StartCoroutine(SpawnNewBoxsGamemode2());
         }
         else if (scene == "Lobby")
         {
             yield return SceneManager.LoadSceneAsync(scene);
             PlayfabManager.instance.GetLeaderboard();
-            AudioManager.instance.ChangeUIManager(0);
-            Debug.Log("LOBBY");
         }
     }
 
@@ -220,7 +249,6 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator SpawnNewBoxs()
     {
-        Debug.Log("test");
         float timeChange = 0;
         int x = 0;
         int y = 0;
@@ -261,6 +289,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public IEnumerator SpawnNewBoxsGamemode2()
+    {
+        int x = 0;
+        int y = 0;
+
+        while (wordsManager.lettersForChosenWords.Count > 0)
+        {
+            GameObject box = boxsPrefab[0];
+            
+            GameObject newBox = ObjectPool.BoxSpawn(box, boxPosBeforeArray.transform.position, Quaternion.identity);
+
+            newBox.transform.SetParent(boxParent.transform);
+            spawnPosition[x, y] = newBox;
+
+            gridManager.SpawnBox(newBox);
+
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     void MoveBoxs(GameObject go)
     {
         for (int i = gridHeight - 1; i >= 0; i--)
@@ -292,6 +340,11 @@ public class GameManager : MonoBehaviour
             gridManager.SpawnBox(lastBox);
         }
     }   
+
+    void OnApplicationQuit()
+    {
+        PlayerPrefs.Save();
+    }
 
     void GameOver()
     {

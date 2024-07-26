@@ -9,6 +9,8 @@ public class TimerScript : MonoBehaviour
     [SerializeField] Canvas canvas;
     VisualElement root;
     VisualElement pauseBlackScreen;
+    VisualElement pauseVisualPaused;
+    VisualElement pauseVisualPlay;
     Label timerLabel;
     Label timerTimeAdd;
     Label timeLabel;
@@ -42,6 +44,8 @@ public class TimerScript : MonoBehaviour
         root = GetComponent<UIDocument>().rootVisualElement; 
         swapLettersTimer = root.Q<Label>("SwapLettersTimer");
         pauseBlackScreen = root.Q<VisualElement>("PauseBlackScreen");
+        pauseVisualPlay = root.Q<VisualElement>("PauseVisualPlay");
+        pauseVisualPaused = root.Q<VisualElement>("PauseVisualPaused");
         timerLabel = root.Q<Label>("TimerLabel");
         timeLabel = root.Q<Label>("TimeLabel");
         timerTimeAdd = root.Q<Label>("TimerTimeAdd");
@@ -57,14 +61,20 @@ public class TimerScript : MonoBehaviour
         timerOn = true;
 
         pauseBlackScreen.pickingMode = PickingMode.Ignore;
-        crusherTimerLabel.text = "";
-        fireTimerLabel.text = "";
-        bombTimerLabel.text = "";
-        swapLettersTimer.text = "";
+
+        if (crusherTimerLabel != null)
+        {
+            crusherTimerLabel.text = "";
+            fireTimerLabel.text = "";
+            bombTimerLabel.text = "";
+            swapLettersTimer.text = "";
+        }
 
         pauseButton.RegisterCallback<ClickEvent>(evt => {
             if(timerOn == true)
             {
+                pauseVisualPlay.style.opacity = 0;
+                pauseVisualPaused.style.opacity = 100;
                 AudioManager.instance.PauseMusic();
                 EventManager.ButtonClicked(0);
                 timerOn = false;
@@ -76,6 +86,8 @@ public class TimerScript : MonoBehaviour
             }
             else
             {
+                pauseVisualPlay.style.opacity = 100;
+                pauseVisualPaused.style.opacity = 0;
                 AudioManager.instance.PauseMusic();
                 EventManager.ButtonClicked(0);
                 timerOn = true;

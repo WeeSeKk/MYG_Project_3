@@ -4,6 +4,7 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEditor.PackageManager;
+using PlayFab.DataModels;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayfabManager : MonoBehaviour
     LobbyUIManager lobbyUIManager;
     public static PlayfabManager instance;
     string playerUsername = null;
+    string category;
 
     void Awake()
     {
@@ -35,7 +37,11 @@ public class PlayfabManager : MonoBehaviour
     void OnError(PlayFabError error)
     {
         Debug.LogError(error.GenerateErrorReport());
-        StartCoroutine(introUIManager.ShowError(error.ErrorMessage));
+        if (introUIManager != null)
+        {
+            StartCoroutine(introUIManager.ShowError(error.ErrorMessage));
+            introUIManager.HideWaitingScreen();
+        }
     }
 
     void UpdateUsername(string username)
@@ -67,6 +73,7 @@ public class PlayfabManager : MonoBehaviour
         Debug.Log("Register Success" + result);
         playerUsername = result.Username;
         UpdateUsername(playerUsername);
+        introUIManager.HideWaitingScreen();
         StartCoroutine(introUIManager.ShowError("Register Completed"));
     }
 
@@ -126,8 +133,27 @@ public class PlayfabManager : MonoBehaviour
         lobbyUIManager = GameObject.Find("UIDocument").GetComponent<LobbyUIManager>();
         foreach (var item in result.Leaderboard)
         {
-            Debug.Log(item.Position + 1 + " " + item.DisplayName + " " + item.StatValue);
             lobbyUIManager.AddLeaderboardList(item.DisplayName + " " + item.StatValue);
         }
+    }
+
+    public void GetCategory()
+    {
+        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), OnCategoryGet, OnError);
+    }
+
+    void OnCategoryGet(GetTitleDataResult result)
+    {
+        if (result.Data == null || result.Data.ContainsKey("animals") == false)
+        {
+            Debug.LogError("FUCK");
+        }
+
+        category = result.Data["animals"];
+    }
+
+    public string Category()
+    {
+        return category;
     }
 }

@@ -313,8 +313,9 @@ MonoBehaviour:
   grid: {fileID: 373122602}
   boxParent: {fileID: 497466869}
   spawnPoint: {fileID: 36314066}
-  gameManager: {fileID: 1005226814}
   animationManager: {fileID: 824970668}
+  objectPool: {fileID: 373122606}
+  defaultBox: {fileID: 6384151933265506706, guid: a06fb9be627588c47a085d50688724db, type: 3}
   selectedBoxs: []
   powerUp:
   - {fileID: 4612867490924019535, guid: 059d1f5460c281d4a9960ac6b6d310c0, type: 3}
@@ -324,6 +325,7 @@ MonoBehaviour:
   maxgridWidth: 11
   gridHeight: 10
   cellMaxHeight: 6
+  gameOver: 0
 --- !u!212 &373122605
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -685,13 +687,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8071feb8bb5a444fa63dccef0e30580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridManager: {fileID: 373122604}
-  wordsManager: {fileID: 1995382827}
-  uIManager: {fileID: 1536425945}
-  timerScript: {fileID: 1536425946}
-  boxParent: {fileID: 497466868}
-  boxPosBeforeArray: {fileID: 36314066}
-  lineGrid: {fileID: 1597064312}
   boxsPrefab:
   - {fileID: 6384151933265506706, guid: a06fb9be627588c47a085d50688724db, type: 3}
   - {fileID: 4612867490924019535, guid: 059d1f5460c281d4a9960ac6b6d310c0, type: 3}
@@ -699,42 +694,6 @@ MonoBehaviour:
   - {fileID: 8665857326951347012, guid: 9ab975e5dcc2ba64f882f2eef36c2348, type: 3}
   - {fileID: 5769404327233256390, guid: 33008eb903bc7c2489b042dca0fa9c23, type: 3}
   - {fileID: 5663635164573233340, guid: 4f12043808ae11e4c8bef16f30f9a87a, type: 3}
-  wordsToFind:
-  - Lion
-  - Tiger
-  - Elephant
-  - Giraffe
-  - Zebra
-  - Kangaroo
-  - Koala
-  - Panda
-  - Gorilla
-  - Chimpanzee
-  - Dolphin
-  - Whale
-  - Shark
-  - Penguin
-  - Seal
-  - Walrus
-  - Otter
-  - Crocodile
-  - Alligator
-  - Hippopotamus
-  - Rhinoceros
-  - Leopard
-  - Cheetah
-  - Jaguar
-  - Buffalo
-  - Antelope
-  - Deer
-  - Moose
-  - Elk
-  - Bison
-  - Wolf
-  - Fox
-  - Raccoon
-  - Opossum
-  - Squirrel
   spawnSpeed: 1
 --- !u!1 &1369438043
 GameObject:
@@ -952,7 +911,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1536425944}
   - component: {fileID: 1536425943}
-  - component: {fileID: 1536425945}
+  - component: {fileID: 1536425947}
   - component: {fileID: 1536425946}
   m_Layer: 5
   m_Name: UIDocument
@@ -975,7 +934,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: cc131e2bf9de38b4ba524b53cb2d08ef, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 9ecc3493aa062b94395e983c44bd8be5, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 60e44fd3e87035e4d857f431271e86d0, type: 3}
   m_SortingOrder: -50
 --- !u!4 &1536425944
 Transform:
@@ -992,7 +951,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1536425945
+--- !u!114 &1536425946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536425942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58821f08f413d2a4f8412b87995d4814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIManager: {fileID: 1536425947}
+  canvas: {fileID: 1369438048}
+  timeLeft: 300
+  crusherTime: 0
+  fireTime: 0
+  bombTime: 0
+  swapTime: 0
+--- !u!114 &1536425947
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1008,25 +986,7 @@ MonoBehaviour:
   elementList: {fileID: 9197481963319205126, guid: 9377d8ccdf37c62498bad139ed4a992a, type: 3}
   gridManager: {fileID: 373122604}
   timerScript: {fileID: 1536425946}
---- !u!114 &1536425946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536425942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58821f08f413d2a4f8412b87995d4814, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uIManager: {fileID: 1536425945}
-  gameManager: {fileID: 1005226814}
   canvas: {fileID: 1369438048}
-  timeLeft: 300
-  crusherTime: 0
-  fireTime: 0
-  bombTime: 0
 --- !u!1 &1597064309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,10 +1158,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aPIManager: {fileID: 7249773}
-  gameManager: {fileID: 1005226814}
   gridManager: {fileID: 373122604}
-  uIManager: {fileID: 1536425945}
+  uIManager: {fileID: 1536425947}
   correctWordsFound: []
+  lettersForChosenWords: 
 --- !u!4 &1995382828
 Transform:
   m_ObjectHideFlags: 0

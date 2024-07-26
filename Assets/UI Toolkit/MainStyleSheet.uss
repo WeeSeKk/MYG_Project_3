@@ -169,3 +169,26 @@ VisualElement {
     color: rgb(255, 255, 255);
     font-size: 50px;
 }
+
+.ButtonDefault {
+    position: absolute;
+    left: 55%;
+    top: 90%;
+    right: 35%;
+    bottom: 2%;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    background-image: url("project://database/Assets/Dark%20UI/Free/32%20Light.png?fileID=2800000&guid=a689281f545979940b5cedad12ec31a8&type=3#32 Light");
+    background-color: rgba(188, 188, 188, 0);
+    font-size: 40px;
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Fonts/This%20Cafe%20SDF.asset?fileID=11400000&guid=8545070a369019248b559cdc4c2b1b3e&type=2#This Cafe SDF");
+    -unity-text-align: middle-center;
+    color: rgb(255, 255, 255);
+}
+
+.ButtonClicked:active {
+    scale: 0.8 0.8;
+    transition-duration: 0.3s;
+}

@@ -1,27 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
-using DG.Tweening;
+using UnityEngine.UI;
+using UnityEngine.Audio;
+using UnityEditor.Rendering;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-    ObjectPool<GameObject> audioSound;
-    LobbyUIManager lobbyUIManager;
-    UIManager uIManager;
     [SerializeField] AudioSource musicAudioSource;
     [SerializeField] AudioSource soundAudioSource;
     [SerializeField] List<AudioClip> clips;
+    [SerializeField] AudioMixer audioMixer;
     bool paused;
     public float musicValue;
     public float soundValue;
-    int scene;
+    const string MUSIC_VOLUME = "MusicVolume";
+    const string SFX_VOLUME = "SFXVolume";
 
     void Awake()
     {
         EventManager.buttonClicked += PlayAudioClip;
-        scene = -1;
+        EventManager.musicVolulmeChange += SetMusicVolume;
+        EventManager.sfxVolulmeChange += SetSFXVolume;
+
+        LoadVolumeValue();
 
         if (instance != null && instance != this)
         {
@@ -32,23 +34,23 @@ public class AudioManager : MonoBehaviour
             instance = this;
         }
         DontDestroyOnLoad(this.gameObject);
-        //CreateAudioSoundObjectPool();
     }
 
-    public void ChangeUIManager(int num)
+    void Update()
     {
-        //on scene load change ui manager for settings
-        //called from GameManager
-        if (num == 1)
-        {
-            uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
-            scene = 1;
-        }
-        else
-        {
-            lobbyUIManager = GameObject.Find("UIDocument").GetComponent<LobbyUIManager>();
-            scene = 0;
-        }
+
+    }
+
+    void SetMusicVolume(float value)
+    {
+        musicValue = value;
+        audioMixer.SetFloat(MUSIC_VOLUME, Mathf.Log10(value) * 20);
+    }
+
+    void SetSFXVolume(float value)
+    {
+        soundValue = value;
+        audioMixer.SetFloat(SFX_VOLUME, Mathf.Log10(value) * 20);
     }
 
     public void PlayAudioClip(int num)
@@ -61,73 +63,34 @@ public class AudioManager : MonoBehaviour
     {
         if (paused)
         {
-            //slider value = musicValue
             musicAudioSource.Play();
             paused = false;
-            
         }
         else
         {
-            //musicValue = slider value
-            //go to 0
             musicAudioSource.Pause();
             paused = true;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    void LoadVolumeValue()
     {
-        if (scene == 0 && lobbyUIManager != null)
+        SetMusicVolume(PlayerPrefs.GetFloat(MUSIC_VOLUME));
+        SetSFXVolume(PlayerPrefs.GetFloat(SFX_VOLUME));
+    }
+
+    void SaveVolumeValue(string type, float volume)
+    {
+        if (type == "Music")
         {
-            musicAudioSource.volume = lobbyUIManager.musicSlider.value;
-            musicValue = musicAudioSource.volume;
-
-
-
-            soundAudioSource.volume = lobbyUIManager.audioSlider.value;
-            soundValue = soundAudioSource.volume;
+            Debug.Log("test");
+            //PlayerPrefs.SetFloat(MUSIC_VOLUME, volume);
+            PlayerPrefs.SetInt(MUSIC_VOLUME, 10);
         }
-        else if (scene == 1 && uIManager != null)
+        else if (type == "SFX")
         {
-            musicAudioSource.volume = uIManager.musicSlider.value;
-            musicValue = musicAudioSource.volume;
-
-
-
-            soundAudioSource.volume = uIManager.audioSlider.value;
-            soundValue = soundAudioSource.volume;
+            //PlayerPrefs.SetFloat(SFX_VOLUME, volume);
+            PlayerPrefs.SetInt(MUSIC_VOLUME, 10);
         }
     }
-    /*
-    public void CreateAudioSoundObjectPool() {
-        audioSound = new ObjectPool<GameObject>(() => {
-            return CreateAudioSound();                      //Creation Function
-        }, audioSound => {
-            audioSound.SetActive(true);                     //On Get
-        }, audioSound => {
-            audioSound.SetActive(false);                    //On Release
-        }, audioSound => {
-            Destroy(audioSound);                            //On Destroy
-        }, false,                                           //Check Collection
-        5,                                                  //Initial Array Size (to avoid recreations)
-        20                                                  //Max Array Size
-        );
-    }
-
-    GameObject CreateAudioSound()
-    {
-        return Instantiate(GameManager.instance.GenerateBox());
-    }
-
-    public GameObject GetAudioSound()
-    {
-        return audioSound.Get();
-    }
-
-    public void ReleaseAudioSound(GameObject go)
-    {
-        audioSound.Release(go);
-    }
-    */
 }

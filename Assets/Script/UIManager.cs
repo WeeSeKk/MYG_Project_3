@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class UIManager : MonoBehaviour
     VisualElement middlebottomStar;
     VisualElement bottombottomStar;
     VisualElement settingsTab;
+    VisualElement pauseVisualPlay;
+    VisualElement pauseVisualPaused;
     ListView wordsList;
     Label lettersLabel;
     Label crusherCount;
@@ -35,6 +38,7 @@ public class UIManager : MonoBehaviour
     Button settingsReturnButton;
     Button swapLettersButton;
     Button retryButton;
+    Scene currentScene;
     Button undoButton;
     Button settingsButton;
     Button crusherButton;
@@ -86,6 +90,40 @@ public class UIManager : MonoBehaviour
         middlebottomStar = root.Q<VisualElement>("MiddlebottomStar");
         bottombottomStar = root.Q<VisualElement>("BottombottomStar");
 
+        if (currentScene.name == "Scene_Gamemode_01")
+        {
+            swapLettersButton.RegisterCallback<ClickEvent>(evt => {
+                swapLettersButton.pickingMode = PickingMode.Ignore;
+                swapLettersButton.style.unityBackgroundImageTintColor = Color.grey;
+                EventManager.SwapLetters();
+                EventManager.ButtonClicked(0);
+            });
+            crusherButton.RegisterCallback<ClickEvent>(evt => {
+                crusherButton.pickingMode = PickingMode.Ignore;
+                crusherButton.style.unityBackgroundImageTintColor = Color.grey;
+                gridManager.SpawnPowerUp(0);
+                timerScript.SetupPowerupTimer(0);
+                UpdatePowerupUsed(crusherButton);
+                EventManager.ButtonClicked(0);
+            });
+            FireButton.RegisterCallback<ClickEvent>(evt => {
+                FireButton.pickingMode = PickingMode.Ignore;
+                FireButton.style.unityBackgroundImageTintColor = Color.grey;
+                gridManager.SpawnPowerUp(1);
+                timerScript.SetupPowerupTimer(1);
+                UpdatePowerupUsed(FireButton);
+                EventManager.ButtonClicked(0);
+            });
+            BombButton.RegisterCallback<ClickEvent>(evt => {
+                BombButton.pickingMode = PickingMode.Ignore;
+                BombButton.style.unityBackgroundImageTintColor = Color.grey;
+                gridManager.SpawnPowerUp(2);
+                timerScript.SetupPowerupTimer(2);
+                UpdatePowerupUsed(BombButton);
+                EventManager.ButtonClicked(0);
+            });
+        }
+
         quitButton.RegisterCallback<ClickEvent>(evt => {
             GameManager.instance.LaunchLobby();
             EventManager.ButtonClicked(0);
@@ -106,48 +144,17 @@ public class UIManager : MonoBehaviour
             CleanLabel();
             EventManager.ButtonClicked(0);
         });
-        swapLettersButton.RegisterCallback<ClickEvent>(evt => {
-            swapLettersButton.pickingMode = PickingMode.Ignore;
-            swapLettersButton.style.unityBackgroundImageTintColor = Color.grey;
-            EventManager.SwapLetters();
-            EventManager.ButtonClicked(0);
-        });
-
         retryButton.RegisterCallback<ClickEvent>(evt => {
             GameManager.instance.ResetAll();
             EventManager.ButtonClicked(0);
         });
-
-        crusherButton.RegisterCallback<ClickEvent>(evt => {
-            crusherButton.pickingMode = PickingMode.Ignore;
-            crusherButton.style.unityBackgroundImageTintColor = Color.grey;
-            gridManager.SpawnPowerUp(0);
-            timerScript.SetupPowerupTimer(0);
-            UpdatePowerupUsed(crusherButton);
+        audioSlider.RegisterValueChangedCallback(evt => {
+            EventManager.SFXVolumeChange(audioSlider.value);
             EventManager.ButtonClicked(0);
         });
-        FireButton.RegisterCallback<ClickEvent>(evt => {
-            FireButton.pickingMode = PickingMode.Ignore;
-            FireButton.style.unityBackgroundImageTintColor = Color.grey;
-            gridManager.SpawnPowerUp(1);
-            timerScript.SetupPowerupTimer(1);
-            UpdatePowerupUsed(FireButton);
-            EventManager.ButtonClicked(0);
+        musicSlider.RegisterValueChangedCallback(evt => {
+            EventManager.MusicVolumeChange(musicSlider.value);
         });
-        BombButton.RegisterCallback<ClickEvent>(evt => {
-            BombButton.pickingMode = PickingMode.Ignore;
-            BombButton.style.unityBackgroundImageTintColor = Color.grey;
-            gridManager.SpawnPowerUp(2);
-            timerScript.SetupPowerupTimer(2);
-            UpdatePowerupUsed(BombButton);
-            EventManager.ButtonClicked(0);
-        });
-        audioSlider.RegisterCallback<ClickEvent>(evt => {
-            EventManager.ButtonClicked(0);
-        });
-
-        musicSlider.value = AudioManager.instance.musicValue;
-        audioSlider.value = AudioManager.instance.soundValue;
     }
     
     public void UpdateLabel(string word)

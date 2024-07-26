@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.DeviceSimulation;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,8 +9,8 @@ public class LobbyUIManager : MonoBehaviour
     [SerializeField] VisualTreeAsset elementList;
     VisualElement root;
     VisualElement settingsTab;
-    public Slider musicSlider;
-    public Slider audioSlider;
+    Slider musicSlider;
+    Slider audioSlider;
     Button singleplayerButton;
     Button multiplayerButton;
     Button settingsButton;
@@ -37,7 +38,11 @@ public class LobbyUIManager : MonoBehaviour
         ShowUsername();
 
         singleplayerButton.RegisterCallback<ClickEvent>(evt => {
-            ConnectingScreen();
+            GameManager.instance.LaunchGamemode_1();
+            EventManager.ButtonClicked(0);
+        });
+        multiplayerButton.RegisterCallback<ClickEvent>(evt => {
+            GameManager.instance.LaunchGamemode_2();
             EventManager.ButtonClicked(0);
         });
         settingsButton.RegisterCallback<ClickEvent>(evt => {
@@ -48,20 +53,13 @@ public class LobbyUIManager : MonoBehaviour
             OpenCloseSettings(returnButton);
             EventManager.ButtonClicked(0);
         });
-        audioSlider.RegisterCallback<ClickEvent>(evt => {
+        audioSlider.RegisterValueChangedCallback(evt => {
+            EventManager.SFXVolumeChange(audioSlider.value);
             EventManager.ButtonClicked(0);
         });
-
-        musicSlider.value = 0.05f;
-        audioSlider.value = 0.5f;
-    }
-
-    void ConnectingScreen()
-    {
-        singleplayerButton.style.opacity = 0;
-        multiplayerButton.style.opacity = 0;
-        connectingLabel.style.opacity = 100;
-        GameManager.instance.LaunchGamemode_1();
+        musicSlider.RegisterValueChangedCallback(evt => {
+            EventManager.MusicVolumeChange(musicSlider.value);
+        });
     }
 
     public void ShowUsername()

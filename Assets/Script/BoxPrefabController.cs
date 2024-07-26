@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class BoxPrefabController : MonoBehaviour
 {
@@ -16,7 +17,9 @@ public class BoxPrefabController : MonoBehaviour
     [SerializeField] SpriteRenderer goSprite;
     [SerializeField] GameObject visualGo;
     TMP_Text text;
+    Scene currentScene;
     bool isClickable;
+    float mooveSpeed = 0;
     bool spawned;
     char letter;
     int posX;
@@ -31,6 +34,8 @@ public class BoxPrefabController : MonoBehaviour
         EventManager.updatePosition += UpdatePos;
         EventManager.swapLetters += SwapLetters;
         EventManager.shakeBoxs += ShakeBoxsAnimation;
+
+        currentScene = SceneManager.GetActiveScene();
         
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
@@ -143,9 +148,18 @@ public class BoxPrefabController : MonoBehaviour
 
     void ChooseLetter()
     {
-        letter = wordsManager.GenerateLetter();
+        if (currentScene.name == "Scene_Gamemode_01")
+        {
+            letter = wordsManager.GenerateLetter();
 
-        text.SetText(letter.ToString());
+            text.SetText(letter.ToString());
+        }
+        else
+        {
+            letter = wordsManager.AssingLetter();
+
+            text.SetText(letter.ToString());
+        }
     }
 
     void OnMouseDown()
@@ -184,12 +198,21 @@ public class BoxPrefabController : MonoBehaviour
     {
         Vector3 newWorldPosition;
 
+        if (currentScene.name == "Scene_Gamemode_01")
+        {
+            mooveSpeed = 3f;
+        }
+        else
+        {
+            mooveSpeed = 0.1f;
+        }
+
         for (int i = 0; i < gridManager.gridHeight; i++)
         {
             if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
             {
                 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i));
-                this.gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutCirc);
+                this.gameObject.transform.DOMove(newWorldPosition, mooveSpeed, false).SetEase(Ease.OutCirc);
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
                 break;

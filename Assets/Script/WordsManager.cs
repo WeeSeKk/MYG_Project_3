@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class WordsManager : MonoBehaviour
 {
@@ -18,6 +19,23 @@ public class WordsManager : MonoBehaviour
     string createdWord;
     System.Random random = new System.Random();
     public List<string> correctWordsFound = new List<string>();
+    List<string> wordsCategory;
+    List<string> wordsCategoryChoosen = new List<string>();
+    public List<char> lettersForChosenWords = new List<char>();
+
+    void Update()
+    {
+        if (Input.GetKeyDown("w"))//test for debug
+        {
+            //Time.timeScale = 5;
+            AddWordsToCategoryList();
+        }
+        if (Input.GetKeyDown("q"))//test for debug
+        {
+            //Time.timeScale = 5;
+            ChooseWords();
+        }
+    }
 
     public char GenerateLetter()
     {
@@ -83,6 +101,18 @@ public class WordsManager : MonoBehaviour
         }
     }
 
+    public void IsWordValidCategory(string word)
+    {
+        if (wordsCategoryChoosen.Contains(word))
+        {
+            OnValidationReceived(true);
+        }
+        else
+        {
+            OnValidationReceived(false);
+        }
+    }
+
     void OnValidationReceived(bool isValid)
     {
         if (isValid)
@@ -108,4 +138,55 @@ public class WordsManager : MonoBehaviour
         
         ResetWord(); //reset the created word 
     }
+
+    public void AddWordsToCategoryList()
+    {
+        string jsonList = PlayfabManager.instance.Category();
+
+        wordsCategory = new List<string>(jsonList.Split(','));
+    }
+
+    public void ChooseWords()
+    {
+        while (lettersForChosenWords.Count < 70)
+        {
+            System.Random rand = new System.Random();
+            int num = rand.Next(0, wordsCategory.Count);
+
+            if (wordsCategory[num] != null)
+            {
+                wordsCategoryChoosen.Add(wordsCategory[num]);
+            }
+
+            foreach (char letter in wordsCategory[num])
+            {
+                lettersForChosenWords.Add(letter);
+            }
+        }
+
+        foreach (string word in wordsCategoryChoosen)
+        {
+            Debug.Log(word);
+        }
+    }
+
+    public char AssingLetter()
+    {
+        System.Random rand = new System.Random();
+        int num = rand.Next(0, lettersForChosenWords.Count);
+
+        char letter = lettersForChosenWords[num];
+
+        lettersForChosenWords.Remove(lettersForChosenWords[num]);
+
+        return letter;
+    }
 }
+
+/*
+    1.chercher assez de mot pour remplir l'array
+    2.ajouter ces mot a l'autre list
+    3.ajouter chaque letter dans l'autre list a une list de char
+    4.assigner chaque letter a une box jusqu'a ce que la list sois vide
+    
+*/
