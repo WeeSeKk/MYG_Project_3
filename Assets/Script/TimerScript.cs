@@ -16,6 +16,7 @@ public class TimerScript : MonoBehaviour
     Label timeLabel;
     Label swapLettersTimer;
     Label crusherTimerLabel;
+    Label hintTimerLabel;
     Label fireTimerLabel;
     Label bombTimerLabel;
     Button pauseButton;
@@ -23,6 +24,7 @@ public class TimerScript : MonoBehaviour
     Button FireButton;
     Button BombButton;
     Button swapButton;
+    Button hintButton;
     public float timeLeft;
     bool timerOn;
     bool crusherTimer;
@@ -33,6 +35,8 @@ public class TimerScript : MonoBehaviour
     public float bombTime;
     bool swapTimer;
     public float swapTime;
+    bool hintTimer;
+    public float hintTime;
     float timePlaying = 0;
     bool gameOver;
 
@@ -48,6 +52,7 @@ public class TimerScript : MonoBehaviour
         pauseVisualPaused = root.Q<VisualElement>("PauseVisualPaused");
         timerLabel = root.Q<Label>("TimerLabel");
         timeLabel = root.Q<Label>("TimeLabel");
+        hintTimerLabel = root.Q<Label>("HintTimerLabel");
         timerTimeAdd = root.Q<Label>("TimerTimeAdd");
         crusherTimerLabel = root.Q<Label>("CrusherTimer");
         fireTimerLabel = root.Q<Label>("FireTimer");
@@ -57,6 +62,7 @@ public class TimerScript : MonoBehaviour
         FireButton = root.Q<Button>("FireButton");
         BombButton = root.Q<Button>("BombButton");
         swapButton = root.Q<Button>("SwapLetters");
+        hintButton = root.Q<Button>("HintButton");
 
         timerOn = true;
 
@@ -185,6 +191,22 @@ public class TimerScript : MonoBehaviour
                 swapLettersTimer.text = "";
             }
         }
+        if (hintTimer)
+        {
+            if (hintTime > 0)
+            {
+                hintTime -= Time.deltaTime;
+                UpdateHintTimer(hintTime);
+            }
+            else 
+            {
+                hintTimer = false;
+
+                hintButton.pickingMode = PickingMode.Position;
+                hintButton.style.unityBackgroundImageTintColor = Color.white;
+                hintButton.text = "";
+            }
+        }
     }
 
     public IEnumerator AddTimerTime(float timeAdded)
@@ -238,6 +260,16 @@ public class TimerScript : MonoBehaviour
                 bombTimer = true;
                 bombTime = 60f;
             break;
+
+            case 3:
+                swapTimer = true;
+                swapTime = 60f;
+            break;
+
+            case 4:
+                hintTimer = true;
+                hintTime = 60f;
+            break;
         }
         GameManager.instance.CountPowerupUse(powerUp);
     }
@@ -277,6 +309,15 @@ public class TimerScript : MonoBehaviour
         swapLettersTimer.text = string.Format("{00}", secondes);
     }
 
+    void UpdateHintTimer(float timerTime)
+    {
+        timerTime += 1;
+
+        float secondes = Mathf.FloorToInt(timerTime % 60);
+
+        hintTimerLabel.text = string.Format("{00}", secondes);
+    }
+
     void UpdateFinalTime(float timerTime)
     {
         timerTime += 1;
@@ -296,9 +337,9 @@ public class TimerScript : MonoBehaviour
         bombTimer = false;
     }
 
-    public void Reset()
+    public void ResetTimers(int scene)
     {
-        if (gameOver)
+        if (gameOver && scene == 1)
         {
             timerOn = true;
 
@@ -315,6 +356,16 @@ public class TimerScript : MonoBehaviour
             crusherButton.pickingMode = PickingMode.Position;
             crusherButton.style.unityBackgroundImageTintColor = Color.white;
             crusherTimerLabel.text = "";
+        }
+        else if (gameOver && scene == 2)
+        {
+            timerOn = true;
+
+            timePlaying = 0;
+
+            hintButton.pickingMode = PickingMode.Position;
+            hintButton.style.unityBackgroundImageTintColor = Color.white;
+            hintTimerLabel.text = "";
         }
     }
 }

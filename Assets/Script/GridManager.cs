@@ -6,6 +6,7 @@ using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class GridManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] AnimationManager animationManager;
     [SerializeField] ObjectPool objectPool;
     [SerializeField] GameObject defaultBox;
+    Scene currentScene;
     public List<GameObject> selectedBoxs = new List<GameObject>();
     public List<GameObject> powerUp = new List<GameObject>();
     public int gridWidth = 12;
@@ -29,6 +31,7 @@ public class GridManager : MonoBehaviour
     {
         EventManager.gameOverEvent += GameOver;
         gridArray = new GameObject[gridWidth, gridHeight];
+        currentScene = SceneManager.GetActiveScene();
     }
 
     public void SpawnBox(GameObject gameObject)
@@ -52,7 +55,10 @@ public class GridManager : MonoBehaviour
 
         if (!foundEmptyCell)//all the cells are full so game over
         {
-            EventManager.GameOverEvent();
+            if (currentScene.name == "Scene_Gamemode_01")
+            {
+                EventManager.GameOverEvent();
+            }
         } 
 
         safeguard = true;

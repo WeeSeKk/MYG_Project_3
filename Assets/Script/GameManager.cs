@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     public List<GameObject> boxsPrefab;
     public GameObject[,] spawnPosition;
     public float spawnSpeed;
-    int currentGamemode;
     int gridWidth = 1;
     int gridHeight = 10;
     bool gameOver;
@@ -102,7 +101,7 @@ public class GameManager : MonoBehaviour
 
             InitializeBoxFrequencies();
 
-            ResetAll();
+            ResetGamemode(1);
         }
         else if (scene == "Scene_Gamemode_02")
         {
@@ -129,7 +128,7 @@ public class GameManager : MonoBehaviour
 
             timerScript.SetupTimer(300f);
 
-            StartCoroutine(SpawnNewBoxsGamemode2());
+            ResetGamemode(2);
         }
         else if (scene == "Lobby")
         {
@@ -159,50 +158,86 @@ public class GameManager : MonoBehaviour
         return boxsPrefab[0];
     }
 
-    public void ResetAll()
+    public void ResetGamemode(int scene)
     {
-        StopAllCoroutines();
-        for (int x = 0; x < gridManager.gridWidth; x++) // For every x position
+        if (scene == 1)
         {
-            for (int y = 0; y < gridManager.gridHeight; y++) // For every y position
+            StopAllCoroutines();
+
+            for (int x = 0; x < gridManager.gridWidth; x++) // For every x position
             {
-                if (gridManager.gridArray[x, y] != null) // Once we found the box in the array
+                for (int y = 0; y < gridManager.gridHeight; y++) // For every y position
                 {
-                    gridManager.gridArray[x, y] = null;
+                    if (gridManager.gridArray[x, y] != null) // Once we found the box in the array
+                    {
+                        gridManager.gridArray[x, y] = null;
+                    }
                 }
             }
-        }
 
-        for (int x = 0; x < gridWidth; x++) // For every x position
-        {
-            for (int y = 0; y < gridHeight; y++) // For every y position
+            for (int x = 0; x < gridWidth; x++) // For every x position
             {
-                if (spawnPosition[x, y] != null) // Once we found the box in the array
+                for (int y = 0; y < gridHeight; y++) // For every y position
                 {
-                    spawnPosition[x, y] = null;
+                    if (spawnPosition[x, y] != null) // Once we found the box in the array
+                    {
+                        spawnPosition[x, y] = null;
+                    }
                 }
             }
-        }
 
-        foreach (Transform child in boxParent.transform)
+            foreach (Transform child in boxParent.transform)
+            {
+                ObjectPool.ReturnObjectToPool(child.gameObject);
+            }
+
+            gridManager.selectedBoxs.Clear();
+            timerScript.timeLeft = 300;
+            powerUpUseCrusher = 0;
+            powerUpUseFire = 0;
+            powerUpUseBomb = 0;
+            wordsManager.correctWordsFound.Clear();
+            uIManager.CleanLabel();
+            uIManager.ResetUI(1);
+            Time.timeScale = 1;
+            timerScript.ResetTimers(1);
+            gameOver = false;
+            gridManager.gameOver = false;
+
+            StartCoroutine(SpawnNewBoxs());
+        }
+        else if (scene == 2)
         {
-            ObjectPool.ReturnObjectToPool(child.gameObject);
+            StopAllCoroutines();
+
+            for (int x = 0; x < gridManager.gridWidth; x++) // For every x position
+            {
+                for (int y = 0; y < gridManager.gridHeight; y++) // For every y position
+                {
+                    if (gridManager.gridArray[x, y] != null) // Once we found the box in the array
+                    {
+                        gridManager.gridArray[x, y] = null;
+                    }
+                }
+            }
+
+            foreach (Transform child in boxParent.transform)
+            {
+                ObjectPool.ReturnObjectToPool(child.gameObject);
+            }
+
+            gridManager.selectedBoxs.Clear();
+            timerScript.timeLeft = 300;
+            wordsManager.correctWordsFound.Clear();
+            uIManager.CleanLabel();
+            uIManager.ResetUI(2);
+            Time.timeScale = 1;
+            timerScript.ResetTimers(2);
+            gameOver = false;
+            gridManager.gameOver = false;
+
+            StartCoroutine(SpawnNewBoxsGamemode2());
         }
-
-        gridManager.selectedBoxs.Clear();
-        timerScript.timeLeft = 300;
-        powerUpUseCrusher = 0;
-        powerUpUseFire = 0;
-        powerUpUseBomb = 0;
-        wordsManager.correctWordsFound.Clear();
-        uIManager.CleanLabel();
-        uIManager.Reset();
-        Time.timeScale = 1;
-        timerScript.Reset();
-        gameOver = false;
-        gridManager.gameOver = false;
-
-        StartCoroutine(SpawnNewBoxs());
     }
 
     public void CountScore(int value)
@@ -293,8 +328,9 @@ public class GameManager : MonoBehaviour
     {
         int x = 0;
         int y = 0;
+        int count = 77;
 
-        while (wordsManager.lettersForChosenWords.Count > 0)
+        while (wordsManager.lettersForChosenWords.Count > 0 || count > 0)
         {
             GameObject box = boxsPrefab[0];
             
@@ -306,6 +342,8 @@ public class GameManager : MonoBehaviour
             gridManager.SpawnBox(newBox);
 
             yield return new WaitForSeconds(0.1f);
+
+            count --;
         }
     }
 

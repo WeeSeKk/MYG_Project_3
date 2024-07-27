@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine.Rendering;
 
 public class WordsManager : MonoBehaviour
 {
@@ -20,7 +21,8 @@ public class WordsManager : MonoBehaviour
     System.Random random = new System.Random();
     public List<string> correctWordsFound = new List<string>();
     List<string> wordsCategory;
-    List<string> wordsCategoryChoosen = new List<string>();
+    public List<string> wordsCategoryChoosen = new List<string>();
+    List<string> bonusWords = new List<string>();
     public List<char> lettersForChosenWords = new List<char>();
 
     void Update()
@@ -28,7 +30,7 @@ public class WordsManager : MonoBehaviour
         if (Input.GetKeyDown("w"))//test for debug
         {
             //Time.timeScale = 5;
-            AddWordsToCategoryList();
+
         }
         if (Input.GetKeyDown("q"))//test for debug
         {
@@ -106,10 +108,36 @@ public class WordsManager : MonoBehaviour
         if (wordsCategoryChoosen.Contains(word))
         {
             OnValidationReceived(true);
+            CallReplaceCategoryWord(word);
+            uIManager.AddToFoundLists(word);
+            CheckIfGameOver();
         }
-        else
+        else if (!wordsCategoryChoosen.Contains(word) && wordsCategory.Contains(word) && !bonusWords.Contains(word))
+        {
+            Debug.Log("BONUS POINTS");
+            bonusWords.Add(word);
+            AudioManager.instance.PlayAudioClip(2);
+            CountWordPoint(createdWord);
+            gridManager.selectedBoxs.Clear();
+            uIManager.CleanLabel();
+            StartCoroutine(uIManager.ShowGreenLine());
+            ResetWord();
+        }
+        else 
         {
             OnValidationReceived(false);
+        }
+    }
+
+    void CallReplaceCategoryWord(string word)
+    {
+        for (int i = 0; i < wordsCategoryChoosen.Count; i++)
+        {
+            if (word == wordsCategoryChoosen[i])
+            {
+                uIManager.RemoveFromToFindList(word, false, i);
+                wordsCategoryChoosen.Remove(wordsCategoryChoosen[i]);
+            }
         }
     }
 
@@ -139,6 +167,15 @@ public class WordsManager : MonoBehaviour
         ResetWord(); //reset the created word 
     }
 
+    void CheckIfGameOver()
+    {
+        if (wordsCategoryChoosen.Count == 0)
+        {
+            Debug.Log("ALL WORDS FOUND");
+            EventManager.GameOverEvent();
+        }
+    }
+
     public void AddWordsToCategoryList()
     {
         string jsonList = PlayfabManager.instance.Category();
@@ -148,7 +185,7 @@ public class WordsManager : MonoBehaviour
 
     public void ChooseWords()
     {
-        while (lettersForChosenWords.Count < 70)
+        while (lettersForChosenWords.Count < 70 && wordsCategoryChoosen.Count < 12)
         {
             System.Random rand = new System.Random();
             int num = rand.Next(0, wordsCategory.Count);
@@ -167,26 +204,54 @@ public class WordsManager : MonoBehaviour
         foreach (string word in wordsCategoryChoosen)
         {
             Debug.Log(word);
+
+            char[] hintchar = new char[word.Length];
+
+            for (int i = 0; i < word.Length; i++)
+            {
+                hintchar[i] = '_';
+            }
+
+            string hint = new string (hintchar);
+
+            uIManager.AddToFindLists(hint);
         }
     }
 
     public char AssingLetter()
     {
-        System.Random rand = new System.Random();
-        int num = rand.Next(0, lettersForChosenWords.Count);
+        if (lettersForChosenWords.Count > 0)
+        {   
+            System.Random rand = new System.Random();
+            int num = rand.Next(0, lettersForChosenWords.Count);
 
-        char letter = lettersForChosenWords[num];
+            char letter = lettersForChosenWords[num];
 
-        lettersForChosenWords.Remove(lettersForChosenWords[num]);
+            lettersForChosenWords.Remove(lettersForChosenWords[num]);
 
-        return letter;
+            return letter;
+        }
+        else
+        {
+            return GenerateLetter();
+        }
+    }
+
+    public void GiveHintOnWord(int pos)
+    {
+        char[] charChosen = wordsCategoryChoosen[pos].ToCharArray();
+        char[] charToFind = uIManager.wordsToFind[pos].ToCharArray();
+
+        for (int a = 0; a < wordsCategoryChoosen[pos].Length; a++)
+        {
+            if (charToFind[a] != charChosen[a])
+            {
+                charToFind[a] = charChosen[a];
+                break;
+            }
+        }
+        string hint = new string (charToFind);
+
+        uIManager.RemoveFromToFindList(hint, true, pos);
     }
 }
-
-/*
-    1.chercher assez de mot pour remplir l'array
-    2.ajouter ces mot a l'autre list
-    3.ajouter chaque letter dans l'autre list a une list de char
-    4.assigner chaque letter a une box jusqu'a ce que la list sois vide
-    
-*/

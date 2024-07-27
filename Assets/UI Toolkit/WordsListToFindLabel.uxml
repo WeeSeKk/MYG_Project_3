@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:Label tabindex="-1" text="______" parse-escape-sequences="true" display-tooltip-when-elided="true" name="WordLabel" style="position: absolute; left: 40%; top: 0; right: 40%; bottom: 95%; -unity-text-align: upper-center; color: rgb(255, 255, 255); -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Fonts/This%20Cafe%20SDF.asset?fileID=11400000&amp;guid=8545070a369019248b559cdc4c2b1b3e&amp;type=2#This Cafe SDF&quot;); -unity-font-style: normal; letter-spacing: 54px;" />
+    </ui:VisualElement>
+</ui:UXML>
