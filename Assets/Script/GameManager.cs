@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown("space"))//test for debug
         {
             //Time.timeScale = 5;
-            PlayfabManager.instance.GetCategory();
+            
         }
     }
 
@@ -115,13 +115,9 @@ public class GameManager : MonoBehaviour
             boxParent = GameObject.Find("BoxParent");
             boxPosBeforeArray = GameObject.Find("BoxPosBeforeArray");
 
-            PlayfabManager.instance.GetCategory();
+            var categoryTask = PlayfabManager.instance.GetCategoryAsync();
+            yield return new WaitUntil(() => categoryTask.IsCompleted);
 
-            Time.timeScale = 1;
-            
-            yield return new WaitForSeconds(1f);
-
-            wordsManager.AddWordsToCategoryList();
             wordsManager.ChooseWords();
 
             spawnPosition = new GameObject[gridWidth, gridHeight];

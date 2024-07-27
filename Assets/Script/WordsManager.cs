@@ -176,9 +176,9 @@ public class WordsManager : MonoBehaviour
         }
     }
 
-    public void AddWordsToCategoryList()
+    public void AddWordsToCategoryList(string jsonList)
     {
-        string jsonList = PlayfabManager.instance.Category();
+        //string jsonList = PlayfabManager.instance.Category();
 
         wordsCategory = new List<string>(jsonList.Split(','));
     }

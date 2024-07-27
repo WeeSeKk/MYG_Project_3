@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
@@ -10,9 +11,10 @@ public class PlayfabManager : MonoBehaviour
 {
     IntroUIManager introUIManager;
     LobbyUIManager lobbyUIManager;
+
+    WordsManager wordsManager;
     public static PlayfabManager instance;
     string playerUsername = null;
-    string category;
 
     void Awake()
     {
@@ -139,21 +141,40 @@ public class PlayfabManager : MonoBehaviour
 
     public void GetCategory()
     {
-        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), OnCategoryGet, OnError);
-    }
-
-    void OnCategoryGet(GetTitleDataResult result)
-    {
-        if (result.Data == null || result.Data.ContainsKey("animals") == false)
+        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), result =>
         {
-            Debug.LogError("FUCK");
-        }
+            if (result.Data == null || !result.Data.ContainsKey("animals"))
+            {
+                Debug.LogError("FUCK");
+                return;
+            }
+            wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
+            string category = result.Data["animals"];
 
-        category = result.Data["animals"];
+            wordsManager.AddWordsToCategoryList(category);
+
+            // Utilisation de la catégorie ici si nécessaire
+            Debug.Log(category);
+
+        }, OnError);
     }
 
-    public string Category()
+    public async Task GetCategoryAsync()
     {
-        return category;
+        var tsk = new TaskCompletionSource<string>();
+
+        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), result =>
+        {
+            string category = result.Data["animals"];
+            tsk.SetResult(category);
+            
+        }, OnError);
+
+        string categoryResult = await tsk.Task;
+
+        wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
+        wordsManager.AddWordsToCategoryList(categoryResult);
+
+        Debug.Log(categoryResult);
     }
 }
