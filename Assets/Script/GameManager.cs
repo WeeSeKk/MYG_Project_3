@@ -117,6 +117,8 @@ public class GameManager : MonoBehaviour
 
             PlayfabManager.instance.GetCategory();
 
+            Time.timeScale = 1;
+            
             yield return new WaitForSeconds(1f);
 
             wordsManager.AddWordsToCategoryList();
