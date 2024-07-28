@@ -156,6 +156,7 @@ VisualElement {
 
 .unity-text-element {
     -unity-text-align: middle-left;
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
 .unity-base-field__label {
@@ -229,4 +230,17 @@ VisualElement {
     scale: 0 0;
     left: 26%;
     bottom: -89px;
+}
+
+.UsernameTextField {
+    position: absolute;
+    left: 35%;
+    top: 50%;
+    right: 35%;
+    bottom: 40%;
+    -unity-text-align: upper-center;
+    background-image: url("project://database/Assets/Dark%20UI/Free/128%20Light.png?fileID=2800000&guid=240ae01ad665c6d4798249cbec763ce8&type=3#128 Light");
+    background-color: rgba(0, 0, 0, 0);
+    overflow: visible;
+    -unity-background-scale-mode: stretch-to-fill;
 }

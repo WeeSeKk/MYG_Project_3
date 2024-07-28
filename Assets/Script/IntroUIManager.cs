@@ -26,6 +26,7 @@ public class IntroUIManager : MonoBehaviour
         loginRegisterHolder = root.Q<VisualElement>("LoginRegisterHolder");
         infoLabel = root.Q<Label>("InfoLabel");
 
+       
 
         registerButton.RegisterCallback<ClickEvent>(evt => {
             EventManager.ButtonClicked(0);

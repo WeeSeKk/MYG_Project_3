@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
-using UnityEditor.PackageManager;
 using PlayFab.DataModels;
 
 public class PlayfabManager : MonoBehaviour
