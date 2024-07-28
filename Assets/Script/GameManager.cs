@@ -24,9 +24,9 @@ public class GameManager : MonoBehaviour
     int gridHeight = 10;
     bool gameOver;
     int score;
-    int powerUpUseCrusher = 0;
-    int powerUpUseFire = 0;
-    int powerUpUseBomb = 0;
+    public int powerUpUseCrusher = 0;
+    public int powerUpUseFire = 0;
+    public int powerUpUseBomb = 0;
 
     void Awake()
     {
@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown("space"))//test for debug
         {
             //Time.timeScale = 5;
-            
         }
     }
 
@@ -66,20 +65,20 @@ public class GameManager : MonoBehaviour
 
     public void LaunchGamemode_1()
     {
-        StartCoroutine(LoadScene("Scene_Gamemode_01"));
+        StartCoroutine(LoadScene("Scene_Gamemode_01", "none"));
     }
 
-    public void LaunchGamemode_2()
+    public void LaunchGamemode_2(string category)
     {
-        StartCoroutine(LoadScene("Scene_Gamemode_02"));
+        StartCoroutine(LoadScene("Scene_Gamemode_02", category));
     }
 
     public void LaunchLobby()
     {
-        StartCoroutine(LoadScene("Lobby"));
+        StartCoroutine(LoadScene("Lobby", "none"));
     }
 
-    public IEnumerator LoadScene(string scene)
+    public IEnumerator LoadScene(string scene, string category)
     {
         if (scene == "Scene_Gamemode_01")
         {
@@ -115,7 +114,7 @@ public class GameManager : MonoBehaviour
             boxParent = GameObject.Find("BoxParent");
             boxPosBeforeArray = GameObject.Find("BoxPosBeforeArray");
 
-            var categoryTask = PlayfabManager.instance.GetCategoryAsync();
+            var categoryTask = PlayfabManager.instance.GetCategoryAsync(category);
             yield return new WaitUntil(() => categoryTask.IsCompleted);
 
             wordsManager.ChooseWords();

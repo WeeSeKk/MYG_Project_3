@@ -37,7 +37,7 @@ public class TimerScript : MonoBehaviour
     public float swapTime;
     bool hintTimer;
     public float hintTime;
-    float timePlaying = 0;
+    public float timePlaying = 0;
     bool gameOver;
 
     // Start is called before the first frame update

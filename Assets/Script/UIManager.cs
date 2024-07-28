@@ -12,12 +12,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] GridManager gridManager;
     [SerializeField] TimerScript timerScript;
     [SerializeField] Canvas canvas;
+    [SerializeField] Sprite emptyStar;
+    [SerializeField] Sprite goldenStar;
     VisualElement root;
     Button pauseButton;
     VisualElement gameOverTab;
     VisualElement greenLine;
-    public Slider musicSlider;
-    public Slider audioSlider;
+    Slider musicSlider;
+    Slider audioSlider;
     VisualElement background;
     VisualElement topleftStar;
     VisualElement topmiddleStar;
@@ -67,6 +69,7 @@ public class UIManager : MonoBehaviour
     int crusher = 0;
     int fire = 0;
     int bomb = 0;
+    int hint = 0;
     bool gameOver;
 
     // Start is called before the first frame update
@@ -127,6 +130,8 @@ public class UIManager : MonoBehaviour
         topbottomStar = root.Q<VisualElement>("TopbottomStar");
         middlebottomStar = root.Q<VisualElement>("MiddlebottomStar");
         bottombottomStar = root.Q<VisualElement>("BottombottomStar");
+
+        HideStars();
 
         if (currentScene.name == "Scene_Gamemode_01")
         {
@@ -269,6 +274,9 @@ public class UIManager : MonoBehaviour
             }
             EventManager.ButtonClicked(0);
         });
+
+        SetSlidersValue();
+        
         audioSlider.RegisterValueChangedCallback(evt => {
             EventManager.SFXVolumeChange(audioSlider.value);
             EventManager.ButtonClicked(0);
@@ -276,6 +284,12 @@ public class UIManager : MonoBehaviour
         musicSlider.RegisterValueChangedCallback(evt => {
             EventManager.MusicVolumeChange(musicSlider.value);
         });
+    }
+
+    void SetSlidersValue()
+    {
+        musicSlider.value = AudioManager.instance.MusicSliderValue();
+        audioSlider.value = AudioManager.instance.SFXSliderValue();
     }
     
     public void UpdateLabel(string word)
@@ -453,10 +467,54 @@ public class UIManager : MonoBehaviour
             bombCount.text = "x " + bomb;
         }
     }
+    void HideStars()
+    {
+        topleftStar.style.backgroundImage = new StyleBackground(emptyStar);
+        topbottomStar.style.backgroundImage = new StyleBackground(emptyStar);
+        topmiddleStar.style.backgroundImage = new StyleBackground(emptyStar);
+        middlebottomStar.style.backgroundImage = new StyleBackground(emptyStar);
+        topleftStar.style.backgroundImage = new StyleBackground(emptyStar);
+        bottombottomStar.style.backgroundImage = new StyleBackground(emptyStar);
+    }
 
     void ShowStars()
     {
-
+        if (currentScene.name == "Scene_Gamemode_01")
+        {
+            if (timerScript.timePlaying > 300f)
+            {
+                topleftStar.style.backgroundImage = new StyleBackground(goldenStar);
+                topbottomStar.style.backgroundImage = new StyleBackground(goldenStar);
+            }
+            if (crusher + fire + bomb < 5)
+            {
+                topmiddleStar.style.backgroundImage = new StyleBackground(goldenStar);
+                middlebottomStar.style.backgroundImage = new StyleBackground(goldenStar);
+            }
+            if (wordsFound.Count > 20)
+            {
+                toprightStar.style.backgroundImage = new StyleBackground(goldenStar);
+                bottombottomStar.style.backgroundImage = new StyleBackground(goldenStar);
+            }
+        }
+        else
+        {
+            if (timerScript.timeLeft > 0)
+            {
+                topleftStar.style.backgroundImage = new StyleBackground(goldenStar);
+                topbottomStar.style.backgroundImage = new StyleBackground(goldenStar);
+            }
+            if (hint < 5)
+            {
+                topmiddleStar.style.backgroundImage = new StyleBackground(goldenStar);
+                middlebottomStar.style.backgroundImage = new StyleBackground(goldenStar);
+            }
+            if (wordsManager.wordsCategoryChoosen.Count < wordsFound.Count)
+            {
+                toprightStar.style.backgroundImage = new StyleBackground(goldenStar);
+                bottombottomStar.style.backgroundImage = new StyleBackground(goldenStar);
+            }
+        }
     }
 
     public IEnumerator ShowGreenLine()
@@ -549,10 +607,6 @@ public class UIManager : MonoBehaviour
 
     void UpdateGameOverToFindList()//update the list to add new words 
     {
-        if (wordsManager.wordsCategoryChoosen[0] == null)
-        {
-            wordsManager.wordsCategoryChoosen.Add(" ");
-        }
         goWordsToFindList.Clear();
         goWordsToFindList.itemsSource = wordsManager.wordsCategoryChoosen;
         goWordsToFindList.makeItem = () => elementList.CloneTree();
@@ -589,6 +643,7 @@ public class UIManager : MonoBehaviour
             UpdateGameOverToFindList();
             UpdateGameOverFoundList();
         }
+        ShowStars();
         gameOver = true;
         canvas.enabled = false;
         gameOverTab.RemoveFromClassList("GameOverTabHidden");

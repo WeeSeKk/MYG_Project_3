@@ -1423,9 +1423,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wordsManager: {fileID: 1995382827}
   elementList: {fileID: 9197481963319205126, guid: 9377d8ccdf37c62498bad139ed4a992a, type: 3}
+  elementListToFind: {fileID: 0}
   gridManager: {fileID: 373122604}
   timerScript: {fileID: 1536425946}
   canvas: {fileID: 1369438048}
+  emptyStar: {fileID: 21300000, guid: 68cad4b94433d3b4faec47266db765e6, type: 3}
+  goldenStar: {fileID: 21300000, guid: 7ab2fe5dd2fbc0b4d8b3fd47a1c304ba, type: 3}
+  wordsToFind: []
+  wordsFound: []
 --- !u!114 &1536425946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1445,6 +1450,8 @@ MonoBehaviour:
   fireTime: 60
   bombTime: 60
   swapTime: 60
+  hintTime: 0
+  timePlaying: 0
 --- !u!1 &1565682327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1871,6 +1878,8 @@ MonoBehaviour:
   gridManager: {fileID: 373122604}
   uIManager: {fileID: 1536425945}
   correctWordsFound: []
+  wordsCategoryChoosen: []
+  lettersForChosenWords: 
 --- !u!4 &1995382828
 Transform:
   m_ObjectHideFlags: 0

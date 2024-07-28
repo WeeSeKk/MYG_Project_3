@@ -139,33 +139,13 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    public void GetCategory()
-    {
-        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), result =>
-        {
-            if (result.Data == null || !result.Data.ContainsKey("animals"))
-            {
-                Debug.LogError("FUCK");
-                return;
-            }
-            wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
-            string category = result.Data["animals"];
-
-            wordsManager.AddWordsToCategoryList(category);
-
-            // Utilisation de la catégorie ici si nécessaire
-            Debug.Log(category);
-
-        }, OnError);
-    }
-
-    public async Task GetCategoryAsync()
+    public async Task GetCategoryAsync(string key)
     {
         var tsk = new TaskCompletionSource<string>();
 
         PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), result =>
         {
-            string category = result.Data["animals"];
+            string category = result.Data[key];
             tsk.SetResult(category);
             
         }, OnError);

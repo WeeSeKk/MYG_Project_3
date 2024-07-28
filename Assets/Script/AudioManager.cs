@@ -23,8 +23,6 @@ public class AudioManager : MonoBehaviour
         EventManager.musicVolulmeChange += SetMusicVolume;
         EventManager.sfxVolulmeChange += SetSFXVolume;
 
-        LoadVolumeValue();
-
         if (instance != null && instance != this)
         {
             Destroy(this);
@@ -36,21 +34,23 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    void Update()
+    void Start()
     {
-
+        LoadVolumeValue();
     }
 
     void SetMusicVolume(float value)
     {
         musicValue = value;
         audioMixer.SetFloat(MUSIC_VOLUME, Mathf.Log10(value) * 20);
+        SaveVolumeValue("Music", value);
     }
 
     void SetSFXVolume(float value)
     {
         soundValue = value;
         audioMixer.SetFloat(SFX_VOLUME, Mathf.Log10(value) * 20);
+        SaveVolumeValue("SFX", value);
     }
 
     public void PlayAudioClip(int num)
@@ -75,22 +75,47 @@ public class AudioManager : MonoBehaviour
 
     void LoadVolumeValue()
     {
-        SetMusicVolume(PlayerPrefs.GetFloat(MUSIC_VOLUME));
-        SetSFXVolume(PlayerPrefs.GetFloat(SFX_VOLUME));
+        float defaultVolume = 0.5f; 
+        float musicVolume = IntToFloat(PlayerPrefs.GetInt(MUSIC_VOLUME, FloatToInt(defaultVolume)));
+        float sfxVolume = IntToFloat(PlayerPrefs.GetInt(SFX_VOLUME, FloatToInt(defaultVolume)));
+        
+        SetMusicVolume(musicVolume);
+        SetSFXVolume(sfxVolume);
     }
 
     void SaveVolumeValue(string type, float volume)
     {
+        int volumeint = FloatToInt(volume);
+
         if (type == "Music")
         {
-            Debug.Log("test");
-            //PlayerPrefs.SetFloat(MUSIC_VOLUME, volume);
-            PlayerPrefs.SetInt(MUSIC_VOLUME, 10);
+            PlayerPrefs.SetInt(MUSIC_VOLUME, volumeint);
         }
-        else if (type == "SFX")
+        if (type == "SFX")
         {
-            //PlayerPrefs.SetFloat(SFX_VOLUME, volume);
-            PlayerPrefs.SetInt(MUSIC_VOLUME, 10);
+            PlayerPrefs.SetInt(SFX_VOLUME, volumeint);
         }
+    }
+
+    public float MusicSliderValue()
+    {
+        float defaultVolume = 0.5f; 
+        return IntToFloat(PlayerPrefs.GetInt(MUSIC_VOLUME, FloatToInt(defaultVolume)));
+    }
+
+    public float SFXSliderValue()
+    {
+        float defaultVolume = 0.5f; 
+        return IntToFloat(PlayerPrefs.GetInt(SFX_VOLUME, FloatToInt(defaultVolume)));
+    }
+
+    int FloatToInt(float value)
+    {
+        return (int)(value * 1000);
+    }
+
+    float IntToFloat(int value)
+    {
+        return value / 1000.0f;
     }
 }
