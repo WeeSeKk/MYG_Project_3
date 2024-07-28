@@ -14,6 +14,7 @@ public class BoxPrefabController : MonoBehaviour
     [SerializeField] GameObject child;
     [SerializeField] SpriteRenderer freeze;
     [SerializeField] SpriteRenderer outline;
+    [SerializeField] GameObject outlineGO;
     [SerializeField] SpriteRenderer goSprite;
     [SerializeField] GameObject visualGo;
     TMP_Text text;
@@ -24,8 +25,10 @@ public class BoxPrefabController : MonoBehaviour
     char letter;
     int posX;
     int posY;
+    const string BOXSSKIN = "Skin";
     public List<Sprite> sprites;
     public List<Sprite> kSprites;
+    public List<Sprite> sSprites;
     public List<Sprite> outlineSprites;
     
     void Awake()
@@ -81,26 +84,64 @@ public class BoxPrefabController : MonoBehaviour
 
     void ChooseSprite()
     {
-        
-        System.Random rand = new System.Random();
-        int num = rand.Next(0, 4);
+        string sprite = PlayerPrefs.GetString(BOXSSKIN, "default");
 
-        goSprite.sprite = sprites[num];
-
-        if (num > 1)
+        if (sprite == "default")//default sprite
         {
-            outline.sprite = outlineSprites[1];
-        }
-        else
-        {
-            outline.sprite = outlineSprites[0];
-        }
-        /*
-        System.Random rand = new System.Random();
-        int num = rand.Next(0, 15);
+            System.Random rdm = new System.Random();
+            int i = rdm.Next(0, 4);
 
-        goSprite.sprite = kSprites[num];
-        */
+            goSprite.sprite = sprites[i];
+            text.color = Color.black;
+            visualGo.transform.localScale = new Vector3(1f, 1f);
+        }
+        else if (sprite == "kenney")//k sprite
+        {
+            System.Random rdm = new System.Random();
+            int i = rdm.Next(0, 15);
+
+            goSprite.sprite = kSprites[i];
+            text.color = Color.black;
+            visualGo.transform.localScale = new Vector3(1.45f, 1.45f);
+
+            if (i == 1 || i == 5 || i == 9 || i == 13)
+            {
+                outline.sprite = outlineSprites[1];
+                outlineGO.transform.localScale = new Vector3(0.9f, 0.9f);
+                outlineGO.transform.localRotation = Quaternion.Euler(0, 0, -45f);
+            }
+            if (i == 0 || i == 4 || i == 8 || i == 12 || i == 15)
+            {
+                outline.sprite = outlineSprites[0];
+            }
+            else
+            {
+                outline.sprite = outlineSprites[1];
+            }
+        }
+        else if (sprite == "simple")//s sprite
+        {
+            System.Random rdm = new System.Random();
+            int i = rdm.Next(0, 3);
+
+            text.color = Color.white;
+            
+            if (i == 0)
+            {
+                outline.sprite = outlineSprites[1];
+                visualGo.transform.localScale = new Vector3(0.45f, 0.45f);
+                outlineGO.transform.localScale = new Vector3(1.05f, 1.05f);
+                goSprite.sprite = sSprites[0];
+            }
+            else
+            {
+                outline.sprite = outlineSprites[0];
+                visualGo.transform.localScale = new Vector3(1.2f, 1.2f);
+                outlineGO.transform.localScale = new Vector3(1.05f, 1.05f);
+                goSprite.sprite = sSprites[1];
+            }
+            
+        }
     }
 
     // Update is called once per frame

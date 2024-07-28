@@ -11,7 +11,7 @@ public class PlayfabManager : MonoBehaviour
 {
     IntroUIManager introUIManager;
     LobbyUIManager lobbyUIManager;
-
+    UIManager uIManager;
     WordsManager wordsManager;
     public static PlayfabManager instance;
     string playerUsername = null;
@@ -154,6 +154,9 @@ public class PlayfabManager : MonoBehaviour
 
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
         wordsManager.AddWordsToCategoryList(categoryResult);
+
+        uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
+        uIManager.SetCategoryLabel(key);
 
         Debug.Log(categoryResult);
     }

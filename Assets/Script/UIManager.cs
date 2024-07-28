@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Sprite emptyStar;
     [SerializeField] Sprite goldenStar;
     VisualElement root;
+    Label categoryLabel;
     Button pauseButton;
     VisualElement gameOverTab;
     VisualElement greenLine;
@@ -28,6 +29,9 @@ public class UIManager : MonoBehaviour
     VisualElement middlebottomStar;
     VisualElement bottombottomStar;
     VisualElement settingsTab;
+    VisualElement backgroundDay;
+    VisualElement backgroundSunset;
+    VisualElement backgroundNight;
     ListView wordsList;
     ListView rightListView;
     ListView leftListView;
@@ -66,6 +70,7 @@ public class UIManager : MonoBehaviour
     List<string> words = new List<string>();
     public List<string> wordsToFind = new List<string>();
     public List<string> wordsFound = new List<string>();
+    const string BACKGROUND = "CurrentBackground";
     int crusher = 0;
     int fire = 0;
     int bomb = 0;
@@ -84,6 +89,10 @@ public class UIManager : MonoBehaviour
         background = root.Q<VisualElement>("Background");
         greenLine = root.Q<VisualElement>("GreenLine");
         settingsTab = root.Q<VisualElement>("SettingsTab");
+        backgroundDay = root.Q<VisualElement>("BackgroundDay");
+        backgroundSunset = root.Q<VisualElement>("BackgroundSunset");
+        backgroundNight = root.Q<VisualElement>("BackgroundNight");
+        categoryLabel = root.Q<Label>("CategoryLabel");
         wordsList = root.Q<ListView>("WordsList");
         rightListView = root.Q<ListView>("RightListView");
         leftListView = root.Q<ListView>("LeftListView");
@@ -132,6 +141,7 @@ public class UIManager : MonoBehaviour
         bottombottomStar = root.Q<VisualElement>("BottombottomStar");
 
         HideStars();
+        SetBackground();
 
         if (currentScene.name == "Scene_Gamemode_01")
         {
@@ -276,7 +286,7 @@ public class UIManager : MonoBehaviour
         });
 
         SetSlidersValue();
-        
+
         audioSlider.RegisterValueChangedCallback(evt => {
             EventManager.SFXVolumeChange(audioSlider.value);
             EventManager.ButtonClicked(0);
@@ -284,6 +294,35 @@ public class UIManager : MonoBehaviour
         musicSlider.RegisterValueChangedCallback(evt => {
             EventManager.MusicVolumeChange(musicSlider.value);
         });
+    }
+
+    public void SetCategoryLabel(string category)
+    {
+        categoryLabel.text = category;
+    }
+
+    void SetBackground()
+    {
+        string background = PlayerPrefs.GetString(BACKGROUND, backgroundDay.name);
+
+        if (background == "BackgroundDay")
+        {
+            backgroundDay.style.opacity = 1;
+            backgroundSunset.style.opacity = 0;
+            backgroundNight.style.opacity = 0;
+        }
+        else if (background == "BackgroundSunset")
+        {
+            backgroundDay.style.opacity = 0;
+            backgroundSunset.style.opacity = 1;
+            backgroundNight.style.opacity = 0;
+        }
+        else if (background == "BackgroundNight")
+        {
+            backgroundDay.style.opacity = 0;
+            backgroundSunset.style.opacity = 0;
+            backgroundNight.style.opacity = 1;
+        }
     }
 
     void SetSlidersValue()

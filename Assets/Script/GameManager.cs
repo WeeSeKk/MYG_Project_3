@@ -82,7 +82,10 @@ public class GameManager : MonoBehaviour
     {
         if (scene == "Scene_Gamemode_01")
         {
+            StopCoroutine(SpawnNewBoxs());
+            StopCoroutine(SpawnNewBoxsGamemode2());
             yield return SceneManager.LoadSceneAsync(scene);
+            Time.timeScale = 1;
             gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
             objectPool = GameObject.Find("GridManager").GetComponent<ObjectPool>();
             wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
@@ -104,7 +107,10 @@ public class GameManager : MonoBehaviour
         }
         else if (scene == "Scene_Gamemode_02")
         {
+            StopCoroutine(SpawnNewBoxs());
+            StopCoroutine(SpawnNewBoxsGamemode2());
             yield return SceneManager.LoadSceneAsync(scene);
+            Time.timeScale = 1;
             gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
             objectPool = GameObject.Find("GridManager").GetComponent<ObjectPool>();
             wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
@@ -129,7 +135,10 @@ public class GameManager : MonoBehaviour
         }
         else if (scene == "Lobby")
         {
+            StopCoroutine(SpawnNewBoxs());
+            StopCoroutine(SpawnNewBoxsGamemode2());
             yield return SceneManager.LoadSceneAsync(scene);
+            Time.timeScale = 1;
             PlayfabManager.instance.GetLeaderboard();
         }
     }
