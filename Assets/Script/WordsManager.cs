@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Newtonsoft.Json;
 using UnityEngine.Rendering;
+using GameManagerNamespace;
 
 public class WordsManager : MonoBehaviour
 {
@@ -71,6 +72,7 @@ public class WordsManager : MonoBehaviour
         {
             letterFrequencies.TryGetValue(letter, out value);
             GameManager.instance.CountScore(value);
+            
         }
 
         foreach (char letter in word)

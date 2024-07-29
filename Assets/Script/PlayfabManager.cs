@@ -5,6 +5,7 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using PlayFab.DataModels;
+using GameManagerNamespace;
 
 public class PlayfabManager : MonoBehaviour
 {

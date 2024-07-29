@@ -30,7 +30,7 @@ public class BoxPrefabController : MonoBehaviour
     public List<Sprite> kSprites;
     public List<Sprite> sSprites;
     public List<Sprite> outlineSprites;
-    
+
     void Awake()
     {
         EventManager.gameOverEvent += GameOver;
@@ -39,7 +39,7 @@ public class BoxPrefabController : MonoBehaviour
         EventManager.shakeBoxs += ShakeBoxsAnimation;
 
         currentScene = SceneManager.GetActiveScene();
-        
+
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 
@@ -62,7 +62,7 @@ public class BoxPrefabController : MonoBehaviour
 
     void SwapLetters()
     {
-        Vector3 rot = new Vector3(0,0,360);
+        Vector3 rot = new Vector3(0, 0, 360);
 
         if (spawned)
         {
@@ -75,7 +75,7 @@ public class BoxPrefabController : MonoBehaviour
     void OnDisable()
     {
         this.gameObject.transform.DOKill();
-        
+
         if (gridManager.selectedBoxs.Contains(this.gameObject))
         {
             gridManager.selectedBoxs.Remove(this.gameObject);
@@ -125,7 +125,7 @@ public class BoxPrefabController : MonoBehaviour
             int i = rdm.Next(0, 3);
 
             text.color = Color.white;
-            
+
             if (i == 0)
             {
                 outline.sprite = outlineSprites[1];
@@ -140,25 +140,25 @@ public class BoxPrefabController : MonoBehaviour
                 outlineGO.transform.localScale = new Vector3(1.05f, 1.05f);
                 goSprite.sprite = sSprites[1];
             }
-            
+
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(posY > 0)
+        if (posY > 0)
         {
-            if(gridManager.gridArray[posX, posY - 1] == null)
+            if (gridManager.gridArray[posX, posY - 1] == null)
             {
                 FindCell();
-            }    
+            }
         }
 
         if (!spawned)
         {
             for (int x = 0; x < gridManager.maxgridWidth; x++)
-            { 
+            {
                 if (gridManager.gridArray[x, 9] == this.gameObject)
                 {
                     spawned = true;
@@ -167,7 +167,7 @@ public class BoxPrefabController : MonoBehaviour
                 }
             }
         }
-    
+
         if (gridManager.selectedBoxs.Contains(this.gameObject))
         {
             outline.enabled = true;
@@ -180,7 +180,7 @@ public class BoxPrefabController : MonoBehaviour
 
     void UpdatePos(GameObject gameObject, int x, int y)
     {
-        if(gameObject == this.gameObject)
+        if (gameObject == this.gameObject)
         {
             posX = x;
             posY = y;
@@ -215,7 +215,7 @@ public class BoxPrefabController : MonoBehaviour
             wordsManager.AddLetter(letter);
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
-    }    
+    }
 
     public void FindCell()//find in witch cell is this gameobject
     {
@@ -250,14 +250,14 @@ public class BoxPrefabController : MonoBehaviour
 
         for (int i = 0; i < gridManager.gridHeight; i++)
         {
-            if((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
+            if ((i != 0 && gridManager.gridArray[x, i] == null && gridManager.gridArray[x, i - 1] != null) || (i == 0 && gridManager.gridArray[x, i] == null))
             {
                 newWorldPosition = gridManager.grid.CellToWorld(new Vector3Int(x, i));
                 this.gameObject.transform.DOMove(newWorldPosition, mooveSpeed, false).SetEase(Ease.OutCirc);
                 gridManager.UpdateArray(this.gameObject, x, i);
                 posY = i;
                 break;
-            }  
+            }
         }
     }
 
@@ -268,7 +268,7 @@ public class BoxPrefabController : MonoBehaviour
             visualGo.transform.position = this.gameObject.transform.position;
         });
     }
-        
+
     public void Freezing(GameObject gameObject)
     {
         if (gameObject == this.gameObject)

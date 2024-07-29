@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 using DG.Tweening;
+using GameManagerNamespace;
 
 public class LobbyUIManager : MonoBehaviour
 {
@@ -133,7 +134,7 @@ public class LobbyUIManager : MonoBehaviour
             EventManager.ButtonClicked(0);
         });
         leg_FruitButton.RegisterCallback<ClickEvent>(evt => {
-            GameManager.instance.LaunchGamemode_2("vegetables_fruits");
+            GameManager.instance.LaunchGamemode_2("vegetables&fruits");
             EventManager.ButtonClicked(0);
         });
         capitalesButton.RegisterCallback<ClickEvent>(evt => {
