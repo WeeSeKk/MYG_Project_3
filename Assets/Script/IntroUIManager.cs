@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using PlayfabManagerNamespace;
 
 public class IntroUIManager : MonoBehaviour
 {

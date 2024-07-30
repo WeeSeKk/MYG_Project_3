@@ -1,163 +1,178 @@
-using System.Collections;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine;
-using PlayFab;
-using PlayFab.ClientModels;
-using PlayFab.DataModels;
-using GameManagerNamespace;
-
-public class PlayfabManager : MonoBehaviour
+namespace PlayfabManagerNamespace
 {
-    IntroUIManager introUIManager;
-    LobbyUIManager lobbyUIManager;
-    UIManager uIManager;
-    WordsManager wordsManager;
-    public static PlayfabManager instance;
-    string playerUsername = null;
+    using System.Collections;
+    using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using PlayFab;
+    using PlayFab.ClientModels;
+    using PlayFab.DataModels;
+    using GameManagerNamespace;
+    using WordsManagerNamespace;
 
-    void Awake()
+    public class PlayfabManager : MonoBehaviour
     {
-        introUIManager = GameObject.Find("UIDocument").GetComponent<IntroUIManager>();
+        IntroUIManager introUIManager;
+        LobbyUIManager lobbyUIManager;
+        UIManager uIManager;
+        WordsManager wordsManager;
+        public static PlayfabManager instance;
+        string playerUsername = null;
 
-        if (instance != null && instance != this)
+        void Awake()
         {
-            Destroy(this);
-        }
-        else
-        {
-            instance = this;
-        }
-        DontDestroyOnLoad(this.gameObject);
-    }
+            introUIManager = GameObject.Find("UIDocument").GetComponent<IntroUIManager>();
 
-    public string Player_Username()
-    {
-        return playerUsername;
-    }
-
-    void OnError(PlayFabError error)
-    {
-        Debug.LogError(error.GenerateErrorReport());
-        if (introUIManager != null)
-        {
-            StartCoroutine(introUIManager.ShowError(error.ErrorMessage));
-            introUIManager.HideWaitingScreen();
-        }
-    }
-
-    void UpdateUsername(string username)
-    {
-        var request = new UpdateUserTitleDisplayNameRequest {
-            DisplayName = username
-        };
-        PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
-    }
-
-    void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
-    {
-        Debug.Log("Username Changed");
-    }
-
-    public void OnRegister(string username, string password)
-    {
-        var request = new RegisterPlayFabUserRequest {
-            Username = username,
-            Password = password,
-            RequireBothUsernameAndEmail = false
-        };
-
-        PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSucces, OnError);
-    }
-
-    void OnRegisterSucces(RegisterPlayFabUserResult result)
-    {
-        Debug.Log("Register Success" + result);
-        playerUsername = result.Username;
-        UpdateUsername(playerUsername);
-        introUIManager.HideWaitingScreen();
-        StartCoroutine(introUIManager.ShowError("Register Completed"));
-    }
-
-    public void OnLogin(string username, string password)
-    {
-        var request = new LoginWithPlayFabRequest {
-            Username = username,
-            Password = password,
-            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams {
-                GetPlayerProfile = true
+            if (instance != null && instance != this)
+            {
+                Destroy(this);
             }
-        };
-
-        PlayFabClientAPI.LoginWithPlayFab(request, OnLoginSucces, OnError);
-    }
-
-    void OnLoginSucces(LoginResult result)
-    {
-        Debug.Log("Login Success");
-        if (playerUsername == null)
-        {
-            playerUsername = result.InfoResultPayload.PlayerProfile.DisplayName;
+            else
+            {
+                instance = this;
+            }
+            DontDestroyOnLoad(this.gameObject);
         }
-        GameManager.instance.LaunchLobby();
-    }
 
-    public void SendLeaderboard(int score)
-    {
-        var request = new UpdatePlayerStatisticsRequest {
-            Statistics = new List<StatisticUpdate> {
+        public string Player_Username()
+        {
+            return playerUsername;
+        }
+
+        void OnError(PlayFabError error)
+        {
+            Debug.LogError(error.GenerateErrorReport());
+            if (introUIManager != null)
+            {
+                StartCoroutine(introUIManager.ShowError(error.ErrorMessage));
+                introUIManager.HideWaitingScreen();
+            }
+        }
+
+        void UpdateUsername(string username)
+        {
+            var request = new UpdateUserTitleDisplayNameRequest
+            {
+                DisplayName = username
+            };
+            PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
+        }
+
+        void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
+        {
+            Debug.Log("Username Changed");
+        }
+
+        public void OnRegister(string username, string password)
+        {
+            var request = new RegisterPlayFabUserRequest
+            {
+                Username = username,
+                Password = password,
+                RequireBothUsernameAndEmail = false
+            };
+
+            PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSucces, OnError);
+        }
+
+        void OnRegisterSucces(RegisterPlayFabUserResult result)
+        {
+            Debug.Log("Register Success" + result);
+            playerUsername = result.Username;
+            UpdateUsername(playerUsername);
+            introUIManager.HideWaitingScreen();
+            StartCoroutine(introUIManager.ShowError("Register Completed"));
+        }
+
+        public void OnLogin(string username, string password)
+        {
+            var request = new LoginWithPlayFabRequest
+            {
+                Username = username,
+                Password = password,
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                {
+                    GetPlayerProfile = true
+                }
+            };
+
+            PlayFabClientAPI.LoginWithPlayFab(request, OnLoginSucces, OnError);
+        }
+
+        void OnLoginSucces(LoginResult result)
+        {
+            Debug.Log("Login Success");
+            if (playerUsername == null)
+            {
+                playerUsername = result.InfoResultPayload.PlayerProfile.DisplayName;
+            }
+            GameManager.instance.LaunchLobby();
+        }
+
+        public void SendLeaderboard(int score)
+        {
+            var request = new UpdatePlayerStatisticsRequest
+            {
+                Statistics = new List<StatisticUpdate> {
                 new StatisticUpdate {
                     StatisticName = "High Score",
                     Value = score
                 }
             }
-        };
-        PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderbordUpdate, OnError);
-    }
-
-    void OnLeaderbordUpdate(UpdatePlayerStatisticsResult result)
-    {
-        Debug.Log("leaderbord updated");
-    }
-
-    public void GetLeaderboard()
-    {
-        var request = new GetLeaderboardRequest {
-            StatisticName = "High Score",
-            StartPosition = 0,
-            MaxResultsCount = 10
-        };
-        PlayFabClientAPI.GetLeaderboard(request, OnleaderbordGet, OnError);
-    }
-
-    void OnleaderbordGet(GetLeaderboardResult result)
-    {
-        lobbyUIManager = GameObject.Find("UIDocument").GetComponent<LobbyUIManager>();
-        foreach (var item in result.Leaderboard)
-        {
-            lobbyUIManager.AddLeaderboardList(item.DisplayName + " " + item.StatValue);
+            };
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderbordUpdate, OnError);
         }
-    }
 
-    public async Task GetCategoryAsync(string key)
-    {
-        var tsk = new TaskCompletionSource<string>();
-
-        PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), result =>
+        void OnLeaderbordUpdate(UpdatePlayerStatisticsResult result)
         {
-            string category = result.Data[key];
-            tsk.SetResult(category);
-            
-        }, OnError);
+            Debug.Log("leaderbord updated");
+        }
 
-        string categoryResult = await tsk.Task;
+        public void GetLeaderboard()
+        {
+            var request = new GetLeaderboardRequest
+            {
+                StatisticName = "High Score",
+                StartPosition = 0,
+                MaxResultsCount = 10
+            };
+            PlayFabClientAPI.GetLeaderboard(request, OnleaderbordGet, OnError);
+        }
 
-        wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
-        wordsManager.AddWordsToCategoryList(categoryResult);
+        void OnleaderbordGet(GetLeaderboardResult result)
+        {
+            lobbyUIManager = GameObject.Find("UIDocument").GetComponent<LobbyUIManager>();
+            foreach (var item in result.Leaderboard)
+            {
+                lobbyUIManager.AddLeaderboardList(item.DisplayName + " " + item.StatValue);
+            }
+        }
 
-        uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
-        uIManager.SetCategoryLabel(key);
+        public async Task GetCategoryAsync(string key)
+        {
+            var tsk = new TaskCompletionSource<string>();
 
-        Debug.Log(categoryResult);
+            PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), result =>
+            {
+                string category = result.Data[key];
+                tsk.SetResult(category);
+
+            }, OnError);
+
+            string categoryResult = await tsk.Task;
+
+            wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
+            wordsManager.AddWordsToCategoryList(categoryResult);
+
+            uIManager = GameObject.Find("UIDocument").GetComponent<UIManager>();
+            uIManager.SetCategoryLabel(key);
+
+            Debug.Log(categoryResult);
+        }
+
+        public void Logout()
+        {
+            PlayFabClientAPI.ForgetAllCredentials();
+        }
     }
 }

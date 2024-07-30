@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -9,30 +10,25 @@ public class APIManager : MonoBehaviour
     public Word[] words;
     public delegate void Callback(bool isValid);
 
-    public IEnumerator SendRequest(string url, Callback isValidCallback)
+    public async Task SendRequestAsync(string url, Callback isValidCallback)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
-            yield return webRequest.SendWebRequest();
+            var operation = webRequest.SendWebRequest();
 
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)//word found
+            while (!operation.isDone)
             {
-                //Debug.Log("Error: " + webRequest.error);
-
-                if (isValidCallback != null)
-                {
-                    isValidCallback(false);
-                }
+                await Task.Yield();
             }
-            else//word not found
+                
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
-                //Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
+                isValidCallback?.Invoke(false);
+            }
+            else
+            {
                 words = JsonConvert.DeserializeObject<Word[]>(webRequest.downloadHandler.text);
-
-                if (isValidCallback != null)
-                {
-                    isValidCallback(true);
-                }
+                isValidCallback?.Invoke(true);
             }
         }
     }

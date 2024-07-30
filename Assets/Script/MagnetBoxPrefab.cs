@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
-using Unity.Mathematics;
+using WordsManagerNamespace;
 
 public class MagnetBoxPrefab : MonoBehaviour
 {

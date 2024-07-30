@@ -6,6 +6,8 @@ namespace GameManagerNamespace
     using DG.Tweening;
     using UnityEngine.SceneManagement;
     using Unity.VisualScripting;
+    using WordsManagerNamespace;
+    using PlayfabManagerNamespace;
 
     public class GameManager : MonoBehaviour
     {
@@ -17,6 +19,7 @@ namespace GameManagerNamespace
         UIManager uIManager;
         TimerScript timerScript;
         GameObject boxParent;
+        Scene currentScene;
         GameObject boxPosBeforeArray;
         Grid lineGrid;
         public List<GameObject> boxsPrefab;
@@ -25,7 +28,7 @@ namespace GameManagerNamespace
         int gridWidth = 1;
         int gridHeight = 10;
         bool gameOver;
-        int score;
+        public int score;
         public int powerUpUseCrusher = 0;
         public int powerUpUseFire = 0;
         public int powerUpUseBomb = 0;
@@ -87,6 +90,7 @@ namespace GameManagerNamespace
                 StopCoroutine(SpawnNewBoxs());
                 StopCoroutine(SpawnNewBoxsGamemode2());
                 yield return SceneManager.LoadSceneAsync(scene);
+                currentScene = SceneManager.GetActiveScene();
                 Time.timeScale = 1;
                 gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
                 objectPool = GameObject.Find("GridManager").GetComponent<ObjectPool>();
@@ -112,6 +116,7 @@ namespace GameManagerNamespace
                 StopCoroutine(SpawnNewBoxs());
                 StopCoroutine(SpawnNewBoxsGamemode2());
                 yield return SceneManager.LoadSceneAsync(scene);
+                currentScene = SceneManager.GetActiveScene();
                 Time.timeScale = 1;
                 gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
                 objectPool = GameObject.Find("GridManager").GetComponent<ObjectPool>();
@@ -140,6 +145,7 @@ namespace GameManagerNamespace
                 StopCoroutine(SpawnNewBoxs());
                 StopCoroutine(SpawnNewBoxsGamemode2());
                 yield return SceneManager.LoadSceneAsync(scene);
+                currentScene = SceneManager.GetActiveScene();
                 Time.timeScale = 1;
                 PlayfabManager.instance.GetLeaderboard();
             }
@@ -296,7 +302,7 @@ namespace GameManagerNamespace
             int x = 0;
             int y = 0;
 
-            while (!gameOver)
+            while (!gameOver && currentScene.name == "Scene_Gamemode_01")
             {
                 GameObject box = GenerateBox();
 
@@ -338,7 +344,7 @@ namespace GameManagerNamespace
             int y = 0;
             int count = 77;
 
-            while (wordsManager.lettersForChosenWords.Count > 0 || count > 0)
+            while (wordsManager.lettersForChosenWords.Count > 0 && currentScene.name == "Scene_Gamemode_02" || count > 0 && currentScene.name == "Scene_Gamemode_02")
             {
                 GameObject box = boxsPrefab[0];
 

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using WordsManagerNamespace;
 
 public class BoxPrefabController : MonoBehaviour
 {
@@ -273,7 +274,7 @@ public class BoxPrefabController : MonoBehaviour
     {
         if (gameObject == this.gameObject)
         {
-            freeze.DOFade(180, 5000f).SetEase(Ease.Linear);
+            //freeze.DOFade(180, 5000f).SetEase(Ease.Linear);
         }
     }
 

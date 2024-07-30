@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using GameManagerNamespace;
+using WordsManagerNamespace;
 
 public class UIManager : MonoBehaviour
 {

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using DG.Tweening;
 using GameManagerNamespace;
+using PlayfabManagerNamespace;
 
 public class LobbyUIManager : MonoBehaviour
 {
