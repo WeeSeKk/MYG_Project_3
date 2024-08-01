@@ -18,17 +18,13 @@ public class FireBoxPrefab : MonoBehaviour
     bool isClickable;
     bool spawned;
     public List<GameObject> hitBoxs = new List<GameObject>();
-
-    // Start is called before the first frame update
-    void Start()
+    
+    void Awake()
     {
         EventManager.gameOverEvent += GameOver;
         EventManager.updatePosition += UpdatePos;
         EventManager.shakeBoxs += ShakeBoxsAnimation;
-    }
-    
-    void Awake()
-    {
+
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         isClickable = false;
     }

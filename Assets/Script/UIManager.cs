@@ -640,7 +640,7 @@ public class UIManager : MonoBehaviour
         lettersLabel.text = null;
     }
 
-    public void AddToGameOverLists(string wordFound, string wordsToFind)//add the found word to the list 
+    public void AddToGameOverLists()//add the found word to the list 
     {
         UpdateGameOverToFindList();
         UpdateGameOverFoundList();

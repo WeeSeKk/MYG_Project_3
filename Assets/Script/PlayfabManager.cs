@@ -38,7 +38,13 @@ namespace PlayfabManagerNamespace
         {
             return playerUsername;
         }
-
+        /**
+        <summary>
+        Generate an error report if any of the PlayfabManager fonctions fail.
+        </summary>
+        <param name="error">Error report generate by a PlayfabManager fonction</param>
+        <returns></returns>
+        **/
         void OnError(PlayFabError error)
         {
             Debug.LogError(error.GenerateErrorReport());
@@ -147,7 +153,13 @@ namespace PlayfabManagerNamespace
                 lobbyUIManager.AddLeaderboardList(item.DisplayName + " " + item.StatValue);
             }
         }
-
+        /**
+        <summary>
+        Get a string from playfab with different words depending on the category chosen.
+        </summary>
+        <param name="key">Key word to find the category choosen</param>
+        <returns></returns>
+        **/
         public async Task GetCategoryAsync(string key)
         {
             var tsk = new TaskCompletionSource<string>();

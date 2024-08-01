@@ -78,10 +78,4 @@ public class IntroUIManager : MonoBehaviour
         loginRegisterHolder.style.opacity = 100;
         infoLabel.style.opacity = 0;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

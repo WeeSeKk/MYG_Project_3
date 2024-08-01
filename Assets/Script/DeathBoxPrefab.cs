@@ -12,17 +12,13 @@ public class DeathBoxPrefab : MonoBehaviour
     int posX;
     int posY;
     bool spawned;
-
-    // Start is called before the first frame update
-    void Start()
+    
+    void Awake()
     {
         EventManager.gameOverEvent += GameOver;
         EventManager.updatePosition += UpdatePos;
         EventManager.shakeBoxs += ShakeBoxsAnimation;
-    }
-    
-    void Awake()
-    {
+
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
     }

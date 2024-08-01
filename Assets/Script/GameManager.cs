@@ -54,7 +54,13 @@ namespace GameManagerNamespace
                 //Time.timeScale = 5;
             }
         }
-
+        /**
+        <summary>
+        Initialize the frequencies at which the gameobjects will spawn.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         void InitializeBoxFrequencies()
         {
             if (boxFrequencies == null)
@@ -82,7 +88,14 @@ namespace GameManagerNamespace
         {
             StartCoroutine(LoadScene("Lobby", "none"));
         }
-
+        /**
+        <summary>
+        Load necessary scene.
+        </summary>
+        <param name="scene">Name of the scene to load.</param>
+        <param name="category">Choosen category if scene to load is Gamemode 2.</param>
+        <returns></returns>
+        **/
         public IEnumerator LoadScene(string scene, string category)
         {
             if (scene == "Scene_Gamemode_01")
@@ -150,7 +163,13 @@ namespace GameManagerNamespace
                 PlayfabManager.instance.GetLeaderboard();
             }
         }
-
+        /**
+        <summary>
+        Return gameobjects based on frequencies.
+        </summary>
+        <param name=""></param>
+        <returns>Return a gameobject from the list.</returns>
+        **/
         public GameObject GenerateBox()
         {
             int totalWeight = 0;
@@ -171,7 +190,13 @@ namespace GameManagerNamespace
 
             return boxsPrefab[0];
         }
-
+        /**
+        <summary>
+        Reset Gamemode at launch.
+        </summary>
+        <param name="scene">Name of the scene to reset.</param>
+        <returns></returns>
+        **/
         public void ResetGamemode(int scene)
         {
             if (scene == 1)
@@ -295,7 +320,13 @@ namespace GameManagerNamespace
                     break;
             }
         }
-
+        /**
+        <summary>
+        Spawn gameobject for gamemode 1.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         public IEnumerator SpawnNewBoxs()
         {
             float timeChange = 0;
@@ -337,7 +368,13 @@ namespace GameManagerNamespace
                 yield return new WaitForSeconds(spawnSpeed);
             }
         }
-
+        /**
+        <summary>
+        Spawn gameobject for gamemode 2.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         public IEnumerator SpawnNewBoxsGamemode2()
         {
             int x = 0;
@@ -360,7 +397,13 @@ namespace GameManagerNamespace
                 count--;
             }
         }
-
+        /**
+        <summary>
+        Move the gameobject on the grid then give then to the GridManager.
+        </summary>
+        <param name="go">Gameobject to moove</param>
+        <returns></returns>
+        **/
         void MoveBoxs(GameObject go)
         {
             for (int i = gridHeight - 1; i >= 0; i--)

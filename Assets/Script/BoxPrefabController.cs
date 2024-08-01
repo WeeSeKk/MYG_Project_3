@@ -60,7 +60,13 @@ public class BoxPrefabController : MonoBehaviour
         outline.enabled = false;
         spawned = false;
     }
-
+    /**
+        <summary>
+        Change the assigned letter of the gameobject.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     void SwapLetters()
     {
         Vector3 rot = new Vector3(0, 0, 360);
@@ -82,7 +88,13 @@ public class BoxPrefabController : MonoBehaviour
             gridManager.selectedBoxs.Remove(this.gameObject);
         }
     }
-
+    /**
+        <summary>
+        Choose the sprite of the gameobject based on playerpref.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     void ChooseSprite()
     {
         string sprite = PlayerPrefs.GetString(BOXSSKIN, "default");
@@ -156,7 +168,7 @@ public class BoxPrefabController : MonoBehaviour
             }
         }
 
-        if (!spawned)
+        if (!spawned)//If this gameobject is in the maingrid activate it 
         {
             for (int x = 0; x < gridManager.maxgridWidth; x++)
             {
@@ -178,7 +190,15 @@ public class BoxPrefabController : MonoBehaviour
             outline.enabled = false;
         }
     }
-
+    /**
+        <summary>
+        Update position of the gameobject (Only used by magnet powerUp).
+        </summary>
+        <param name="gameObject">All gameobject in the list of locked gameobject of the magnet.</param>
+        <param name="x">New x position of this gameobject.</param>
+        <param name="y">New y position of this gameobject.</param>
+        <returns></returns>
+    **/
     void UpdatePos(GameObject gameObject, int x, int y)
     {
         if (gameObject == this.gameObject)
@@ -187,7 +207,13 @@ public class BoxPrefabController : MonoBehaviour
             posY = y;
         }
     }
-
+    /**
+        <summary>
+        Asign letter to the gameobject.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     void ChooseLetter()
     {
         if (currentScene.name == "Scene_Gamemode_01")
@@ -217,7 +243,13 @@ public class BoxPrefabController : MonoBehaviour
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
     }
-
+    /**
+        <summary>
+        Find this gameobject on the grid.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     public void FindCell()//find in witch cell is this gameobject
     {
         for (int x = 0; x < gridManager.maxgridWidth; x++)
@@ -235,7 +267,14 @@ public class BoxPrefabController : MonoBehaviour
             }
         }
     }
-
+    /**
+        <summary>
+        Move the gameobject down in the grid if empty.
+        </summary>
+        <param name="x">x position of this gameobject in the array</param>
+        <param name="y">y position of this gameobject in the array</param>
+        <returns></returns>
+    **/
     void NewMoveCell(int x, int y)
     {
         Vector3 newWorldPosition;
@@ -261,7 +300,12 @@ public class BoxPrefabController : MonoBehaviour
             }
         }
     }
-
+    /**
+        <summary>
+        <param> </param>
+        <returns> Shake all gameobject (Only used by crusher powerUp) </returns>
+        </summary>
+    **/
     void ShakeBoxsAnimation()
     {
         visualGo.transform.DOShakePosition(1f, 0.1f, 10, 60f, false, true).OnComplete(() =>

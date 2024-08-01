@@ -5,7 +5,12 @@ using UnityEngine.Pool;
 public class ObjectPool : MonoBehaviour
 {
     public static List<PooledObjectInfo> ObjectPools = new List<PooledObjectInfo>();
-
+    /**
+        <summary>
+        <param> </param>
+        <returns> Add gameobjects to the pool </returns>
+        </summary>
+    **/
     public static GameObject BoxSpawn(GameObject gameObject, Vector3 spawnPos, Quaternion spawnRot)
     {
         PooledObjectInfo pool = ObjectPools.Find(p => p.LookUpString == gameObject.name);
@@ -40,7 +45,12 @@ public class ObjectPool : MonoBehaviour
         }
         return spawnAbleObject;
     }
-
+    /**
+        <summary>
+        <param> </param>
+        <returns> Remove gameobjects to the pool </returns>
+        </summary>
+    **/
     public static void ReturnObjectToPool(GameObject gameObject)
     {
         string goName = gameObject.name.Substring(0, gameObject.name.Length - 7);//removing the "(Clone)" frome the new instantiate gameobject

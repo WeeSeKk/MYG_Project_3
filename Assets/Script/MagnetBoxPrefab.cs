@@ -22,13 +22,6 @@ public class MagnetBoxPrefab : MonoBehaviour
     public List<GameObject> lockedGo = new List<GameObject>();
     public GameObject[,] fillerArray;
     
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-    
     void Awake()
     {
         EventManager.gameOverEvent += GameOver;
@@ -39,7 +32,13 @@ public class MagnetBoxPrefab : MonoBehaviour
         ChooseLetter();
         filler = new GameObject();
     }
-
+    /**
+        <summary>
+        Look for every x position between gameobject param and this gameobject and if no empty cell is found lock the parm gameobject.
+        </summary>
+        <param name="gameObject">Gameobject who enter the box collider of this gameobject</param>
+        <returns></returns>
+    **/
     public void LockBoxPosition(GameObject gameObject)
     {
         if (!lockedGo.Contains(gameObject))
@@ -78,7 +77,15 @@ public class MagnetBoxPrefab : MonoBehaviour
             }
         }
     }
-
+    /**
+        <summary>
+        Update the position of the param locked gameobject and fill the array under the gameobject with filler gameobject.
+        </summary>
+        <param name="gameObject">Gameobject who enter the box collider of this gameobject</param>
+        <param name="x">Position x in the array of the gameobject who enter the box collider of this gameobject</param>
+        <param name="y">Position y in the array of the gameobject who enter the box collider of this gameobject</param>
+        <returns></returns>
+    **/
     void SendPositionToArray(GameObject gameObject, int x, int y)
     {
         if (gameObject == this.gameObject)//full the array under this gameobject
@@ -104,7 +111,13 @@ public class MagnetBoxPrefab : MonoBehaviour
             }
         }
     }
-
+    /**
+        <summary>
+        Find in the array the gameobject in the list of locked gameobject.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     public void FindLockedGo()
     {
         for (int x = 0; x < gridManager.maxgridWidth; x++)
@@ -121,7 +134,14 @@ public class MagnetBoxPrefab : MonoBehaviour
             }
         }
     }
-
+    /**
+        <summary>
+        Remove filler gameobject under a locked gameobject who should not be locked anymore.
+        </summary>
+        <param name="x">Position x in the array where filler gameobject need to be removed</param>
+        <param name="y">Position y in the array where filler gameobject need to be removed</param>
+        <returns></returns>
+    **/
     public void RemoveFillerGameobject(int x, int y) 
     {
         for (int i = x ; i < gridManager.maxgridWidth; i++)
@@ -160,7 +180,13 @@ public class MagnetBoxPrefab : MonoBehaviour
         ChooseLetter();
         isClickable = false;
     }
-
+    /**
+        <summary>
+        Remove every filler gameobjects.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     void OnDisable()
     {
         _boxCollider2D.enabled = false;
@@ -182,7 +208,7 @@ public class MagnetBoxPrefab : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!spawned)
+        if (!spawned)//If this gameobject is in the maingrid activate it 
         {
             for (int x = 0; x < gridManager.maxgridWidth; x++)
             { 
@@ -204,7 +230,13 @@ public class MagnetBoxPrefab : MonoBehaviour
             outline.enabled = false;
         }
     }
-
+    /**
+        <summary>
+        Asign letter to the gameobject.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     void ChooseLetter()
     {
         letter = wordsManager.GenerateLetter();
@@ -231,8 +263,14 @@ public class MagnetBoxPrefab : MonoBehaviour
             gridManager.selectedBoxs.Add(this.gameObject);//add this box to the list of boxs used to create a word
         }
     }
-
-    public void FindCell()//find in witch cell is this gameobject
+    /**
+        <summary>
+        Find this gameobject on the grid.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
+    public void FindCell()
     {
         for (int x = 0; x < gridManager.gridWidth; x++)
         {
@@ -247,7 +285,14 @@ public class MagnetBoxPrefab : MonoBehaviour
             }
         }
     }
-
+    /**
+        <summary>
+        Move the gameobject down in the grid if empty.
+        </summary>
+        <param name="x">x position of this gameobject in the array</param>
+        <param name="y">y position of this gameobject in the array</param>
+        <returns></returns>
+    **/
     void NewMoveCell(int x, int y)
     {
         Vector3 newWorldPosition;

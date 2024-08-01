@@ -33,7 +33,13 @@ public class GridManager : MonoBehaviour
         gridArray = new GameObject[gridWidth, gridHeight];
         currentScene = SceneManager.GetActiveScene();
     }
-
+    /**
+        <summary>
+        Add gameobject to the grid.
+        </summary>
+        <param name="gameObject">Gameobject to moove to the array</param>
+        <returns></returns>
+    **/
     public void SpawnBox(GameObject gameObject)
     {
         foundEmptyCell = false;
@@ -90,7 +96,13 @@ public class GridManager : MonoBehaviour
             } 
         }
     }
-
+    /**
+        <summary>
+        Add powerUp to the grid.
+        </summary>
+        <param name="type">PowerUP from the list.</param>
+        <returns></returns>
+    **/
     public void SpawnPowerUp(int type)
     {
         GameObject newBox = ObjectPool.BoxSpawn(powerUp[type], spawnPoint.transform.position, Quaternion.identity);
@@ -98,8 +110,16 @@ public class GridManager : MonoBehaviour
 
         SpawnBox(newBox);
     }
-
-    public void UpdateArray(GameObject go, int x, int y)//update the array
+    /**
+        <summary>
+        Update the position of a gameobject on the grid.
+        </summary>
+        <param name="go">Gameobject to update.</param>
+        <param name="x">New x position of the gameobject.</param>
+        <param name="y">New y position of the gameobject.</param>
+        <returns></returns>
+    **/
+    public void UpdateArray(GameObject go, int x, int y)
     {
         for (int a = 0; a < maxgridWidth; a ++)
         {
@@ -113,7 +133,13 @@ public class GridManager : MonoBehaviour
         }
         gridArray[x, y] = go;
     }
-
+    /**
+        <summary>
+        Return to the pool all gameobject selected by the player.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     public IEnumerator RemoveSelectedBox() //Destroy all the boxes used to create a word
     {
         List<GameObject> boxesToRemove = new List<GameObject>();
@@ -150,7 +176,13 @@ public class GridManager : MonoBehaviour
 
         selectedBoxs.Clear();
     }
-
+    /**
+        <summary>
+        Remove gameobject who are not selected by the player expl : powerUP.
+        </summary>
+        <param name="gameObject">Gameobject to return to the pool.</param>
+        <returns></returns>
+    **/
     public void RemoveBoxs(GameObject gameObject)
     {
         for (int x = 0; x < gridWidth; x++)//for every x position
@@ -166,7 +198,13 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
+    /**
+        <summary>
+        Empty the grid (only for debug).
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+    **/
     public void ResetGridAndArray()
     {
         for (int x = 0; x < gridWidth; x++)//for every x position

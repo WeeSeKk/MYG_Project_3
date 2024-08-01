@@ -23,17 +23,13 @@ public class BombBoxPrefab : MonoBehaviour
     int posX;
     int posY;
     public List<GameObject> explosionRange = new List<GameObject>();
-
-    // Start is called before the first frame update
-    void Start()
+    
+    void Awake()
     {
         EventManager.gameOverEvent += GameOver;
         EventManager.updatePosition += UpdatePos;
         EventManager.swapLetters += SwapLetters;
-    }
-    
-    void Awake()
-    {
+
         gridManager = GameObject.Find("GridManager").GetComponent<GridManager>();
         wordsManager = GameObject.Find("WordsManager").GetComponent<WordsManager>();
 

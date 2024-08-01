@@ -13,7 +13,7 @@ namespace WordsManagerNamespace
         [SerializeField] APIManager aPIManager;
         [SerializeField] GridManager gridManager;
         [SerializeField] UIManager uIManager;
-        private static readonly Dictionary<char, int> letterFrequencies = new Dictionary<char, int>
+        private static readonly Dictionary<char, int> letterFrequencies = new Dictionary<char, int>//List of letters with the frequencies of which they can appear
     {
         { 'a', 8 }, { 'b', 2 }, { 'c', 3 }, { 'd', 4 }, { 'e', 13 }, { 'f', 2 }, { 'g', 2 }, { 'h', 6 },
         { 'i', 7 }, { 'j', 1 }, { 'k', 1 }, { 'l', 4 }, { 'm', 2 }, { 'n', 7 }, { 'o', 8 }, { 'p', 2 },
@@ -40,7 +40,13 @@ namespace WordsManagerNamespace
                 //ChooseWords();
             }
         }
-
+        /**
+        <summary>
+        Return a char based on the frequencies of the letters.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         public char GenerateLetter()
         {
             int totalWeight = 0;
@@ -63,7 +69,13 @@ namespace WordsManagerNamespace
 
             return 'a';
         }
-
+        /**
+        <summary>
+        Count the point for a correct word.
+        </summary>
+        <param name="word">Word created by player.</param>
+        <returns></returns>
+        **/
         void CountWordPoint(string word)
         {
             int value;
@@ -84,13 +96,25 @@ namespace WordsManagerNamespace
 
             StartCoroutine(uIManager.ShowPointUp(wordScore));
         }
-
+        /**
+        <summary>
+        Add letter asigned to gameobject to the label.
+        </summary>
+        <param name="letter">Letter of the clicked gameobject.</param>
+        <returns></returns>
+        **/
         public void AddLetter(char letter)
         {
             createdWord += letter;
             uIManager.UpdateLabel(createdWord);
         }
-
+        /**
+        <summary>
+        Empty the word created by selecting gameobject.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         public void ResetWord()
         {
             createdWord = null;
@@ -101,9 +125,15 @@ namespace WordsManagerNamespace
         {
             StartCoroutine(IsWordValid(word));
 
-             
-        }
 
+        }
+        /**
+        <summary>
+        Call the APIManager to check if wordcreated is a valid word when playing Gamemode 1.
+        </summary>
+        <param name="word">Word created by player.</param>
+        <returns></returns>
+        **/
         public IEnumerator IsWordValid(string word)//make an API call to check if the word is valid or not
         {
             if (word.Length > 1)//the word as to be at least 2 letters long
@@ -112,7 +142,13 @@ namespace WordsManagerNamespace
                 yield return new WaitUntil(() => apiCallTsk.IsCompleted);
             }
         }
-
+        /**
+        <summary>
+        Check if wordcreated is in the list of words chosen when playing Gamemode 2.
+        </summary>
+        <param name="word">Word created by player.</param>
+        <returns></returns>
+        **/
         public void IsWordValidCategory(string word)
         {
             if (wordsCategoryChoosen.Contains(word))
@@ -138,7 +174,13 @@ namespace WordsManagerNamespace
                 OnValidationReceived(false);
             }
         }
-
+        /**
+        <summary>
+        In case of correct word created remove the word from the ToFindList and add it to the FoundList when playing Gamemode 2.
+        </summary>
+        <param name="word">Word created by player.</param>
+        <returns></returns>
+        **/
         void CallReplaceCategoryWord(string word)
         {
             for (int i = 0; i < wordsCategoryChoosen.Count; i++)
@@ -150,7 +192,13 @@ namespace WordsManagerNamespace
                 }
             }
         }
-
+        /**
+        <summary>
+        Add string from playfab to the wordsCategory List based on category choosed when playing Gamemode 2.
+        </summary>
+        <param name="isValid">Bool returned by APIManager to know if word is correct.</param>
+        <returns></returns>
+        **/
         void OnValidationReceived(bool isValid)
         {
             if (isValid)
@@ -176,7 +224,13 @@ namespace WordsManagerNamespace
 
             ResetWord(); //reset the created word 
         }
-
+        /**
+        <summary>
+        When playing Gamemode 2 after a correct word is found check if there is still words to find.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         void CheckIfGameOver()
         {
             if (wordsCategoryChoosen.Count <= 0)
@@ -185,12 +239,24 @@ namespace WordsManagerNamespace
                 EventManager.GameOverEvent();
             }
         }
-
+        /**
+        <summary>
+        Add string from playfab to the wordsCategory List based on category choosed when playing Gamemode 2.
+        </summary>
+        <param name="jsonList">String returned by Playfab Manager.</param>
+        <returns></returns>
+        **/
         public void AddWordsToCategoryList(string jsonList)
         {
             wordsCategory = new List<string>(jsonList.Split(','));
         }
-
+        /**
+        <summary>
+        Choose what words of the category list will be a word to find when playing Gamemode 2.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         public void ChooseWords()
         {
             while (lettersForChosenWords.Count < 70 && wordsCategoryChoosen.Count < 12)
@@ -225,7 +291,13 @@ namespace WordsManagerNamespace
                 uIManager.AddToFindLists(hint);
             }
         }
-
+        /**
+        <summary>
+        Choose a letter for the gameobjects when playing Gamemode 2.
+        </summary>
+        <param name=""></param>
+        <returns></returns>
+        **/
         public char AssingLetter()
         {
             if (lettersForChosenWords.Count > 0)
@@ -244,7 +316,13 @@ namespace WordsManagerNamespace
                 return GenerateLetter();
             }
         }
-
+        /**
+        <summary>
+        Show the first letter that is not already shown when selecting a word with the hint button while playing Gamemode 2.
+        </summary>
+        <param name="pos">Position of the word chosen in the list.</param>
+        <returns></returns>
+        **/
         public void GiveHintOnWord(int pos)
         {
             char[] charChosen = wordsCategoryChoosen[pos].ToCharArray();
