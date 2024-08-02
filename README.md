@@ -17,9 +17,9 @@ FIGMA BLOCKOUT :
 CLASS DIAGRAM :
 ![MYG_Project_3 drawio](https://github.com/WeeSeKk/MYG_Project_3/assets/113300702/6d6aafc4-432b-4cc7-a4cb-a5b9396400ba)
 
-[Upload---
+
 title: MYG Word Game
----
+
 # Introduction
 
 This document will walk you through the implementation of the MYG Word Game feature.
