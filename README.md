@@ -1297,8 +1297,3 @@ The <SwmToken path="/Assets/Script/WordsManager.cs" pos="326:5:5" line-data="   
 
 </SwmSnippet>
 
-This concludes the walkthrough of the MYG Word Game feature. Each section explains the rationale behind the implementation and how it fits into the overall game logic.
-
-<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBTVlHX1Byb2plY3RfMyUzQSUzQVdlZVNlS2s=" repo-name="MYG_Project_3"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
-ing myg-word-game.dg9wp5z6.sw.md…]()
-
