@@ -15,8 +15,7 @@ FIGMA BLOCKOUT :
 
 
 CLASS DIAGRAM :
-![MYG_Project_3 drawio](https://github.com/WeeSeKk/MYG_Project_3/assets/113300702/6d6aafc4-432b-4cc7-a4cb-a5b9396400ba)
-
+![MYG_Project_3 drawio](https://github.com/user-attachments/assets/8dfe16db-2088-4599-bfcf-90d4c82fe00b)
 
 # DOCUMENTATION :
 
