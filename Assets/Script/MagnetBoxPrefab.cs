@@ -63,7 +63,7 @@ public class MagnetBoxPrefab : MonoBehaviour
                                 gameObject.transform.DOMove(newWorldPosition, 3f, false).SetEase(Ease.OutElastic);
                                 SendPositionToArray(gameObject, x, y);
                                 gridManager.UpdateArray(gameObject, x, posY);
-
+                                
                                 EventManager.UpdatePosition(gameObject, x, posY);
 
                                 if (!lockedGo.Contains(gameObject))
