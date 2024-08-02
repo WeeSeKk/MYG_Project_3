@@ -1,5 +1,3 @@
-[myg-word-game.dg9wp5z6.sw.md](https://github.com/user-attachments/files/16468431/myg-word-game.dg9wp5z6.sw.md)# MYG_Project_3
-
 TRELLO LINK :
 https://trello.com/invite/b/cZZcHlFe/ATTI593b4da3ca8f7fc4926574da62fcc1cfAF657B5F/myg-project-3
 
