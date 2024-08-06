@@ -15,6 +15,7 @@ public class BombBoxPrefab : MonoBehaviour
     [SerializeField] SpriteRenderer outline;
     [SerializeField] SpriteRenderer goSprite;
     [SerializeField] ParticleSystem _particleSystem;
+    [SerializeField] ParticleSystem _particleFuse;
     [SerializeField] GameObject visualGo;
     bool isClickable;
     bool spawned;
@@ -114,6 +115,7 @@ public class BombBoxPrefab : MonoBehaviour
     public void ActivateBox()
     {
         FindCell();
+        _particleFuse.Play();
         boxCollider2D.enabled = true;
         isClickable = true;
         StartCoroutine(BombTicking());
@@ -178,7 +180,7 @@ public class BombBoxPrefab : MonoBehaviour
         int lastTicking = 0;
 
         Vector3 initScale = visualGo.transform.localScale;
-        Vector3 scaleBig = new Vector3(1.5f, 1.5f);
+        Vector3 scaleBig = new Vector3(0.6f, 0.6f);
 
         while (timeTicking < maxTicking)
         {
@@ -207,6 +209,7 @@ public class BombBoxPrefab : MonoBehaviour
             lastTicking ++;
         }
 
+        _particleFuse.Stop();
         goSprite.enabled = false;
         AudioManager.instance.PlayAudioClip(4);
         _particleSystem.Play();

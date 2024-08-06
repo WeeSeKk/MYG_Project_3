@@ -277,8 +277,6 @@ public class TimerScript : MonoBehaviour
 
     void UpdateCrusherTimer(float timerTime)
     {
-        timerTime += 1;
-
         float secondes = Mathf.FloorToInt(timerTime % 60);
 
         crusherTimerLabel.text = string.Format("{00}", secondes);
@@ -286,8 +284,6 @@ public class TimerScript : MonoBehaviour
 
     void UpdateFireTimer(float timerTime)
     {
-        timerTime += 1;
-
         float secondes = Mathf.FloorToInt(timerTime % 60);
 
         fireTimerLabel.text = string.Format("{00}", secondes);
@@ -295,16 +291,12 @@ public class TimerScript : MonoBehaviour
 
     void UpdateBombTimer(float timerTime)
     {
-        timerTime += 1;
-
         float secondes = Mathf.FloorToInt(timerTime % 60);
 
         bombTimerLabel.text = string.Format("{00}", secondes);
     }
     void UpdateSwapTimer(float timerTime)
     {
-        timerTime += 1;
-
         float secondes = Mathf.FloorToInt(timerTime % 60);
 
         swapLettersTimer.text = string.Format("{00}", secondes);
@@ -312,8 +304,6 @@ public class TimerScript : MonoBehaviour
 
     void UpdateHintTimer(float timerTime)
     {
-        timerTime += 1;
-
         float secondes = Mathf.FloorToInt(timerTime % 60);
 
         hintTimerLabel.text = string.Format("{00}", secondes);
@@ -321,8 +311,6 @@ public class TimerScript : MonoBehaviour
 
     void UpdateFinalTime(float timerTime)
     {
-        timerTime += 1;
-
         float minutes = Mathf.FloorToInt(timerTime / 60);
         float secondes = Mathf.FloorToInt(timerTime % 60);
 

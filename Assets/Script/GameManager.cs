@@ -65,10 +65,10 @@ namespace GameManagerNamespace
         void InitializeBoxFrequencies()
         {
             boxFrequencies.Add(boxsPrefab[0], 100);//default box  100
-            boxFrequencies.Add(boxsPrefab[1], 0);//crusher box  4
+            boxFrequencies.Add(boxsPrefab[1], 10);//crusher box  4
             boxFrequencies.Add(boxsPrefab[2], 0);//skull box  6
             boxFrequencies.Add(boxsPrefab[3], 0);//fire box  3
-            boxFrequencies.Add(boxsPrefab[4], 100);//magnet box  2
+            boxFrequencies.Add(boxsPrefab[4], 0);//magnet box  2
             boxFrequencies.Add(boxsPrefab[5], 0);//bomb box   3
         }
 
