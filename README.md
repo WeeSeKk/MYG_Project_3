@@ -1,6 +1,8 @@
 TRELLO LINK :
 https://trello.com/invite/b/cZZcHlFe/ATTI593b4da3ca8f7fc4926574da62fcc1cfAF657B5F/myg-project-3
 
+![Capture d'écran 2024-08-05 084726](https://github.com/user-attachments/assets/600fe4ce-5035-4199-9ff8-95ecda5dc6f8)
+
 FIGMA BLOCKOUT :
 ![GAME LOBBY](https://github.com/WeeSeKk/MYG_Project_3/assets/113300702/60a5c25e-55c6-49d6-a870-1add8ec80e42)  ![GAME LOBBY SELECTED PLAYER ICON AND USERNAME](https://github.com/WeeSeKk/MYG_Project_3/assets/113300702/76ed719b-fd39-43e6-8494-ca472fb1626b)  ![GAME LOBBY SETTINGS](https://github.com/WeeSeKk/MYG_Project_3/assets/113300702/4030e8f3-b644-453d-a0f7-7401dee9a70d)
 
